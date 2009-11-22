@@ -39,3 +39,16 @@ Rails::Initializer.run do |config|
   # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}')]
   # config.i18n.default_locale = :de
 end
+
+ActionMailer::Base.smtp_settings = {
+  :address => 'smtp.gmail.com',
+  :port => 587,
+  :authentication => :plain,
+  :enable_starttls_auto => true,
+	:domain => 'mylo.gs',
+  :user_name => 'noreply@mylo.gs',
+  :password => 'N0-r3P1y'
+}
+
+ActionController::CgiRequest::DEFAULT_SESSION_OPTIONS[:session_domain] = '.mylo.gs'
+

@@ -1,0 +1,10 @@
+<% form_tag 'login' do %>
+<div>Please log in.</div>
+<div class='error_msg'><%= flash[:error_msg] %></div>
+<div class='input_prompt'>Email:</div>
+<div class='input_field'><%= text_field_tag 'email' %></div>
+<div class='input_prompt'>Password:</div>
+<div class='input_field'><%= password_field_tag 'password' %></div>
+<div class='input_field'><%= check_box_tag 'remember_me' %> Remember me on this computer</div>
+<div><%= submit_tag 'Login' %></div>
+<% end %>

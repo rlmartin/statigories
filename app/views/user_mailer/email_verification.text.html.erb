@@ -1,0 +1,8 @@
+<html>
+<body>
+Dear <%= @recipient[:first_name] + ' ' + @recipient[:last_name] %>,<br />
+Please click here to verify your email address. <a href='http://mylo.gs/users/<%= @recipient[:username] %>/verify?code=<%= @recipient[:verification_code] %>'>http://mylo.gs/users/<%= @recipient[:username] %>/verify?code=<%= @recipient[:verification_code] %></a>.<br />
+Thank you,<br />
+MyLogs Admin
+</body>
+</html>

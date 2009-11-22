@@ -1,0 +1,15 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  email: rlmartin@gmail.com
+  password: MyString
+  first_name: Ryan
+  last_name: Martin
+  verified: true
+
+two:
+  email: ssisani@gmail.com
+  password: MyString
+  first_name: Sara
+  last_name: Isani
+  verified: true
