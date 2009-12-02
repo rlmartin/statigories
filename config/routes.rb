@@ -31,15 +31,31 @@ ActionController::Routing::Routes.draw do |map|
   #   end
 
   # You can have the root of your site routed with map.root -- just remember to delete public/index.html.
-  # map.root :controller => "welcome"
+  map.root :controller => "general_page"
 
   # See how all your routes lay out with "rake routes"
 
 	# Login routes
-#	map.resource :session
-  map.connect 'login', :controller => "sessions", :action => "create", :conditions => { :method => :post }
-  map.connect 'login', :controller => "sessions", :action => "new", :conditions => { :method => :get }
-  map.connect 'logout', :controller => "sessions", :action => "destroy"
+  map.login 'login', :controller => "sessions", :action => "create", :conditions => { :method => :post }
+  map.login 'login', :controller => "sessions", :action => "new", :conditions => { :method => :get }
+  map.logout 'logout', :controller => "sessions", :action => "destroy"
+
+	# User routes
+	map.new_user 'signup', :controller => "users", :action => "create", :conditions => { :method => :post }
+	map.new_user 'signup', :controller => "users", :action => "new", :conditions => { :method => :get }
+	map.forgot_password 'forgot_password', :controller => "users", :action => "process_forgot_password", :conditions => { :method => :post }
+	map.forgot_password 'forgot_password', :controller => "users", :action => "forgot_password", :conditions => { :method => :get }
+	map.resend_verify 'resend_verify', :controller => "users", :action => "process_resend_verify", :conditions => { :method => :post }
+	map.resend_verify 'resend_verify', :controller => "users", :action => "resend_verify", :conditions => { :method => :get }
+	map.verify_check 'verify', :controller => "users", :action => "verify_check"
+	map.verify_user 'user/:username/verify', :controller => "users", :action => "verify"
+	map.edit_user 'user/:username/edit', :controller => "users", :action => "edit", :conditions => { :method => :get }
+	map.reset_password 'user/:username/reset_password', :controller => "users", :action => "process_reset_password", :conditions => { :method => :post }
+	map.reset_password 'user/:username/reset_password', :controller => "users", :action => "reset_password", :conditions => { :method => :get }
+	map.user 'user/:username', :controller => "users", :action => "update", :conditions => { :method => :post }
+	map.user_availability 'user', :controller => "users", :action => "show", :conditions => { :method => :get }
+	map.user 'user/:username', :controller => "users", :action => "show", :conditions => { :method => :get }
+	map.user 'user/:username', :controller => "users", :action => "destroy", :conditions => { :method => :delete }
 
   # Install the default routes as the lowest priority.
   # Note: These default routes make all actions in every controller accessible via GET requests. You should

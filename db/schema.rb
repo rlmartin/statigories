@@ -32,13 +32,15 @@ ActiveRecord::Schema.define(:version => 20091121201534) do
   add_index "constants", ["server_type"], :name => "index_constants_on_server_type"
 
   create_table "users", :force => true do |t|
-    t.string   "email",                                :null => false
-    t.string   "username",                             :null => false
+    t.string   "email",                                         :null => false
+    t.string   "username",                                      :null => false
     t.string   "password"
-    t.string   "first_name",        :default => ""
-    t.string   "last_name",         :default => ""
-    t.boolean  "verified",          :default => false
-    t.string   "verification_code", :default => ""
+    t.string   "first_name",                 :default => ""
+    t.string   "last_name",                  :default => ""
+    t.boolean  "verified",                   :default => false
+    t.string   "verification_code",          :default => ""
+    t.string   "password_recovery_code",     :default => ""
+    t.date     "password_recovery_code_set"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

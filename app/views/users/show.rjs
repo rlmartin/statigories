@@ -1,0 +1,5 @@
+if @user != nil and @user.id > 0
+  page.replace_html 'availability_results', t(:msg_username_taken)
+else
+  page.replace_html 'availability_results', t(:msg_username_available)
+end

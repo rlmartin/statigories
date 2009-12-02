@@ -2,4 +2,71 @@
 # See http://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
 
 en:
-  hello: "Hello world"
+  hello_world: "Hello, world"
+
+  # Button text
+  btn_check_availability: "Check Availability"
+  btn_create: Create
+  btn_edit: Edit
+  btn_login: Login
+  btn_save: Save
+  btn_send: Send
+
+  # Email subject lines
+  subject_email_verification: "Please verify your email address"
+  subject_password_reset: "Password reset requested"
+
+  # General text
+  log_in_prompt: "Please log in."
+  sign_up_prompt: "Not a member?"
+
+  # Header text
+  not_logged_in: "Not logged in."
+  welcome_back: "Welcome back"
+
+  # Input prompts
+  input_confirm_email: "Confirm Email:"
+  input_confirm_password: "Confirm Password:"
+  input_email: "Email:"
+  input_first_name: "First Name:"
+  input_last_name: "Last Name:"
+  input_password: "Password:"
+  input_remember_me: "Remember me on this computer"
+  input_username: "Username:"
+
+  # Link text
+  link_forgot_password: "Forgot your password?"
+  link_sign_up: "Sign up for a new account."
+
+  # Messages
+  msg_email_error: "There was an error sending the email."
+  msg_email_not_found: "Sorry, we could not find this email address."
+  msg_general_error: "Sorry, there was an error."
+  msg_invalid_password_recovery_code: "Sorry, this password recovery code is invalid.  Try <a href='/forgot_password'>re-sending the password recovery email</a>."
+  msg_user_not_found: "Sorry, this user was not found."
+  msg_username_available: "Score! You can have this username."
+  msg_username_taken: "Sorry, this username is not available."
+
+  # Page Titles
+  title_edit_user: "Edit My Profile"
+  title_signup: "Create User"
+
+  # Pages
+  # Email verification
+  link_go_to_your_page: "Go to your homepage."
+  link_resend_verification: "re-sending the verification email."
+  msg_already_verified: "This email has already been verified. Please <a href='/login'>log in</a> to begin using your account."
+  msg_invalid_verification_code: "Invalid verification code."
+  msg_successful_verification_code: "Email verified."
+  msg_verification_sent: "Email sent.  You should receive an email with your verification code within a few minutes.  Be sure to check your junk email and add noreply@mylo.gs to your safe senders list to ensure delivery."
+  prompt_resend_verification: "Having trouble? If you have not yet received the verification email, please check your junk email and add noreply@mylo.gs to your safe senders list. If you still don't see the email, try "
+  prompt_resend_verification_enter_email: "If you have not received your email verification code, enter your email address below and we'll send it again."
+  prompt_get_started: "Get started logging now."
+  title_email_verification: "Verify Email"
+
+  # Forgot/Reset Password
+  title_forgot_password: "Forgot Password"
+  msg_password_set: "Password saved."
+  msg_reset_password_sent: "Email sent successfully.  Within a few minutes, you should receive an email with instructions about how to reset your password.  Be sure to check your junk email and add noreply@mylo.gs to your safe senders list to ensure delivery."
+  prompt_forgot_password: "Forgot your password? Enter your email address below and we'll send you an email to begin the password reset process."
+  prompt_reset_password: "Enter your new password below."

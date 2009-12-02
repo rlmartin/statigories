@@ -12,8 +12,8 @@ class Constant < ActiveRecord::Base
       const_name = const.name.gsub(/\W+/, '_').downcase.to_sym
       if const.array
         hash[const_name] = const.value.split(',')
-        hash[const_name].each do | value |
-          value = StringLib.cast(StringLib.trim(value), const.cast_as)
+        hash[const_name].each_index do | i |
+          hash[const_name][i] = StringLib.cast(StringLib.trim(hash[const_name][i]), const.cast_as)
         end
       else
         hash[const_name] = StringLib.cast(const.value, const.cast_as)

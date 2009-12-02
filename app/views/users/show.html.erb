@@ -1,0 +1,9 @@
+<%= flash[:error] %>
+<% if @user == nil %>
+<div class='error_msg'><%= t :msg_user_not_found %></div>
+<% else %>
+<h1><%= @user.first_name %> <%= @user.last_name %></h1>
+<% if @can_edit %>
+	<%= button_to t(:btn_edit), edit_user_path(@user), :method => :get %>
+<% end %>
+<% end %>

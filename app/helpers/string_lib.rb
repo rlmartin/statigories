@@ -4,6 +4,7 @@ module StringLib
     symType = self.to_sym(symType)
     strValue = strValue.to_s
     case symType
+			when :b, :bool, :boolean: strValue.match(/(true|t|yes|y|1)$/i) != nil
       when :date, :datetime: Date.parse(strValue)
       when :dec, :decimal: strValue.to_d
       when :float, :f, :dbl, :d, :double: strValue.to_f

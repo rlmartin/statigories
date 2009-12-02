@@ -8,6 +8,8 @@ class CreateUsers < ActiveRecord::Migration
       t.string :last_name, :default => ""
       t.boolean :verified, :default => false
 			t.string :verification_code, :default => ""
+			t.string :password_recovery_code, :default => ""
+			t.datetime :password_recovery_code_set
 
       t.timestamps
     end

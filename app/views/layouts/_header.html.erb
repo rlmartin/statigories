@@ -1,0 +1,18 @@
+<script type='text/javascript'>addthis_pub  = 'goroam';</script>
+<div class='header'>
+<!--	<div class='logo'><a href='/'><img src='/images/logo.gif' alt='GoRoam' /></a></div>
+	<div class='title'><a href='/'><span class='dark_color'>GO</span><span class='light_color'>ROAM</span></a></div>
+	<div class='subtitle'><a href='/'><%= Constant::get(:header_subheader_text) %></a></div>
+	<ul class='menu'>
+		<li><a href='/'>Home</a></li>
+    <li><a href='/search'>Find Lat/Lng</a></li>
+    <li><a href='http://www.addthis.com/bookmark.php' onmouseover="return addthis_open(this, '', '[URL]', '[TITLE]')" onmouseout="addthis_close()" onclick="return addthis_sendto()">Share</a></li>
+    <li><a href='http://help.goro.am'>Help</a></li>
+  </ul>-->
+	<div class='login_panel'><% if session[:logged_in] %>
+		<%= t :welcome_back %>, <%= link_to session[:name], '/user/' + session[:username] %>. <%= link_to Constant::get(:link_text_logout), logout_path %>
+	<% else %>
+		<%= t :not_logged_in %> <%= link_to Constant::get(:link_text_login), login_path %>
+	<% end %></div>
+</div>
+<!--<script type="text/javascript" src="http://s7.addthis.com/js/152/addthis_widget.js"></script>-->
