@@ -33,7 +33,9 @@ class Constant < ActiveRecord::Base
 		  else
 		    server_type = server_type.value
 		  end
-		  const_set("SERVER_TYPE", server_type.downcase)
+		  if const_defined?("SERVER_TYPE"): remove_const("SERVER_TYPE") end
+      const_set("SERVER_TYPE", server_type.downcase)
+      if const_defined?("CONST_STALE"): remove_const("CONST_STALE") end
 		  const_set("CONST_STALE", {})
 		  # Load the constants into the hashes for each language
 		  find(:all, :conditions => ["(server_type = :server_type OR server_type = '') AND active AND NOT name = ''", { :server_type => self::SERVER_TYPE }]).each do | const |
@@ -71,6 +73,7 @@ class Constant < ActiveRecord::Base
     if const_defined?(lang.upcase + '_CONST_LIST')
       const_get(lang.upcase + '_CONST_LIST')
     else
+      unless const_defined?("CONST_LIST"): self.cache_constants end
       self::CONST_LIST
     end
   end

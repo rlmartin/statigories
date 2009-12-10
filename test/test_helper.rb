@@ -35,4 +35,11 @@ class ActiveSupport::TestCase
   fixtures :all
 
   # Add more helper methods to be used by all tests here...
+
+  def do_login(user = :ryan)
+    old_controller = @controller
+    @controller = SessionsController.new
+    post :create, :email => users(user).email, :password => 'pwd'
+    @controller = old_controller
+  end
 end

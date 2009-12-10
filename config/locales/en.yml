@@ -17,6 +17,7 @@ en:
   subject_password_reset: "Password reset requested"
 
   # General text
+  app_name: "MyLogs"
   log_in_prompt: "Please log in."
   sign_up_prompt: "Not a member?"
 
@@ -35,21 +36,36 @@ en:
   input_username: "Username:"
 
   # Link text
+  link_delete_user: "Delete My Account"
   link_forgot_password: "Forgot your password?"
+  link_login: "Log In"
+  link_login_again: "Log in again"
+  link_logout: "Log Out"
   link_sign_up: "Sign up for a new account."
 
   # Messages
+  msg_confirm_delete_user: "Are you sure you want to delete your account? There is no way to undo this."
   msg_email_error: "There was an error sending the email."
   msg_email_not_found: "Sorry, we could not find this email address."
   msg_general_error: "Sorry, there was an error."
+  msg_invalid_login: "Login failed. The email address and/or password was not correct."
   msg_invalid_password_recovery_code: "Sorry, this password recovery code is invalid.  Try <a href='/forgot_password'>re-sending the password recovery email</a>."
+  msg_need_verification_explanation: "We're sorry, but you have not yet verified your email address.  Please take the time to do so now - check your email and click on the link provided."
+  msg_profile_saved: "Your changes have been saved."
+  msg_successful_logout: "Logout Successful"
   msg_user_not_found: "Sorry, this user was not found."
   msg_username_available: "Score! You can have this username."
   msg_username_taken: "Sorry, this username is not available."
 
   # Page Titles
+  subtitle_users: ": User"
   title_edit_user: "Edit My Profile"
+  title_error_user_not_found: "Not Found"
+  title_login: "Log In"
+  title_logout: "Log Out"
   title_signup: "Create User"
+  title_user_delete: "Delete"
+  title_verification_needed: "Please verify your email address"
 
   # Pages
   # Email verification

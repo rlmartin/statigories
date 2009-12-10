@@ -9,6 +9,7 @@ class UsersController < ApplicationController
 			set_logged_in(@user.id, false)
 			redirect_to login_path
 		else
+      @submit_to = new_user_path
 			render :edit
 		end
   end
@@ -16,7 +17,7 @@ class UsersController < ApplicationController
   def destroy
 		# Only allow deleting if the user has permission.
 		if @can_delete
-			@page[:title] = Constant::get(:title_user_delete)
+			@page[:title] = t(:title_user_delete)
 			User.delete(@user.id)
 			logout
 		else
@@ -66,13 +67,16 @@ class UsersController < ApplicationController
     if @user == nil
       flash.now[:error] = t(:msg_email_not_found)
     elsif @user.verified
-        flash.now[:error] = t(:msg_already_verified)
+      flash.now[:error] = t(:msg_already_verified)
     else
+      bolResult = false
       if @user.verification_code == ''
         @user.set_verification_code
-        @user.save
+        bolResult = @user.save
+      else
+        bolResult = @user.send_verification_email(true)
       end
-      if @user.send_verification_email
+      if bolResult
         flash.now[:notice] = t(:msg_verification_sent)
       else
         flash.now[:error] = t(:msg_email_error)
@@ -97,7 +101,7 @@ class UsersController < ApplicationController
       @user.password = params[:user][:password]
       @user.password_confirmation = params[:user][:password_confirmation]
       @user.password_recovery_code = ''
-      @user.password_recovery_code = nil
+      @user.password_recovery_code_set = nil
       if @user.save
         flash.now[:notice] = t(:msg_password_set)
         set_logged_in(@user.id, false)
@@ -114,6 +118,7 @@ class UsersController < ApplicationController
 
   def update
 		@user = User.find_by_id(params[:user][:id])
+    old_username = @user.username
 		unless @user == nil
 			if params[:user][:password] == ''
 				params[:user].delete(:password)
@@ -125,8 +130,10 @@ class UsersController < ApplicationController
 			end
 			@user.update_attributes(params[:user])
 			if @user.save
-				redirect_to login_path
+        flash[:notice] = t(:msg_profile_saved)
+				redirect_to user_path(@user.username)
 			else
+		    @submit_to = user_path(old_username)
 				render :edit
 			end
 		end
@@ -155,7 +162,7 @@ class UsersController < ApplicationController
 
 	protected
 	def load_user_from_param
-		@page[:title] = Constant::get(:title_error_user_not_found)
+		@page[:title] = t(:title_error_user_not_found)
     if params[:username] == nil and params[:user][:username] != nil: params[:username] = params[:user][:username] end
 		@user = User.find_by_username(params[:username])
 		if @user != nil
@@ -164,7 +171,7 @@ class UsersController < ApplicationController
 	end
 
 	def set_page_vars
-		@page[:subtitle] = Constant::get(:subtitle_users)
+		@page[:subtitle] = t(:subtitle_users)
 	end
 
 end

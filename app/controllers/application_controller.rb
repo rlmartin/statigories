@@ -29,16 +29,14 @@ class ApplicationController < ActionController::Base
 
 	def fetch_logged_in_user
 		if session[:user_id] == nil and cookies[:user_id] != nil and cookies[:user_id] != '': session[:user_id] = AESCrypt::decrypt(cookies[:user_id]).to_i end
-		if session[:user_id] != nil and session[:user_id] > 0 and session[:logged_in] == nil or session[:logged_in] == false
+		if session[:user_id] != nil and session[:user_id] > 0 and (session[:logged_in] == nil or session[:logged_in] == false)
 			@_me = User.find_by_id(session[:user_id])
 			unless @_me == nil
-				if @_me.verified or (@_me.created_at + 1) <= DateTime.now
-					session[:username] = @_me.username
-					session[:name] = @_me.first_name
-					session[:logged_in] = true
-					session[:_me] = @_me
-					@_me = nil
-				end
+				session[:username] = @_me.username
+				session[:name] = @_me.first_name
+				session[:logged_in] = true
+				session[:_me] = @_me
+				@_me = nil
 			end
 		end
 		@_me = session[:_me]
