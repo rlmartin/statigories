@@ -44,12 +44,17 @@ class SessionsControllerTest < ActionController::TestCase
   end
 
   def test_should_logout
+    log_count = EventLog.find(:all).count
     do_login
     assert assigns(:current_user)
     assert_redirected_to '/'
     assert_not_nil session[:user_id]
     assert session[:logged_in]
+    assert_equal log_count + 1, EventLog.find(:all).count
+    assert_equal EventLog.find(:last).event_id, Event::LOGIN
     get :destroy
+    assert_equal log_count + 2, EventLog.find(:all).count
+    assert_equal EventLog.find(:last).event_id, Event::LOGOUT
     assert ! assigns(:current_user)
     assert_response :success
     assert_template :destroy
@@ -60,6 +65,47 @@ class SessionsControllerTest < ActionController::TestCase
 		assert_nil session[:logged_in]
 		assert_nil session[:_me]
 		assert_nil cookies[:user_id]
+  end
+
+  def test_should_not_allow_login_with_cookie
+    do_login_with_remember
+    assert_not_nil cookies['user_id']
+    session.clear
+    @request.cookies['user_id'] = CGI.unescape(cookies['user_id'])
+    get :new
+    assert_redirected_to '/'
+  end
+
+  def test_should_log_login_event
+    log_count = EventLog.find(:all).count
+    do_login
+    assert_equal log_count + 1, EventLog.find(:all).count
+  end
+
+  def test_should_log_login_event_only_once
+    log_count = EventLog.find(:all).count
+    do_login_with_remember
+    assert_not_nil cookies['user_id']
+    assert_equal log_count + 1, EventLog.find(:all).count
+    assert_equal EventLog.find(:last).event_id, Event::LOGIN
+    @request.cookies['user_id'] = CGI.unescape(cookies['user_id'])
+    get :new
+    assert_equal log_count + 1, EventLog.find(:all).count
+    assert_redirected_to '/'
+  end
+
+  def test_should_log_login_event_with_remember_me
+    log_count = EventLog.find(:all).count
+    do_login_with_remember
+    assert_not_nil cookies['user_id']
+    assert_equal log_count + 1, EventLog.find(:all).count
+    assert_equal EventLog.find(:last).event_id, Event::LOGIN
+    session.clear
+    @request.cookies['user_id'] = CGI.unescape(cookies['user_id'])
+    get :new
+    assert_equal log_count + 2, EventLog.find(:all).count
+    assert_equal EventLog.find(:last).event_id, Event::LOGIN
+    assert_redirected_to '/'
   end
 
 end

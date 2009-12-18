@@ -83,7 +83,11 @@ class UsersControllerTest < ActionController::TestCase
     assert_not_nil User.find_by_id(users(:ryan).id)
     do_login
     assert_not_nil session[:logged_in]
+    log_count = EventLog.find(:all).count
     get :destroy, :username => users(:ryan).username
+    assert_equal log_count + 1, EventLog.find(:all).count
+    assert_equal EventLog.find(:last).event_id, Event::USER_DELETED
+    assert_equal EventLog.find(:last).event_data, users(:ryan).id.to_s
     assert_nil User.find_by_id(users(:ryan).id)
     assert_select "h1", I18n.t(:title_user_delete)
     # Check that user is logged out after delete.
@@ -94,7 +98,9 @@ class UsersControllerTest < ActionController::TestCase
 
   def test_should_not_delete_user_when_not_logged_in
     assert_not_nil User.find_by_id(users(:ryan).id)
+    log_count = EventLog.find(:all).count
     get :destroy, :username => users(:ryan).username
+    assert_equal log_count, EventLog.find(:all).count
     assert_redirected_to user_path(users(:ryan).username)
     assert_not_nil User.find_by_id(users(:ryan).id)
   end
@@ -102,7 +108,9 @@ class UsersControllerTest < ActionController::TestCase
   def test_should_not_delete_user_when_not_own_user
     assert_not_nil User.find_by_id(users(:user1).id)
     do_login
+    log_count = EventLog.find(:all).count
     get :destroy, :username => users(:user1).username
+    assert_equal log_count, EventLog.find(:all).count
     assert_redirected_to user_path(users(:user1).username)
     assert_not_nil User.find_by_id(users(:user1).id)
   end
@@ -177,13 +185,24 @@ class UsersControllerTest < ActionController::TestCase
     assert_select "form[action=#{forgot_password_path}] input[type=submit][value=#{I18n.t(:btn_send)}]", :count => 1
   end
 
-  def test_should_send_forgot_password_email
+  def test_should_send_forgot_password_email_also_check_msg_sent_event
+    # Store initial values.
     num_deliveries = ActionMailer::Base.deliveries.size
+    log_count = EventLog.find(:all).count
+    @request.env["HTTP_USER_AGENT"] = 'hihi'
+    @request.env["REMOTE_ADDR"] = '2.2.2.2'
+    # Send the email
     u = User.find_by_id(users(:ryan).id)
     assert_equal u.password_recovery_code, ''
     assert_nil u.password_recovery_code_set
     post :process_forgot_password, :email => users(:ryan).email
     assert_equal num_deliveries + 1, ActionMailer::Base.deliveries.size
+    assert_equal log_count + 1, EventLog.find(:all).count
+    assert_equal EventLog.find(:last).event_id, Event::EMAIL_MSG_SENT
+    assert_equal EventLog.find(:last).user_id, u.id
+    # Check the request properties.
+    assert_equal EventLog.find(:last).user_agent.user_agent, 'hihi'
+    assert_equal EventLog.find(:last).ip_address, '2.2.2.2'
     # Check user
     u = User.find_by_id(users(:ryan).id)
     assert_not_equal u.password_recovery_code, ''
@@ -238,13 +257,22 @@ class UsersControllerTest < ActionController::TestCase
     assert_select "div.error_msg", :count => 0
   end
 
-  def test_should_resend_verify_email_even_if_code_blank
+  def test_should_resend_verify_email_even_if_code_blank_also_check_msg_sent_event
     num_deliveries = ActionMailer::Base.deliveries.size
+    log_count = EventLog.find(:all).count
+    @request.env["HTTP_USER_AGENT"] = 'hihi'
+    @request.env["REMOTE_ADDR"] = '2.2.2.2'
     u = User.find_by_id(users(:user2).id)
     assert_equal u.verification_code, ''
     assert !u.verified
     post :process_resend_verify, :email => users(:user2).email
     assert_equal num_deliveries + 1, ActionMailer::Base.deliveries.size
+    assert_equal log_count + 1, EventLog.find(:all).count
+    assert_equal EventLog.find(:last).event_id, Event::EMAIL_MSG_SENT
+    assert_equal EventLog.find(:last).user_id, u.id
+    # Check the request properties.
+    assert_equal EventLog.find(:last).user_agent.user_agent, 'hihi'
+    assert_equal EventLog.find(:last).ip_address, '2.2.2.2'
     # Check user
     u = User.find_by_id(users(:user2).id)
     assert_not_equal u.verification_code, ''
@@ -424,6 +452,7 @@ class UsersControllerTest < ActionController::TestCase
     username = u.username
     password = u.password
     # Use the authoried email to test the automatic email verification sending.
+    log_count = EventLog.find(:all).count
     post :update, :user => {
       :id => users(:ryan).id,
       :first_name => 'John',
@@ -439,6 +468,9 @@ class UsersControllerTest < ActionController::TestCase
     assert_nil flash[:error]
     assert_not_nil flash[:notice]
     assert_equal flash[:notice], I18n.t(:msg_profile_saved)
+    # One logged event for each: user edited, msg sent
+    assert_equal log_count + 2, EventLog.find(:all).count
+    assert_equal EventLog.find(:last).event_id, Event::USER_EDITED
     # Make sure the verification email was sent.
     assert_equal num_deliveries + 1, ActionMailer::Base.deliveries.size
     # Check the user
@@ -463,6 +495,7 @@ class UsersControllerTest < ActionController::TestCase
     email = u.email
     username = u.username
     password = u.password
+    log_count = EventLog.find(:all).count
     post :update, :user => {
       :id => users(:user3).id,
       :first_name => 'John',
@@ -478,6 +511,8 @@ class UsersControllerTest < ActionController::TestCase
     assert_nil flash[:error]
     assert_not_nil flash[:notice]
     assert_equal flash[:notice], I18n.t(:msg_profile_saved)
+    assert_equal log_count + 1, EventLog.find(:all).count
+    assert_equal EventLog.find(:last).event_id, Event::USER_EDITED
     # Make sure the verification email was not sent.
     assert_equal num_deliveries, ActionMailer::Base.deliveries.size
     # Check the user
@@ -502,6 +537,7 @@ class UsersControllerTest < ActionController::TestCase
     email = u.email
     username = u.username
     password = u.password
+    log_count = EventLog.find(:all).count
     post :update, :user => {
       :id => users(:user2).id,
       :first_name => 'John',
@@ -517,6 +553,9 @@ class UsersControllerTest < ActionController::TestCase
     assert_nil flash[:error]
     assert_not_nil flash[:notice]
     assert_equal flash[:notice], I18n.t(:msg_profile_saved)
+    # One logged event for each: user edited, msg sent
+    assert_equal log_count + 2, EventLog.find(:all).count
+    assert_equal EventLog.find(:last).event_id, Event::USER_EDITED
     # Make sure the verification email was sent.
     assert_equal num_deliveries + 1, ActionMailer::Base.deliveries.size
     # Check the user
@@ -541,6 +580,7 @@ class UsersControllerTest < ActionController::TestCase
     email = u.email
     username = u.username
     password = u.password
+    log_count = EventLog.find(:all).count
     post :update, :user => {
       :id => users(:user2).id,
       :first_name => 'John',
@@ -556,6 +596,7 @@ class UsersControllerTest < ActionController::TestCase
     assert_not_nil assigns(:user)
     assert_not_nil assigns(:submit_to)
     assert assigns(:user).errors.on(:email)
+    assert_equal log_count, EventLog.find(:all).count
     # Make sure the verification email was not sent.
     assert_equal num_deliveries, ActionMailer::Base.deliveries.size
     # Has correct title text
@@ -590,6 +631,7 @@ class UsersControllerTest < ActionController::TestCase
     email = u.email
     username = u.username
     password = u.password
+    log_count = EventLog.find(:all).count
     post :update, :user => {
       :id => users(:user2).id,
       :first_name => 'John',
@@ -605,6 +647,7 @@ class UsersControllerTest < ActionController::TestCase
     assert_not_nil assigns(:user)
     assert_not_nil assigns(:submit_to)
     assert assigns(:user).errors.on(:email)
+    assert_equal log_count, EventLog.find(:all).count
     # Make sure the verification email was not sent.
     assert_equal num_deliveries, ActionMailer::Base.deliveries.size
     # Has correct title text
@@ -639,6 +682,7 @@ class UsersControllerTest < ActionController::TestCase
     email = u.email
     username = u.username
     password = u.password
+    log_count = EventLog.find(:all).count
     post :update, :user => {
       :id => users(:user2).id,
       :first_name => 'John',
@@ -654,6 +698,7 @@ class UsersControllerTest < ActionController::TestCase
     assert_not_nil assigns(:user)
     assert_not_nil assigns(:submit_to)
     assert assigns(:user).errors.on(:password)
+    assert_equal log_count, EventLog.find(:all).count
     # Make sure the verification email was not sent.
     assert_equal num_deliveries, ActionMailer::Base.deliveries.size
     # Has correct title text
@@ -686,6 +731,7 @@ class UsersControllerTest < ActionController::TestCase
     email = u.email
     username = u.username
     password = u.password
+    log_count = EventLog.find(:all).count
     post :update, :user => {
       :id => users(:user2).id,
       :first_name => 'John',
@@ -701,6 +747,7 @@ class UsersControllerTest < ActionController::TestCase
     assert_not_nil assigns(:user)
     assert_not_nil assigns(:submit_to)
     assert assigns(:user).errors.on(:username)
+    assert_equal log_count, EventLog.find(:all).count
     # Make sure the verification email was not sent.
     assert_equal num_deliveries, ActionMailer::Base.deliveries.size
     # Has correct title text

@@ -18,7 +18,7 @@ class UsersController < ApplicationController
 		# Only allow deleting if the user has permission.
 		if @can_delete
 			@page[:title] = t(:title_user_delete)
-			User.delete(@user.id)
+			if User.delete(@user.id): EventLog.create(:event_id => Event::USER_DELETED, :event_data => @user.id.to_s) end
 			logout
 		else
 			redirect_to user_path(@user)
@@ -131,6 +131,7 @@ class UsersController < ApplicationController
 			@user.update_attributes(params[:user])
 			if @user.save
         flash[:notice] = t(:msg_profile_saved)
+        @user.add_edited_event
 				redirect_to user_path(@user.username)
 			else
 		    @submit_to = user_path(old_username)
@@ -156,7 +157,7 @@ class UsersController < ApplicationController
   end
 
 	def verify_check
-		if @_me == nil or @_me.id <= 0: redirect_to new_user_path end
+		if @_me == nil or @_me[:id] <= 0: redirect_to new_user_path end
 		@page[:title] = t(:title_email_verification)
 	end
 

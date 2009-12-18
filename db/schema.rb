@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20091121201534) do
+ActiveRecord::Schema.define(:version => 20091210122245) do
 
   create_table "constants", :force => true do |t|
     t.string   "name",        :default => ""
@@ -30,6 +30,40 @@ ActiveRecord::Schema.define(:version => 20091121201534) do
   add_index "constants", ["server_type", "active", "name"], :name => "index_constants_on_server_type_and_active_and_name"
   add_index "constants", ["server_type", "active"], :name => "index_constants_on_server_type_and_active"
   add_index "constants", ["server_type"], :name => "index_constants_on_server_type"
+
+  create_table "event_log_extras", :force => true do |t|
+    t.integer  "event_log_id", :null => false
+    t.text     "data",         :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "event_logs", :force => true do |t|
+    t.integer  "event_id",                      :null => false
+    t.integer  "user_id"
+    t.integer  "user_agent_id",                 :null => false
+    t.string   "event_data",    :default => "", :null => false
+    t.string   "ip_address",    :default => "", :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "events", :force => true do |t|
+    t.string   "name",        :default => "", :null => false
+    t.string   "description", :default => "", :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "user_agents", :force => true do |t|
+    t.string   "user_agent", :default => "",    :null => false
+    t.boolean  "is_bot",     :default => false, :null => false
+    t.boolean  "is_mobile",  :default => false, :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "user_agents", ["user_agent"], :name => "index_user_agents_on_user_agent", :unique => true
 
   create_table "users", :force => true do |t|
     t.string   "email",                                         :null => false

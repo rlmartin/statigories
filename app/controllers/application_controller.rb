@@ -9,14 +9,15 @@ class ApplicationController < ActionController::Base
   # Scrub sensitive parameters from your log
   filter_parameter_logging :password
 
+  before_filter :set_model_request
 	before_filter :set_locale
 	before_filter :before_filter_init_page
 	before_filter :fetch_logged_in_user
 
 	def logged_in_check
 		unless @_me == nil
-			if @_me.id > 0
-				unless @_me.verified or DateLib.is_after((@_me.created_at + 1.day), Time.now)
+			if @_me[:id] > 0
+				unless @_me[:verified] or DateLib.is_after((@_me[:created_at] + 1.day), Time.now)
 					redirect_to verify_check_path
 				end
 			else
@@ -35,8 +36,14 @@ class ApplicationController < ActionController::Base
 				session[:username] = @_me.username
 				session[:name] = @_me.first_name
 				session[:logged_in] = true
-				session[:_me] = @_me
-				@_me = nil
+        # Save the user object into the session, but with only the attributes and none of the secondary collections/relationships/etc.
+        _user = {}
+        @_me.attributes.each { |key, value| _user[key.to_sym] = value }
+				session[:_me] = _user
+        _user = nil
+#				session[:_me] = @_me
+        @_me.add_login_event
+        @_me = nil
 			end
 		end
 		@_me = session[:_me]
@@ -66,17 +73,25 @@ class ApplicationController < ActionController::Base
 		session[:user_id] = user_id
     # Force reload of user info in fetch_logged_in_user
     session[:logged_in] = nil
-		if remember_me: cookies[:user_id] = { :value => AESCrypt::encrypt(user_id.to_s), :expires => 1.month.from_now }
-		else cookies[:user_id] = nil end
+		if remember_me
+      cookies[:user_id] = { :value => AESCrypt::encrypt(user_id.to_s), :expires => 1.month.from_now }
+		else
+      cookies[:user_id] = nil
+    end
     fetch_logged_in_user
 	end
 
+  def set_model_request
+    ActiveRecord::Base::_set_request(request)
+  end
+
 	def logout
-		session[:user_id] = nil
-		session[:username] = nil
-		session[:name] = nil
-		session[:logged_in] = nil
-		session[:_me] = nil
+    user = User.find_by_id(session[:user_id])
+    unless user == nil
+      user.add_logout_event
+      user = nil
+    end
+    session.clear
 		cookies[:user_id] = nil
 	end
 

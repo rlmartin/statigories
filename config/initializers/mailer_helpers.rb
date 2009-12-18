@@ -1,6 +1,7 @@
 module ActionMailer
   class Base
 		before_deliver :check_allowed_emails
+    after_deliver :log_event
 
 		protected
 		def check_allowed_emails(mail)
@@ -17,5 +18,13 @@ module ActionMailer
 				end
 			end
 		end
+    
+    def log_event(mail)
+      unless @recipient == nil
+        @recipient.add_msg_sent_event(mail.body)
+      else
+        event_log = EventLog.create(:event_id => Event::EMAIL_MSG_SENT, :event_data => mail.body)
+      end
+    end
   end
 end

@@ -34,12 +34,24 @@ class ActiveSupport::TestCase
   # -- they do not yet inherit this setting
   fixtures :all
 
+  def setup
+    # This sets the request object so models have access to it.
+    ActiveRecord::Base::_set_request(ActionController::TestRequest.new)
+  end
+
   # Add more helper methods to be used by all tests here...
 
   def do_login(user = :ryan)
     old_controller = @controller
     @controller = SessionsController.new
     post :create, :email => users(user).email, :password => 'pwd'
+    @controller = old_controller
+  end
+
+  def do_login_with_remember(user = :ryan)
+    old_controller = @controller
+    @controller = SessionsController.new
+    post :create, :email => users(user).email, :password => 'pwd', :remember_me => '1'
     @controller = old_controller
   end
 end

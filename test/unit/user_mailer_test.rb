@@ -7,8 +7,13 @@ class UserMailerTest < ActionMailer::TestCase
     u = User.find_by_username(users(:ryan).username)
     assert u
     unless Constant::get(:test_emails)[0] == '': u.email = Constant::get(:test_emails)[0] end
+    log_count = EventLog.find(:all).count
     assert UserMailer.deliver_email_verification(u)
     assert_equal num_deliveries + 1, ActionMailer::Base.deliveries.size
+    # Make sure an event was written
+    assert_equal log_count + 1, EventLog.find(:all).count
+    assert_equal EventLog.find(:last).event_id, Event::EMAIL_MSG_SENT
+    assert_equal EventLog.find(:last).user_id, u.id
   end
 
   def test_email_not_sent_not_test_address
@@ -19,7 +24,9 @@ class UserMailerTest < ActionMailer::TestCase
     unless Constant::get(:test_emails)[0] == '': u.email = Constant::get(:test_emails)[0] end
     # Fake using an email not on the list
     u.email = 'xx' + u.email
+    log_count = EventLog.find(:all).count
     assert !UserMailer.deliver_email_verification(u)
     assert_equal num_deliveries, ActionMailer::Base.deliveries.size
+    assert_equal log_count, EventLog.find(:all).count
   end
 end

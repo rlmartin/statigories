@@ -38,6 +38,10 @@ module StringLib
     unless iNumChars >= strValue.length: strValue.slice!(iNumChars, (strValue.length - iNumChars)) end
   end
 
+  def self.MD5(strValue)
+    Digest::MD5.hexdigest(strValue)
+  end
+
   def self.right(strValue, iNumChars)
     if iNumChars < strValue.length
       strValue.slice((strValue.length - iNumChars), iNumChars)
