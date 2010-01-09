@@ -10,15 +10,19 @@ en:
   btn_edit: Edit
   btn_login: Login
   btn_save: Save
+  btn_search: Search
   btn_send: Send
 
   # Email subject lines
   subject_email_verification: "Please verify your email address"
+  subject_new_friend_request: "You have a new friend!"
   subject_password_reset: "Password reset requested"
 
   # General text
   app_name: "MyLogs"
   log_in_prompt: "Please log in."
+  no_reply_email: "noreply@mylo.gs"
+  no_reply_from_name: "MyLogs 2"
   sign_up_prompt: "Not a member?"
 
   # Header text
@@ -34,30 +38,46 @@ en:
   input_password: "Password:"
   input_remember_me: "Remember me on this computer"
   input_username: "Username:"
+  input_user_search_text: "Search Text:"
 
   # Link text
+  link_add_friend: "Add Friend"
+  link_delete_friend: "Remove Friend"
   link_delete_user: "Delete My Account"
   link_forgot_password: "Forgot your password?"
+  link_block_friend_request: "Block"
+  link_ignore_friend_request: "Ignore"
   link_login: "Log In"
   link_login_again: "Log in again"
   link_logout: "Log Out"
+  link_return_to_friends: "Back to friends list."
   link_sign_up: "Sign up for a new account."
+  link_user_friends: "My Friends"
 
   # Messages
   msg_confirm_delete_user: "Are you sure you want to delete your account? There is no way to undo this."
   msg_email_error: "There was an error sending the email."
   msg_email_not_found: "Sorry, we could not find this email address."
+  msg_friend_added: "You have successfully added this friend."
+  msg_friend_blocked: "You have blocked this user."
+  msg_friend_deleted: "You have removed this friend."
+  msg_friend_ignored: "You have ignored this friend request."
+  msg_friend_not_found: "Sorry, we could not find this friend."
   msg_general_error: "Sorry, there was an error."
   msg_invalid_login: "Login failed. The email address and/or password was not correct."
   msg_invalid_password_recovery_code: "Sorry, this password recovery code is invalid.  Try <a href='/forgot_password'>re-sending the password recovery email</a>."
   msg_need_verification_explanation: "We're sorry, but you have not yet verified your email address.  Please take the time to do so now - check your email and click on the link provided."
+  msg_not_authorized: "Sorry, you are not authorized to perform this action."
   msg_profile_saved: "Your changes have been saved."
   msg_successful_logout: "Logout Successful"
   msg_user_not_found: "Sorry, this user was not found."
+  msg_user_search_none_found: "No users matched this search."
   msg_username_available: "Score! You can have this username."
   msg_username_taken: "Sorry, this username is not available."
 
   # Page Titles
+  section_title_user_friend_requests: "Pending friend requests:"
+  section_title_user_friends: "Your friends:"
   subtitle_users: ": User"
   title_edit_user: "Edit My Profile"
   title_error_user_not_found: "Not Found"
@@ -65,6 +85,8 @@ en:
   title_logout: "Log Out"
   title_signup: "Create User"
   title_user_delete: "Delete"
+  title_user_friends: "{{name}}'s Friends"
+  title_user_search: "Search Users"
   title_verification_needed: "Please verify your email address"
 
   # Pages
@@ -86,3 +108,40 @@ en:
   msg_reset_password_sent: "Email sent successfully.  Within a few minutes, you should receive an email with instructions about how to reset your password.  Be sure to check your junk email and add noreply@mylo.gs to your safe senders list to ensure delivery."
   prompt_forgot_password: "Forgot your password? Enter your email address below and we'll send you an email to begin the password reset process."
   prompt_reset_password: "Enter your new password below."
+
+  # Model errors
+  activerecord:
+    errors:
+      templates:
+        header:
+          one: "1 error prohibited this {{object_name}} from being saved"
+          other: "{{count}} errors prohibited this {{object_name}} from being saved"
+        body: "there were problems with the following fields:"
+      messages:
+        accepted: "must be accepted"
+        blank: "can't be blank"
+        confirmation: "doesn't match confirmation"
+        empty: "can't be empty"
+        equal_to: "must be equal to {{count}}"
+        even: "must be even"
+        exclusion: "is reserved"
+        greater_than: "must be greater than {{count}}"
+        greater_than_or_equal_to: "must be greater than or equal to {{count}}"
+        inclusion: "is not included in the list"
+        invalid: "is invalid"
+        less_than: "must be less than {{count}}"
+        less_than_or_equal_to: "must be less than or equal to {{count}}"
+        not_a_number: "is not a number"
+        odd: "must be odd"
+        taken: "is already taken"
+        too_long: "is too long (maximum is {{count}} characters)"
+        too_short: "is too short (minimum is {{count}} characters)"
+        wrong_length: "is the wrong length (should be {{count}} characters)"
+      models:
+        friendship:
+          message: "Unknown error creating friend."
+          attributes:
+            friend_id:
+              blank: "Missing associated friend."
+              taken: "You have already added this user as a friend."
+

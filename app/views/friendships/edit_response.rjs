@@ -1,0 +1,18 @@
+if @friend != nil and @friend.id > 0 and @action_completed
+  page['friendship_' + @friend.id.to_s].replace_html prep_rjs(render(:partial => 'edit', :locals => { :edit => @friend }))
+  page.select("ul:not(#search_results) .user_row_#{@friend.id}").each do |f|
+    f.hide
+  end
+  page << "if($('friend_list')){"
+  if @friend_added: page.insert_html :bottom, :friend_list, prep_rjs(render(:partial => 'users/user_row', :locals => { :user_row => @friend})) end
+  page << "}"
+  page[:error_msg].replace_html prep_rjs('')
+  page[:error_msg].hide
+  page[:notice_msg].replace_html prep_rjs(flash[:notice])
+  page[:notice_msg].show
+else
+  page[:notice_msg].replace_html prep_rjs('')
+  page[:notice_msg].hide
+  page[:error_msg].replace_html prep_rjs(flash[:error])
+  page[:error_msg].show
+end

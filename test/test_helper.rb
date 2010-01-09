@@ -41,17 +41,32 @@ class ActiveSupport::TestCase
 
   # Add more helper methods to be used by all tests here...
 
-  def do_login(user = :ryan)
+  def change_constant(name, value)
+    c = Constant.find_by_name(name)
+    assert_not_nil c
+    c.update_attributes(:value => value)
+    Constant::refresh!(name)
+  end
+
+  def do_login(user = :ryan, redirect_url = nil)
     old_controller = @controller
     @controller = SessionsController.new
-    post :create, :email => users(user).email, :password => 'pwd'
+    post :create, :email => users(user).email, :password => 'pwd', :url => redirect_url
     @controller = old_controller
   end
 
-  def do_login_with_remember(user = :ryan)
+  def do_login_with_remember(user = :ryan, redirect_url = nil)
     old_controller = @controller
     @controller = SessionsController.new
-    post :create, :email => users(user).email, :password => 'pwd', :remember_me => '1'
+    post :create, :email => users(user).email, :password => 'pwd', :remember_me => '1', :url => redirect_url
     @controller = old_controller
   end
+
+  def load_user_page(user = :ryan)
+    old_controller = @controller
+    @controller = UsersController.new
+    get :show, :username => users(user).username
+    @controller = old_controller
+  end
+
 end

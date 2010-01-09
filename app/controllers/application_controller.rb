@@ -1,6 +1,5 @@
 # Filters added to this controller apply to all controllers in the application.
 # Likewise, all the methods added will be available for all controllers.
-
 class ApplicationController < ActionController::Base
   helper :all # include all helpers, all the time
   protect_from_forgery # See ActionController::RequestForgeryProtection for details
@@ -56,6 +55,14 @@ class ApplicationController < ActionController::Base
 		@can_delete = false
   end
 
+  def is_mine
+    if @user == nil
+      false
+    else
+      (@user.id == my_user_id)
+    end
+  end
+
 	def load_permissions_for_user
 		if @user != nil and @user.id == session[:user_id]
 			@can_edit = true
@@ -63,6 +70,23 @@ class ApplicationController < ActionController::Base
 			@can_view = true
 		end
 	end
+
+	def load_user_from_param
+		@page[:title] = t(:title_error_user_not_found)
+    if params[:username] == nil and params[:user][:username] != nil: params[:username] = params[:user][:username] end
+		@user = User.find_by_username(params[:username])
+		if @user != nil
+			@page[:title] = @user.first_name + ' ' + @user.last_name
+		end
+	end
+
+  def my_user_id
+    if @_me == nil
+      0
+    else
+      @_me[:id]
+    end
+  end
 
 	def set_locale
 		I18n.locale = :en

@@ -1,0 +1,5 @@
+<div id='friendship_<%= edit.id %>'><% if edit.inverse_friendships.exists?(:user_id => my_user_id) %><%= link_to_remote t(:link_delete_friend), :url => user_remove_friend_path(:username => @_me[:username], :friend => edit.username), :method => :delete %>
+<% elsif edit.id != my_user_id and session[:logged_in] %><%= link_to_remote t(:link_add_friend), :url => user_add_friend_path(:username => @_me[:username], :friend => edit.username), :method => :create %>
+<% if edit.friendships.exists?(:friend_id => my_user_id, :responded => false, :blocked => false) %><%= link_to_remote t(:link_ignore_friend_request), :url => user_ignore_friend_path(:username => @_me[:username], :friend => edit.username) %> <%= link_to_remote t(:link_block_friend_request), :url => user_block_friend_path(:username => @_me[:username], :friend => edit.username) %>
+<% end %>
+<% end %></div>

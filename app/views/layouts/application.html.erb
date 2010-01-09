@@ -17,6 +17,7 @@
 	<div class='page'>
     <%= render :partial => (@page[:header] || 'layouts/header') unless @hide_header %>
 		<div class='main <%= @page[:main_class] %>' id='main'>
+      <%= render :partial => 'general_page/message_containers' %>
 			<%= yield %>
 		</div>
     <%= render :partial => (@page[:footer] || 'layouts/footer') unless @hide_footer %>

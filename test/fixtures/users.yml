@@ -33,3 +33,21 @@ user3:
   verified: false
   verification_code: 823ba6742fc6a7578bcc20fcdffac2d1
 
+user4:
+  email: test4a@mylo.gs
+  password: 9003d1df22eb4d3820015070385194c8
+  username: john4
+  first_name: John4
+  last_name: Doe4
+  verified: false
+  verification_code: 823ba6742fc6a7578bcc20fcdffac2d1
+
+user5:
+  email: test5@mylo.gs
+  password: 9003d1df22eb4d3820015070385194c8
+  username: john5
+  first_name: John5
+  last_name: Doe5
+  verified: false
+  verification_code: 823ba6742fc6a7578bcc20fcdffac2d1
+

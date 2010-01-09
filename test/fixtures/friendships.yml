@@ -1,0 +1,50 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  user: ryan
+  friend: user1
+  responded: false
+  blocked: false
+
+two:
+  user: ryan
+  friend: user2
+  responded: false
+  blocked: false
+
+three:
+  user: user1
+  friend: user2
+  responded: false
+  blocked: false
+
+four:
+  user: user1
+  friend: user3
+  responded: true
+  blocked: false
+
+five:
+  user: user3
+  friend: user4
+  responded: true
+  blocked: true
+
+six:
+  user: user3
+  friend: user5
+  responded: false
+  blocked: false
+
+seven:
+  user: user3
+  friend: user1
+  responded: true
+  blocked: false
+
+eight:
+  user: user2
+  friend: user4
+  responded: true
+  blocked: false
+

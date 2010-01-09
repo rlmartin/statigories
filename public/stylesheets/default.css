@@ -1,1 +1,4 @@
+.error_msg { color: #f00; }
+.notice_msg { font-weight: bold; }
 .translation_missing { color: #f00; font-weight: bold; }
+

@@ -4,7 +4,18 @@ class UserMailer < ActionMailer::Base
     @subject = I18n.t(:subject_email_verification)
     body[:recipient] = recipient
     @recipients = recipient[:first_name] + ' ' + recipient[:last_name] + ' <' + recipient[:email] + '>'
-    @from = 'MyLogs <noreply@mylo.gs>'
+    @from = I18n.t(:no_reply_from_name) + ' <' + I18n.t(:no_reply_email) + '>'
+		@content_type = 'text/html'
+		@sent_on = Time.now
+  end
+
+  def new_friend_request(recipient, friend = nil)
+    prep_mailing(recipient)
+    @subject = I18n.t(:subject_new_friend_request)
+    body[:recipient] = recipient
+    body[:friend] = friend
+    @recipients = recipient[:first_name] + ' ' + recipient[:last_name] + ' <' + recipient[:email] + '>'
+    @from = I18n.t(:no_reply_from_name) + ' <' + I18n.t(:no_reply_email) + '>'
 		@content_type = 'text/html'
 		@sent_on = Time.now
   end
@@ -14,7 +25,7 @@ class UserMailer < ActionMailer::Base
     @subject = I18n.t(:subject_password_reset)
     body[:recipient] = recipient
     @recipients = recipient[:first_name] + ' ' + recipient[:last_name] + ' <' + recipient[:email] + '>'
-    @from = 'MyLogs <noreply@mylo.gs>'
+    @from = I18n.t(:no_reply_from_name) + ' <' + I18n.t(:no_reply_email) + '>'
 		@content_type = 'text/html'
 		@sent_on = Time.now
   end

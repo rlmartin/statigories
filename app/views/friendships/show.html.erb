@@ -1,0 +1,12 @@
+<h1><%= t(:title_user_friends, :name => @user.full_name) %></h1>
+<% if is_mine and @user.unanswered_friend_requests.count > 0 %>
+  <h3><%= t :section_title_user_friend_requests %></h3>
+  <ul id='friend_requests'>
+    <%= render :partial => 'users/user_row', :collection => @user.unanswered_friend_requests %>
+  </ul>
+  <hr />
+  <h3><%= t :section_title_user_friends %></h3>
+<% end %>
+<ul id='friend_list'>
+  <%= render :partial => 'users/user_row', :collection => @user.non_blocked_friends %>
+</ul>

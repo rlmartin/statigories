@@ -3,6 +3,8 @@
 <% else %>
 <h1><%= @user.first_name %> <%= @user.last_name %></h1>
 <div class='notice_msg'><%= flash[:notice] %></div>
+<div class='friend_action'><%= render :partial => 'friendships/edit', :locals => { :edit => @user } %></div>
+<div><%= link_to t(:link_user_friends), user_friends_path(@user) %></div>
 <% if @can_edit %>
 	<%= button_to t(:btn_edit), edit_user_path(@user), :method => :get %>
 <% end %>

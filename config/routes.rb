@@ -56,6 +56,19 @@ ActionController::Routing::Routes.draw do |map|
 	map.user_availability 'user', :controller => "users", :action => "show", :conditions => { :method => :get }
 	map.user 'user/:username', :controller => "users", :action => "show", :conditions => { :method => :get }
 	map.user 'user/:username', :controller => "users", :action => "destroy", :conditions => { :method => :delete }
+	map.users 'users', :controller => "users", :action => "search", :conditions => { :method => :get }
+	map.users 'users/limit/:limit', :controller => "users", :action => "search", :conditions => { :method => :get }
+	map.user_search 'users/search', :controller => "users", :action => "show_search", :conditions => { :method => :get }
+	map.user_search 'users/search', :controller => "users", :action => "search", :conditions => { :method => :post }
+
+  # Friend routes
+  map.user_friends 'user/:username/friends', :controller => "friendships", :action => "show", :conditions => { :method => :get }
+  map.user_friends 'user/:username/friends', :controller => "friendships", :action => "create", :conditions => { :method => :post }
+  map.user_add_friend 'user/:username/friends/:friend', :controller => "friendships", :action => "create", :conditions => { :method => :post }
+  map.user_block_friend 'user/:username/block_friend/:friend', :controller => "friendships", :action => "block"
+  map.user_friends 'user/:username/friends', :controller => "friendships", :action => "destroy", :conditions => { :method => :delete }
+  map.user_ignore_friend 'user/:username/ignore_friend/:friend', :controller => "friendships", :action => "ignore"
+  map.user_remove_friend 'user/:username/friends/:friend', :controller => "friendships", :action => "destroy", :conditions => { :method => :delete }
 
   # Install the default routes as the lowest priority.
   # Note: These default routes make all actions in every controller accessible via GET requests. You should

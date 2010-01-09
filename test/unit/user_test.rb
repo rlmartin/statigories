@@ -2,6 +2,11 @@ require 'test_helper'
 
 class UserTest < ActiveSupport::TestCase
 
+  def test_full_name
+    u = User.find_by_id(users(:ryan).id)
+    assert_equal u.full_name, u.first_name + ' ' + u.last_name
+  end
+
   def test_should_not_be_vaild_without_email
     u = User.create(:username => "john", :password => "pwd", :first_name => "John", :last_name => "Doe")
     assert u.errors.on(:email)
@@ -265,4 +270,105 @@ class UserTest < ActiveSupport::TestCase
     assert_equal num_deliveries, ActionMailer::Base.deliveries.size
   end
 
+  def test_should_add_new_friend
+    change_constant 'send_level_two_emails', 'true'
+    num_deliveries = ActionMailer::Base.deliveries.size
+    u = User.find_by_id(users(:user1).id)
+    assert_not_nil u
+    assert_equal u.friends.count, 2
+    assert_equal u.friendships.count, 2
+    assert_equal u.inverse_friends.count, 2
+    assert_equal u.inverse_friendships.count, 2
+    u2 = User.find_by_id(users(:user2).id)
+    assert_not_nil u2
+    assert_equal u2.friends.count, 1
+    assert_equal u2.friendships.count, 1
+    assert_equal u2.inverse_friends.count, 2
+    assert_equal u2.inverse_friendships.count, 2
+    u2.add_friend(u)
+    assert_equal u.friends.count, 2
+    assert_equal u.inverse_friends.count, 3
+    assert_equal u2.friends.count, 2
+    assert_equal u2.inverse_friends.count, 2
+    # Make sure it sends an email.
+    assert_equal num_deliveries + 1, ActionMailer::Base.deliveries.size
+  end
+
+  def test_should_not_add_new_friend
+    change_constant 'send_level_two_emails', 'true'
+    num_deliveries = ActionMailer::Base.deliveries.size
+    u = User.find_by_id(users(:user1).id)
+    assert_not_nil u
+    assert_equal u.friends.count, 2
+    assert_equal u.friendships.count, 2
+    assert_equal u.inverse_friends.count, 2
+    assert_equal u.inverse_friendships.count, 2
+    u2 = User.find_by_id(users(:user2).id)
+    assert_not_nil u2
+    assert_equal u2.friends.count, 1
+    assert_equal u2.friendships.count, 1
+    assert_equal u2.inverse_friends.count, 2
+    assert_equal u2.inverse_friendships.count, 2
+    u.add_friend(u2)
+    assert_equal u.friends.count, 2
+    assert_equal u.inverse_friends.count, 2
+    assert_equal u2.friends.count, 1
+    assert_equal u2.inverse_friends.count, 2
+    # Make sure it does not send an email.
+    assert_equal num_deliveries, ActionMailer::Base.deliveries.size
+  end
+
+  def test_remove_friend
+    u = User.find_by_id(users(:user1).id)
+    assert_not_nil u
+    assert_equal u.friends.count, 2
+    assert_equal u.friendships.count, 2
+    u2 = User.find_by_id(users(:user2).id)
+    assert_not_nil u2
+    assert u.friends.include?(u2)
+    assert u.remove_friend(u2)
+    assert_equal u.friends.count, 1
+    assert_equal u.friendships.count, 1
+  end
+
+  def test_remove_friend_failed
+    u = User.find_by_id(users(:user1).id)
+    assert_not_nil u
+    assert_equal u.friends.count, 2
+    assert_equal u.friendships.count, 2
+    u2 = User.find_by_id(users(:ryan).id)
+    assert_not_nil u2
+    assert !u.friends.include?(u2)
+    assert !u.remove_friend(u2)
+    assert_equal u.friends.count, 2
+    assert_equal u.friendships.count, 2
+    assert !u.remove_friend(nil)
+    assert_equal u.friends.count, 2
+    assert_equal u.friendships.count, 2
+  end
+
+  def test_friend_collection_does_not_include_blocked
+    u = User.find_by_id(users(:user3).id)
+    assert u
+    assert_equal u.friends.count, 3
+    assert_equal u.non_blocked_friends.count, 2
+  end
+
+  def test_should_send_new_friend_request_email_level_two_on
+    change_constant 'send_level_two_emails', 'true'
+    num_deliveries = ActionMailer::Base.deliveries.size
+    u = User.find_by_id(users(:ryan).id)
+    u.send_new_friend_request_email
+    assert_equal num_deliveries + 1, ActionMailer::Base.deliveries.size
+  end
+
+  def test_should_not_send_new_friend_request_email_level_two_off
+    change_constant 'send_level_two_emails', 'false'
+    num_deliveries = ActionMailer::Base.deliveries.size
+    u = User.find_by_id(users(:ryan).id)
+    u.send_new_friend_request_email
+    assert_equal num_deliveries, ActionMailer::Base.deliveries.size
+  end
+
 end
+

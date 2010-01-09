@@ -113,36 +113,52 @@ class UsersController < ApplicationController
     render :reset_password
 	end
 
+  def search
+    limit = StringLib.cast(params[:limit], :int)
+    if limit == nil or limit <= 0: limit = Constant::get(:search_default_limit) end
+    text = params[:text]
+    if text == nil
+      @users = User.find(:all, :limit => limit, :order => 'created_at DESC')
+    else
+      @users = User.find(:all, :limit => limit, :order => 'created_at DESC', :conditions => ['username LIKE ? OR first_name LIKE ? OR last_name LIKE ? OR email LIKE ?', '%' + text + '%', '%' + text + '%', '%' + text + '%', '%' + text + '%'])
+    end
+    @page[:title] = t(:title_user_search)
+    @page[:subtitle] = ''
+  end
+
   def show
   end
 
   def update
-		@user = User.find_by_id(params[:user][:id])
+	  @user = User.find_by_id(params[:user][:id])
+    load_permissions_for_user
     old_username = @user.username
-		unless @user == nil
-			if params[:user][:password] == ''
-				params[:user].delete(:password)
-				params[:user].delete(:password_confirmation)
-			end
-			if params[:user][:email] == '' or params[:user][:email].downcase == @user.email
-				params[:user].delete(:email)
-				params[:user].delete(:email_confirmation)
-			end
-			@user.update_attributes(params[:user])
-			if @user.save
-        flash[:notice] = t(:msg_profile_saved)
-        @user.add_edited_event
-				redirect_to user_path(@user.username)
-			else
-		    @submit_to = user_path(old_username)
-				render :edit
-			end
-		end
+	  unless @user == nil
+      if @can_edit
+			  if params[:user][:password] == ''
+				  params[:user].delete(:password)
+				  params[:user].delete(:password_confirmation)
+			  end
+			  if params[:user][:email] == '' or params[:user][:email].downcase == @user.email
+				  params[:user].delete(:email)
+				  params[:user].delete(:email_confirmation)
+			  end
+			  if @user.update_attributes(params[:user])
+          flash[:notice] = t(:msg_profile_saved)
+          @user.add_edited_event
+				  redirect_to user_path(@user.username)
+			  else
+		      @submit_to = user_path(old_username)
+				  render :edit
+			  end
+      else
+			  redirect_to user_path(@user.username)
+		  end
+    end
   end
 
   def verify
     @verified = false
-		@user = User.find_by_username(params[:username])
     unless @user == nil
 		  if @user.verified
         @verified = true
@@ -162,15 +178,6 @@ class UsersController < ApplicationController
 	end
 
 	protected
-	def load_user_from_param
-		@page[:title] = t(:title_error_user_not_found)
-    if params[:username] == nil and params[:user][:username] != nil: params[:username] = params[:user][:username] end
-		@user = User.find_by_username(params[:username])
-		if @user != nil
-			@page[:title] = @user.first_name + ' ' + @user.last_name
-		end
-	end
-
 	def set_page_vars
 		@page[:subtitle] = t(:subtitle_users)
 	end
