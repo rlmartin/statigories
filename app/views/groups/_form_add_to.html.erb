@@ -1,0 +1,4 @@
+<% form_remote_tag :url => user_group_add_member_dynamic_path(:username => username), :method => :post do %>
+    <span><%= select_tag 'group_name', options_from_collection_for_select(@user.groups, :group_name, :name) %></span>
+    <span><%= submit_tag t(:btn_add) %><%= hidden_field_tag 'friend', friend %></span>
+<% end %>

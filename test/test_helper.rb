@@ -41,6 +41,12 @@ class ActiveSupport::TestCase
 
   # Add more helper methods to be used by all tests here...
 
+  def assert_select_match_text(selector, text)
+    css_select(selector).each do |e|
+      assert e.match(:child => Regexp.new(text))
+    end
+  end
+
   def change_constant(name, value)
     c = Constant.find_by_name(name)
     assert_not_nil c

@@ -35,6 +35,9 @@ ActionController::Routing::Routes.draw do |map|
 
   # See how all your routes lay out with "rake routes"
 
+  # General pages
+  map.error 'error', :controller => "general_page", :action => "error"
+
 	# Login routes
   map.login 'login', :controller => "sessions", :action => "create", :conditions => { :method => :post }
   map.login 'login', :controller => "sessions", :action => "new", :conditions => { :method => :get }
@@ -69,6 +72,19 @@ ActionController::Routing::Routes.draw do |map|
   map.user_friends 'user/:username/friends', :controller => "friendships", :action => "destroy", :conditions => { :method => :delete }
   map.user_ignore_friend 'user/:username/ignore_friend/:friend', :controller => "friendships", :action => "ignore"
   map.user_remove_friend 'user/:username/friends/:friend', :controller => "friendships", :action => "destroy", :conditions => { :method => :delete }
+
+  # Group routes
+  map.user_groups 'user/:username/groups', :controller => "groups", :action => "show_all", :conditions => { :method => :get }
+  map.user_groups_form_add_to 'user/:username/groups_add_to', :controller => "groups", :action => "form_add_to"
+  map.user_edit_group 'user/:username/groups', :controller => "groups", :action => "create", :conditions => { :method => :post }
+  map.user_edit_group 'user/:username/groups/:group_name', :controller => "groups", :action => "create", :conditions => { :method => :post }
+  map.user_remove_group 'user/:username/groups', :controller => "groups", :action => "destroy", :conditions => { :method => :delete }
+  map.user_remove_group 'user/:username/groups/:group_name', :controller => "groups", :action => "destroy", :conditions => { :method => :delete }
+  map.user_group 'user/:username/groups/:group_name', :controller => "groups", :action => "show", :conditions => { :method => :get }
+  map.user_group_add_member_dynamic 'user/:username/groups_members', :controller => "group_memberships", :action => "create", :conditions => { :method => :post }
+  map.user_group_add_member 'user/:username/groups/:group_name/members/:friend', :controller => "group_memberships", :action => "create", :conditions => { :method => :post }
+  map.user_group_remove_member_dynamic 'user/:username/groups_members', :controller => "group_memberships", :action => "destroy", :conditions => { :method => :delete }
+  map.user_group_remove_member 'user/:username/groups/:group_name/members/:friend', :controller => "group_memberships", :action => "destroy", :conditions => { :method => :delete }
 
   # Install the default routes as the lowest priority.
   # Note: These default routes make all actions in every controller accessible via GET requests. You should

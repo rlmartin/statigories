@@ -18,6 +18,7 @@ class User < ActiveRecord::Base
   has_many :event_logs
   has_many :friendships
   has_many :friends, :through => :friendships, :uniq => true
+  has_many :groups, :dependent => :destroy
   has_many :inverse_friendships, :class_name => "Friendship", :foreign_key => :friend_id
   has_many :inverse_friends, :through => :inverse_friendships, :source => :user, :uniq => true
 
@@ -29,6 +30,21 @@ class User < ActiveRecord::Base
     unless self.friends.include?(friend)
       self.friends << friend
       friend.send_new_friend_request_email(self)
+    end
+  end
+
+  def add_friend_to_group(friend, group)
+    unless friend == nil or group == nil
+      if (friend.id != self.id) and groups.include?(group)
+        add_friend(friend)
+        friendship = friendships.find_by_friend_id(friend.id)
+        gm = group.group_memberships.find_by_friendship_id(friendship.id)
+        if gm == nil
+          group.group_memberships.create(:friendship_id => friendship.id)
+        else
+          gm
+        end
+      end
     end
   end
 
@@ -64,6 +80,15 @@ class User < ActiveRecord::Base
     first_name + ' ' + last_name
   end
 
+  # Groups this user is a member of
+  def inverse_group_memberships
+    a = []
+    self.inverse_friendships.each do |f|
+      a = a | f.group_memberships
+    end
+    a.uniq
+  end
+
   def remove_friend(friend)
     if friend == nil
       false
@@ -72,8 +97,21 @@ class User < ActiveRecord::Base
       if friendship == nil
         false
       else
-        friendship.delete
+        friendship.destroy
         true
+      end
+    end
+  end
+
+  def remove_friend_from_group(friend, group)
+    unless friend == nil or group == nil
+      if (friend.id != self.id) and groups.include?(group)
+        friendship = friendships.find_by_friend_id(friend.id)
+        unless friendship == nil
+          gm = group.group_memberships.find_by_friendship_id(friendship.id)
+          unless gm == nil: gm.destroy end
+          gm
+        end
       end
     end
   end

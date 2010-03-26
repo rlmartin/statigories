@@ -1,0 +1,6 @@
+if @success
+  page.select(".group_row_#{@group.id}").each do |f|
+    f.hide
+  end
+end
+finish_rjs page

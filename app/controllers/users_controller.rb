@@ -18,7 +18,7 @@ class UsersController < ApplicationController
 		# Only allow deleting if the user has permission.
 		if @can_delete
 			@page[:title] = t(:title_user_delete)
-			if User.delete(@user.id): EventLog.create(:event_id => Event::USER_DELETED, :event_data => @user.id.to_s) end
+			if User.destroy(@user.id): EventLog.create(:event_id => Event::USER_DELETED, :event_data => @user.id.to_s) end
 			logout
 		else
 			redirect_to user_path(@user)
@@ -127,6 +127,7 @@ class UsersController < ApplicationController
   end
 
   def show
+    error_page_on_fail @user != nil, :msg_user_not_found
   end
 
   def update

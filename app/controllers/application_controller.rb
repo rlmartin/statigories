@@ -27,6 +27,16 @@ class ApplicationController < ActionController::Base
 
 	protected
 
+  # Redirect to the error page if 'condition' is false. Use 'msg' symbol to set the message from the translation lookup.
+  def error_page_on_fail(condition, msg)
+    unless condition
+      flash[:error] = t(msg)
+      unless request.xhr?: redirect_to error_path end
+      return true
+    end
+    false
+  end
+
 	def fetch_logged_in_user
 		if session[:user_id] == nil and cookies[:user_id] != nil and cookies[:user_id] != '': session[:user_id] = AESCrypt::decrypt(cookies[:user_id]).to_i end
 		if session[:user_id] != nil and session[:user_id] > 0 and (session[:logged_in] == nil or session[:logged_in] == false)
@@ -53,6 +63,7 @@ class ApplicationController < ActionController::Base
 		@can_edit = false
 		@can_view = false
 		@can_delete = false
+    @success = false
   end
 
   def is_mine
@@ -60,6 +71,15 @@ class ApplicationController < ActionController::Base
       false
     else
       (@user.id == my_user_id)
+    end
+  end
+
+  def load_group_from_param
+    if @user == nil: redirect_to user_path(params[:username]) end
+    @group = nil
+    unless @user == nil
+      @group = @user.groups.find_by_group_name(params[:group_name])
+      unless @group == nil: @page[:title] = @group.name + ' : ' + @page[:title] end
     end
   end
 
@@ -85,6 +105,14 @@ class ApplicationController < ActionController::Base
       0
     else
       @_me[:id]
+    end
+  end
+
+  def my_username
+    if @_me == nil
+      ''
+    else
+      @_me[:username]
     end
   end
 

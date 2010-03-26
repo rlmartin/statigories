@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20091219180409) do
+ActiveRecord::Schema.define(:version => 20100112113529) do
 
   create_table "constants", :force => true do |t|
     t.string   "name",        :default => ""
@@ -67,6 +67,28 @@ ActiveRecord::Schema.define(:version => 20091219180409) do
   add_index "friendships", ["friend_id"], :name => "index_friendships_on_friend_id"
   add_index "friendships", ["user_id", "friend_id"], :name => "index_friendships_on_user_id_and_friend_id", :unique => true
   add_index "friendships", ["user_id"], :name => "index_friendships_on_user_id"
+
+  create_table "group_memberships", :force => true do |t|
+    t.integer  "group_id",      :null => false
+    t.integer  "friendship_id", :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "group_memberships", ["friendship_id"], :name => "index_group_memberships_on_friendship_id"
+  add_index "group_memberships", ["group_id", "friendship_id"], :name => "index_group_memberships_on_group_id_and_friendship_id", :unique => true
+  add_index "group_memberships", ["group_id"], :name => "index_group_memberships_on_group_id"
+
+  create_table "groups", :force => true do |t|
+    t.integer  "user_id",                    :null => false
+    t.string   "name",       :default => "", :null => false
+    t.string   "group_name", :default => "", :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "groups", ["user_id", "group_name"], :name => "index_groups_on_user_id_and_group_name", :unique => true
+  add_index "groups", ["user_id"], :name => "index_groups_on_user_id"
 
   create_table "user_agents", :force => true do |t|
     t.string   "user_agent", :default => "",    :null => false

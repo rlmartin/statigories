@@ -283,13 +283,13 @@ class UserTest < ActiveSupport::TestCase
     assert_not_nil u2
     assert_equal u2.friends.count, 1
     assert_equal u2.friendships.count, 1
-    assert_equal u2.inverse_friends.count, 2
-    assert_equal u2.inverse_friendships.count, 2
+    assert_equal u2.inverse_friends.count, 4
+    assert_equal u2.inverse_friendships.count, 4
     u2.add_friend(u)
     assert_equal u.friends.count, 2
     assert_equal u.inverse_friends.count, 3
     assert_equal u2.friends.count, 2
-    assert_equal u2.inverse_friends.count, 2
+    assert_equal u2.inverse_friends.count, 4
     # Make sure it sends an email.
     assert_equal num_deliveries + 1, ActionMailer::Base.deliveries.size
   end
@@ -307,13 +307,13 @@ class UserTest < ActiveSupport::TestCase
     assert_not_nil u2
     assert_equal u2.friends.count, 1
     assert_equal u2.friendships.count, 1
-    assert_equal u2.inverse_friends.count, 2
-    assert_equal u2.inverse_friendships.count, 2
+    assert_equal u2.inverse_friends.count, 4
+    assert_equal u2.inverse_friendships.count, 4
     u.add_friend(u2)
     assert_equal u.friends.count, 2
     assert_equal u.inverse_friends.count, 2
     assert_equal u2.friends.count, 1
-    assert_equal u2.inverse_friends.count, 2
+    assert_equal u2.inverse_friends.count, 4
     # Make sure it does not send an email.
     assert_equal num_deliveries, ActionMailer::Base.deliveries.size
   end
@@ -368,6 +368,35 @@ class UserTest < ActiveSupport::TestCase
     u = User.find_by_id(users(:ryan).id)
     u.send_new_friend_request_email
     assert_equal num_deliveries, ActionMailer::Base.deliveries.size
+  end
+
+  def test_groups_association
+    u = User.find_by_id(users(:ryan).id)
+    assert_not_nil u.groups
+    assert_equal u.groups.count, 3
+    g = u.groups.find_by_id(groups(:ryan_family).id)
+    assert_not_nil g
+    assert g.members.count, 2
+  end
+
+  def test_new_group
+    u = User.find_by_id(users(:ryan).id)
+    assert_nil Group.find_by_user_id_and_group_name(users(:ryan).id, groups(:ryan_family).group_name + 'x')
+    num_groups = u.groups.count
+    g = u.groups.create(:name => groups(:ryan_family).group_name + 'x')
+    assert_not_nil g.id
+    assert_equal num_groups + 1, u.groups.count
+    assert_not_nil u.groups.find_by_group_name(groups(:ryan_family).group_name + 'x')
+  end
+
+  def test_destroy_dependents_groups
+    u = User.find_by_id(users(:user1).id)
+    assert_not_nil u
+    num = Group.find_all_by_user_id(u.id).count
+    assert_not_equal 0, num
+    u.destroy
+    assert_not_equal num, Group.find_all_by_user_id(u.id).count
+    assert_equal 0, Group.find_all_by_user_id(u.id).count
   end
 
 end

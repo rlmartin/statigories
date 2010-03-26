@@ -1,11 +1,10 @@
-<% if @user == nil %>
-<div class='error_msg'><%= t :msg_user_not_found %></div>
-<% else %>
 <h1><%= @user.first_name %> <%= @user.last_name %></h1>
-<div class='notice_msg'><%= flash[:notice] %></div>
 <div class='friend_action'><%= render :partial => 'friendships/edit', :locals => { :edit => @user } %></div>
+<% if (@user.id != my_user_id) and Constant::get(:show_groups) %><div class='group_action'><%= render :partial => 'group_memberships/edit_for_user', :locals => { :edit_for_user => @user } %></div><% end %>
 <div><%= link_to t(:link_user_friends), user_friends_path(@user) %></div>
+<% if @can_view and Constant::get(:show_groups) %>
+<div><%= link_to t(:link_user_groups), user_groups_path(@user) %></div>
+<% end %>
 <% if @can_edit %>
 	<%= button_to t(:btn_edit), edit_user_path(@user), :method => :get %>
-<% end %>
 <% end %>

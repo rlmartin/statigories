@@ -1,0 +1,11 @@
+if @success
+  page << "if(!$('group_membership_#{@group_membership.id}')){"
+  page << "if($('group_memberships_for_#{@friend.username}')){"
+  page.insert_html :bottom, 'group_memberships_for_' + @friend.username, prep_rjs(render(:partial => 'group_memberships/group_membership_row', :locals => { :group_membership_row => @group_membership, :friend_username => @friend.username }))
+  page << "}"
+  page << "if ($('group_members_#{@group.group_name}')) {"
+  page.insert_html :bottom, 'group_members_' + @group.group_name, prep_rjs(render(:partial => 'users/user_row', :locals => { :user_row => @friend }))
+  page << "}"
+  page << "}"
+end
+finish_rjs page

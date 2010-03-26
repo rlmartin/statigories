@@ -1059,4 +1059,43 @@ class UsersControllerTest < ActionController::TestCase
     assert_select ".friend_action a[onclick*=#{user_block_friend_path(:username => users(:ryan).username, :friend => users(:user3).username)}]", :count => 0
   end
 
+  def test_should_show_group_links_for_user
+    change_constant 'show_groups', 'true'
+    do_login :ryan
+    get :show, { :username => users(:ryan).username }
+    assert_response :success
+    assert_template :show
+    # Has groups link
+    assert_select "a[href=#{user_groups_path(users(:ryan).username)}]", I18n.t(:link_user_groups)
+  end
+
+  def test_should_not_show_group_links_for_non_logged_in_user
+    change_constant 'show_groups', 'true'
+    get :show, { :username => users(:ryan).username }
+    assert_response :success
+    assert_template :show
+    # Has groups link
+    assert_select "a[href=#{user_groups_path(users(:ryan).username)}]", :count => 0
+  end
+
+  def test_should_not_show_group_links_for_other_user
+    change_constant 'show_groups', 'true'
+    do_login :user1
+    get :show, { :username => users(:ryan).username }
+    assert_response :success
+    assert_template :show
+    # Has groups link
+    assert_select "a[href=#{user_groups_path(users(:ryan).username)}]", :count => 0
+  end
+
+  def test_should_not_show_group_links_if_groups_turned_off
+    change_constant 'show_groups', 'false'
+    do_login :ryan
+    get :show, { :username => users(:ryan).username }
+    assert_response :success
+    assert_template :show
+    # Has groups link
+    assert_select "a[href=#{user_groups_path(users(:ryan).username)}]", :count => 0
+  end
+
 end

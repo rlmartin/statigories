@@ -1,6 +1,7 @@
 class Friendship < ActiveRecord::Base
   belongs_to :user
   belongs_to :friend, :class_name => 'User'
+  has_many :group_memberships, :dependent => :destroy
   validates_presence_of [:user_id, :friend_id]
   validates_uniqueness_of :friend_id, :scope => :user_id
   after_create :after_create_cleanup_inverse

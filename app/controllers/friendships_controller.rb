@@ -4,63 +4,55 @@ class FriendshipsController < ApplicationController
   before_filter :load_friend, :only => [:block, :create, :destroy, :ignore]
 
   def block
-    if @can_edit
+    unless error_page_on_fail @can_edit, :msg_not_authorized
       if @friend == nil or !@friend.friends.exists?(@user)
         flash.now[:error] = t(:msg_friend_not_found)
       else
         @friend.friendships.find_by_friend_id(@user.id).block
         flash.now[:notice] = t(:msg_friend_blocked)
-        @action_completed = true
+        @success = true
       end
-    else
-			flash.now[:error] = t(:msg_not_authorized)
     end
-    render :edit_response
+    render :edit_response unless performed?
   end
 
   def create
-    if @can_edit
+    unless error_page_on_fail @can_edit, :msg_not_authorized
       if @friend == nil
         flash.now[:error] = t(:msg_friend_not_found)
       else
         @user.add_friend(@friend)
         @friend_added = true
         flash.now[:notice] = t(:msg_friend_added)
-        @action_completed = true
+        @success = true
       end
-    else
-			flash.now[:error] = t(:msg_not_authorized)
     end
-    render :edit_response
+    render :edit_response unless performed?
   end
 
   def destroy
-    if @can_delete
+    unless error_page_on_fail @can_delete, :msg_not_authorized
       if @user.remove_friend(@friend)
         flash.now[:notice] = t(:msg_friend_deleted)
-        @action_completed = true
+        @success = true
       else
         flash.now[:error] = t(:msg_friend_not_found)
       end
-    else
-			flash.now[:error] = t(:msg_not_authorized)
     end
-    render :edit_response
+    render :edit_response unless performed?
   end
 
   def ignore
-    if @can_edit
+    unless error_page_on_fail @can_edit, :msg_not_authorized
       if @friend == nil or !@friend.friends.exists?(@user)
         flash.now[:error] = t(:msg_friend_not_found)
       else
         @friend.friendships.find_by_friend_id(@user.id).ignore
         flash.now[:notice] = t(:msg_friend_ignored)
-        @action_completed = true
+        @success = true
       end
-    else
-			flash.now[:error] = t(:msg_not_authorized)
     end
-    render :edit_response
+    render :edit_response unless performed?
   end
 
   def show
@@ -70,7 +62,7 @@ class FriendshipsController < ApplicationController
   def load_friend
     @friend = User.find_by_username(params[:friend])
     @friend_added = false
-    @action_completed = false
+    @success = false
   end
 
 end

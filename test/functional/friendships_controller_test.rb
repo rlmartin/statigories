@@ -57,9 +57,8 @@ class FriendshipsControllerTest < ActionController::TestCase
     assert_select ".user_row a[href=#{user_path(users(:user2).username)}]", users(:user2).first_name + ' ' + users(:user2).last_name
     # Do the block
     get :block, { :username => users(:user2).username, :friend => users(:ryan).username }
-    assert_response :success
-    assert_template :edit_response
-    assert_select "div.error_msg", I18n.t(:msg_not_authorized)
+    assert_redirected_to error_path
+    assert_equal flash[:error], I18n.t(:msg_not_authorized)
     f = u.inverse_friendships.find_by_user_id(users(:ryan).id)
     assert_not_nil f
     assert !f.blocked
@@ -133,9 +132,8 @@ class FriendshipsControllerTest < ActionController::TestCase
     assert_select ".user_row a[href=#{user_path(users(:user2).username)}]", users(:user2).first_name + ' ' + users(:user2).last_name
     # Do the create
     get :create, { :username => users(:user2).username, :friend => users(:ryan).username }
-    assert_response :success
-    assert_template :edit_response
-    assert_select "div.error_msg", I18n.t(:msg_not_authorized)
+    assert_redirected_to error_path
+    assert_equal flash[:error], I18n.t(:msg_not_authorized)
     f = u.inverse_friendships.find_by_user_id(users(:ryan).id)
     assert_not_nil f
     assert !f.blocked
@@ -218,9 +216,8 @@ class FriendshipsControllerTest < ActionController::TestCase
     assert_select ".user_row a[href=#{user_path(users(:user3).username)}]", users(:user3).first_name + ' ' + users(:user3).last_name
     # Do the destroy
     get :destroy, { :username => users(:user3).username, :friend => users(:user1).username }
-    assert_response :success
-    assert_template :edit_response
-    assert_select "div.error_msg", I18n.t(:msg_not_authorized)
+    assert_redirected_to error_path
+    assert_equal flash[:error], I18n.t(:msg_not_authorized)
     f = u.inverse_friendships.find_by_user_id(users(:user1).id)
     assert_not_nil f
     assert !f.blocked
@@ -293,9 +290,8 @@ class FriendshipsControllerTest < ActionController::TestCase
     assert_select ".user_row a[href=#{user_path(users(:user2).username)}]", users(:user2).first_name + ' ' + users(:user2).last_name
     # Do the ignore
     get :ignore, { :username => users(:user2).username, :friend => users(:ryan).username }
-    assert_response :success
-    assert_template :edit_response
-    assert_select "div.error_msg", I18n.t(:msg_not_authorized)
+    assert_redirected_to error_path
+    assert_equal flash[:error], I18n.t(:msg_not_authorized)
     f = u.inverse_friendships.find_by_user_id(users(:ryan).id)
     assert_not_nil f
     assert !f.blocked
@@ -329,6 +325,22 @@ class FriendshipsControllerTest < ActionController::TestCase
     end
     assert_select ".friend_action a[onclick*=#{user_block_friend_path(:username => users(:ryan).username, :friend => '')}]", :count => 0
     assert_select ".friend_action a[onclick*=#{user_ignore_friend_path(:username => users(:ryan).username, :friend => '')}]", :count => 0
+    assert_select "#group_memberships_for_#{users(:user1).username}", :count => 1
+    assert_select "#group_memberships_for_#{users(:user2).username}", :count => 1
+    assert_select "#group_memberships_for_#{users(:user1).username} li a[href=#{user_group_add_member_path(:username => users(:ryan).username, :group_name => groups(:ryan_family).group_name, :friend => users(:user1).username)}]", groups(:ryan_family).name
+    assert_select "#group_memberships_for_#{users(:user1).username} li a[href=#{user_group_add_member_path(:username => users(:ryan).username, :group_name => groups(:ryan_friends).group_name, :friend => users(:user1).username)}]", groups(:ryan_friends).name
+    assert_select "#group_memberships_for_#{users(:user1).username} li a[href=#{user_group_add_member_path(:username => users(:ryan).username, :group_name => groups(:ryan_work).group_name, :friend => users(:user1).username)}]", :count => 0
+    assert_select "#group_memberships_for_#{users(:user2).username} li a[href=#{user_group_add_member_path(:username => users(:ryan).username, :group_name => groups(:ryan_family).group_name, :friend => users(:user2).username)}]", groups(:ryan_family).name
+    assert_select "#group_memberships_for_#{users(:user2).username} li a[href=#{user_group_add_member_path(:username => users(:ryan).username, :group_name => groups(:ryan_friends).group_name, :friend => users(:user2).username)}]", :count => 0
+    assert_select "#group_memberships_for_#{users(:user2).username} li a[href=#{user_group_add_member_path(:username => users(:ryan).username, :group_name => groups(:ryan_work).group_name, :friend => users(:user2).username)}]", :count => 0
+    assert_select "#group_memberships_for_#{users(:user1).username} li a[onclick*=#{user_group_remove_member_path(:username => users(:ryan).username, :group_name => groups(:ryan_family).group_name, :friend => users(:user1).username)}]", I18n.t(:link_short_delete)
+    assert_select "#group_memberships_for_#{users(:user1).username} li a[onclick*=#{user_group_remove_member_path(:username => users(:ryan).username, :group_name => groups(:ryan_friends).group_name, :friend => users(:user1).username)}]", I18n.t(:link_short_delete)
+    assert_select "#group_memberships_for_#{users(:user1).username} li a[onclick*=#{user_group_remove_member_path(:username => users(:ryan).username, :group_name => groups(:ryan_work).group_name, :friend => users(:user1).username)}]", :count => 0
+    assert_select "#group_memberships_for_#{users(:user2).username} li a[onclick*=#{user_group_remove_member_path(:username => users(:ryan).username, :group_name => groups(:ryan_family).group_name, :friend => users(:user2).username)}]", I18n.t(:link_short_delete)
+    assert_select "#group_memberships_for_#{users(:user2).username} li a[onclick*=#{user_group_remove_member_path(:username => users(:ryan).username, :group_name => groups(:ryan_friends).group_name, :friend => users(:user2).username)}]", :count => 0
+    assert_select "#group_memberships_for_#{users(:user2).username} li a[onclick*=#{user_group_remove_member_path(:username => users(:ryan).username, :group_name => groups(:ryan_work).group_name, :friend => users(:user2).username)}]", :count => 0
+    assert_select "#group_form_add_to_#{users(:user1).username} a[onclick*=#{user_groups_form_add_to_path(:username => users(:ryan).username, :friend => users(:user1).username)}]", I18n.t(:link_add_to_group)
+    assert_select "#group_form_add_to_#{users(:user2).username} a[onclick*=#{user_groups_form_add_to_path(:username => users(:ryan).username, :friend => users(:user2).username)}]", I18n.t(:link_add_to_group)
   end
 
   def test_show_page_with_friend_requests_not_logged_in
