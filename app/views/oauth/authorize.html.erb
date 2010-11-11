@@ -1,0 +1,17 @@
+<%
+@page[:title] = t(:title_oauth_authorize)
+%>
+<h1><%= t :title_oauth_authorize %></h1>
+<p><%= t(:oauth_authorize_intro, :name => link_to(@token.client_application.name,@token.client_application.url), :url => link_to(@token.client_application.url,@token.client_application.url)) %></p>
+<% form_tag authorize_url do %>
+  <%= hidden_field_tag "oauth_token", @token.token %>
+  <%- if params[:oauth_callback] -%>
+  <%= hidden_field_tag "oauth_callback", params[:oauth_callback] %>
+<%- end -%>
+<p>
+  <%= check_box_tag 'authorize' %> <%= t :input_oauth_authorize_prompt %>
+</p>
+<p>
+  <%= submit_tag %>
+</p>
+<% end %>

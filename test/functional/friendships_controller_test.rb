@@ -44,6 +44,33 @@ class FriendshipsControllerTest < ActionController::TestCase
     assert u.friends.count, friend_count
   end
 
+  def test_do_not_block_friendship_not_authorized
+    u = User.find_by_id(users(:user2).id)
+    assert_not_nil u
+    friend_count = u.friends.count
+    f = u.inverse_friendships.find_by_user_id(users(:ryan).id)
+    assert_not_nil f
+    assert !f.blocked
+    # Look at the other user's page
+    get :show, { :username => users(:ryan).username }
+    assert_response :success
+    assert_select ".user_row a[href=#{user_path(users(:user2).username)}]", users(:user2).first_name + ' ' + users(:user2).last_name
+    do_login :user1
+    # Do the block
+    get :block, { :username => users(:user2).username, :friend => users(:ryan).username }
+    assert_redirected_to error_path
+    assert_equal flash[:error], I18n.t(:msg_not_authorized)
+    f = u.inverse_friendships.find_by_user_id(users(:ryan).id)
+    assert_not_nil f
+    assert !f.blocked
+    assert !f.responded
+    assert u.friends.count, friend_count
+    # Look at the other user's page again
+    get :show, { :username => users(:ryan).username }
+    assert_response :success
+    assert_select ".user_row a[href=#{user_path(users(:user2).username)}]", users(:user2).first_name + ' ' + users(:user2).last_name
+  end
+
   def test_do_not_block_friendship_not_logged_in
     u = User.find_by_id(users(:user2).id)
     assert_not_nil u
@@ -57,8 +84,7 @@ class FriendshipsControllerTest < ActionController::TestCase
     assert_select ".user_row a[href=#{user_path(users(:user2).username)}]", users(:user2).first_name + ' ' + users(:user2).last_name
     # Do the block
     get :block, { :username => users(:user2).username, :friend => users(:ryan).username }
-    assert_redirected_to error_path
-    assert_equal flash[:error], I18n.t(:msg_not_authorized)
+    assert_login_redirect
     f = u.inverse_friendships.find_by_user_id(users(:ryan).id)
     assert_not_nil f
     assert !f.blocked
@@ -118,6 +144,34 @@ class FriendshipsControllerTest < ActionController::TestCase
     assert u.friends.count, friend_count
   end
 
+  def test_do_not_create_friendship_not_authorized
+    u = User.find_by_id(users(:user2).id)
+    assert_not_nil u
+    friend_count = u.friends.count
+    f = u.inverse_friendships.find_by_user_id(users(:ryan).id)
+    assert_not_nil f
+    assert !f.blocked
+    assert !f.responded
+    # Look at the other user's page
+    get :show, { :username => users(:ryan).username }
+    assert_response :success
+    assert_select ".user_row a[href=#{user_path(users(:user2).username)}]", users(:user2).first_name + ' ' + users(:user2).last_name
+    do_login :user1
+    # Do the create
+    get :create, { :username => users(:user2).username, :friend => users(:ryan).username }
+    assert_redirected_to error_path
+    assert_equal flash[:error], I18n.t(:msg_not_authorized)
+    f = u.inverse_friendships.find_by_user_id(users(:ryan).id)
+    assert_not_nil f
+    assert !f.blocked
+    assert !f.responded
+    assert u.friends.count, friend_count
+    # Look at the other user's page again
+    get :show, { :username => users(:ryan).username }
+    assert_response :success
+    assert_select ".user_row a[href=#{user_path(users(:user2).username)}]", users(:user2).first_name + ' ' + users(:user2).last_name
+  end
+
   def test_do_not_create_friendship_not_logged_in
     u = User.find_by_id(users(:user2).id)
     assert_not_nil u
@@ -132,8 +186,7 @@ class FriendshipsControllerTest < ActionController::TestCase
     assert_select ".user_row a[href=#{user_path(users(:user2).username)}]", users(:user2).first_name + ' ' + users(:user2).last_name
     # Do the create
     get :create, { :username => users(:user2).username, :friend => users(:ryan).username }
-    assert_redirected_to error_path
-    assert_equal flash[:error], I18n.t(:msg_not_authorized)
+    assert_login_redirect
     f = u.inverse_friendships.find_by_user_id(users(:ryan).id)
     assert_not_nil f
     assert !f.blocked
@@ -198,6 +251,42 @@ class FriendshipsControllerTest < ActionController::TestCase
     assert u.friends.count, friend_count
   end
 
+  def test_do_not_destroy_friendship_not_authorized
+    u = User.find_by_id(users(:user3).id)
+    assert_not_nil u
+    friend_count = u.friends.count
+    f = u.inverse_friendships.find_by_user_id(users(:user1).id)
+    assert_not_nil f
+    assert !f.blocked
+    assert f.responded
+    # Look at own page
+    get :show, { :username => users(:user3).username }
+    assert_response :success
+    assert_select ".user_row a[href=#{user_path(users(:user1).username)}]", users(:user1).first_name + ' ' + users(:user1).last_name
+    # Look at the other user's page
+    get :show, { :username => users(:user1).username }
+    assert_response :success
+    assert_select ".user_row a[href=#{user_path(users(:user3).username)}]", users(:user3).first_name + ' ' + users(:user3).last_name
+    do_login :user1
+    # Do the destroy
+    get :destroy, { :username => users(:user3).username, :friend => users(:user1).username }
+    assert_redirected_to error_path
+    assert_equal flash[:error], I18n.t(:msg_not_authorized)
+    f = u.inverse_friendships.find_by_user_id(users(:user1).id)
+    assert_not_nil f
+    assert !f.blocked
+    assert f.responded
+    assert u.friends.count, friend_count
+    # Look at own page again
+    get :show, { :username => users(:user3).username }
+    assert_response :success
+    assert_select ".user_row a[href=#{user_path(users(:user1).username)}]", users(:user1).first_name + ' ' + users(:user1).last_name
+    # Look at the other user's page again
+    get :show, { :username => users(:user1).username }
+    assert_response :success
+    assert_select ".user_row a[href=#{user_path(users(:user3).username)}]", users(:user3).first_name + ' ' + users(:user3).last_name
+  end
+
   def test_do_not_destroy_friendship_not_logged_in
     u = User.find_by_id(users(:user3).id)
     assert_not_nil u
@@ -216,8 +305,7 @@ class FriendshipsControllerTest < ActionController::TestCase
     assert_select ".user_row a[href=#{user_path(users(:user3).username)}]", users(:user3).first_name + ' ' + users(:user3).last_name
     # Do the destroy
     get :destroy, { :username => users(:user3).username, :friend => users(:user1).username }
-    assert_redirected_to error_path
-    assert_equal flash[:error], I18n.t(:msg_not_authorized)
+    assert_login_redirect
     f = u.inverse_friendships.find_by_user_id(users(:user1).id)
     assert_not_nil f
     assert !f.blocked
@@ -276,6 +364,34 @@ class FriendshipsControllerTest < ActionController::TestCase
     assert u.friends.count, friend_count
   end
 
+  def test_do_not_ignore_friendship_not_authorized
+    u = User.find_by_id(users(:user2).id)
+    assert_not_nil u
+    friend_count = u.friends.count
+    f = u.inverse_friendships.find_by_user_id(users(:ryan).id)
+    assert_not_nil f
+    assert !f.blocked
+    assert !f.responded
+    # Look at the other user's page
+    get :show, { :username => users(:ryan).username }
+    assert_response :success
+    assert_select ".user_row a[href=#{user_path(users(:user2).username)}]", users(:user2).first_name + ' ' + users(:user2).last_name
+    do_login :user1
+    # Do the ignore
+    get :ignore, { :username => users(:user2).username, :friend => users(:ryan).username }
+    assert_redirected_to error_path
+    assert_equal flash[:error], I18n.t(:msg_not_authorized)
+    f = u.inverse_friendships.find_by_user_id(users(:ryan).id)
+    assert_not_nil f
+    assert !f.blocked
+    assert !f.responded
+    assert u.friends.count, friend_count
+    # Look at the other user's page again
+    get :show, { :username => users(:ryan).username }
+    assert_response :success
+    assert_select ".user_row a[href=#{user_path(users(:user2).username)}]", users(:user2).first_name + ' ' + users(:user2).last_name
+  end
+
   def test_do_not_ignore_friendship_not_logged_in
     u = User.find_by_id(users(:user2).id)
     assert_not_nil u
@@ -290,8 +406,7 @@ class FriendshipsControllerTest < ActionController::TestCase
     assert_select ".user_row a[href=#{user_path(users(:user2).username)}]", users(:user2).first_name + ' ' + users(:user2).last_name
     # Do the ignore
     get :ignore, { :username => users(:user2).username, :friend => users(:ryan).username }
-    assert_redirected_to error_path
-    assert_equal flash[:error], I18n.t(:msg_not_authorized)
+    assert_login_redirect
     f = u.inverse_friendships.find_by_user_id(users(:ryan).id)
     assert_not_nil f
     assert !f.blocked
@@ -371,15 +486,8 @@ class FriendshipsControllerTest < ActionController::TestCase
   def test_ajax_add_friendship
     do_login :user2
     xhr :get, :create, { :username => users(:user2).username, :friend => users(:ryan).username }
-    assert_select_rjs :chained_replace_html, 'friendship_' + users(:ryan).id.to_s do |elements|
-      assert_select "span", I18n.t(:link_delete_friend)
-    end
-    assert_select_rjs :chained_replace_html, 'error_msg' do |elements|
-      assert_select "span", ''
-    end
-    assert_select_rjs :chained_replace_html, 'notice_msg' do |elements|
-      assert_select "span", I18n.t(:msg_friend_added)
-    end
+    assert_rjs_text :link_delete_friend, 'friendship_' + users(:ryan).id.to_s
+    assert_xhr_notice :msg_friend_added
     assert_select_rjs :insert, :bottom, 'friend_list'
     # If I ever integrate better RJS testing, add these tests:
     # assert_select_rjs :hide, '.user_row'.each
@@ -389,47 +497,31 @@ class FriendshipsControllerTest < ActionController::TestCase
     assert_nil User.find_by_username(users(:ryan).username + 'xx')
     do_login :user2
     xhr :get, :create, { :username => users(:user2).username, :friend => users(:ryan).username + 'xx' }
-    assert_select_rjs :chained_replace_html, 'error_msg' do |elements|
-      assert_select "span", I18n.t(:msg_friend_not_found)
-    end
-    assert_select_rjs :chained_replace_html, 'notice_msg' do |elements|
-      assert_select "span", ''
-    end
+    assert_xhr_error :msg_friend_not_found
   end
 
   def test_ajax_do_not_add_friendship_friend_not_specified
     do_login :user2
     xhr :get, :create, { :username => users(:user2).username }
-    assert_select_rjs :chained_replace_html, 'error_msg' do |elements|
-      assert_select "span", I18n.t(:msg_friend_not_found)
-    end
-    assert_select_rjs :chained_replace_html, 'notice_msg' do |elements|
-      assert_select "span", ''
-    end
+    assert_xhr_error :msg_friend_not_found
+  end
+
+  def test_ajax_do_not_add_friendship_not_authorized
+    do_login :user1
+    xhr :get, :create, { :username => users(:user2).username, :friend => users(:ryan).username }
+    assert_xhr_error :msg_not_authorized
   end
 
   def test_ajax_do_not_add_friendship_not_logged_in
     xhr :get, :create, { :username => users(:user2).username, :friend => users(:ryan).username }
-    assert_select_rjs :chained_replace_html, 'error_msg' do |elements|
-      assert_select "span", I18n.t(:msg_not_authorized)
-    end
-    assert_select_rjs :chained_replace_html, 'notice_msg' do |elements|
-      assert_select "span", ''
-    end
+    assert_login_redirect
   end
 
   def test_ajax_block_friendship
     do_login :user2
     xhr :get, :block, { :username => users(:user2).username, :friend => users(:ryan).username }
-    assert_select_rjs :chained_replace_html, 'friendship_' + users(:ryan).id.to_s do |elements|
-      assert_select "span", I18n.t(:link_add_friend)
-    end
-    assert_select_rjs :chained_replace_html, 'error_msg' do |elements|
-      assert_select "span", ''
-    end
-    assert_select_rjs :chained_replace_html, 'notice_msg' do |elements|
-      assert_select "span", I18n.t(:msg_friend_blocked)
-    end
+    assert_rjs_text :link_add_friend, 'friendship_' + users(:ryan).id.to_s
+    assert_xhr_notice :msg_friend_blocked
     # If I ever integrate better RJS testing, add these tests:
     # !assert_select_rjs :insert, :bottom, 'friend_list'
     # assert_select_rjs :hide, '.user_row'.each
@@ -439,48 +531,32 @@ class FriendshipsControllerTest < ActionController::TestCase
     assert_nil User.find_by_username(users(:ryan).username + 'xx')
     do_login :user2
     xhr :get, :block, { :username => users(:user2).username, :friend => users(:ryan).username + 'xx' }
-    assert_select_rjs :chained_replace_html, 'error_msg' do |elements|
-      assert_select "span", I18n.t(:msg_friend_not_found)
-    end
-    assert_select_rjs :chained_replace_html, 'notice_msg' do |elements|
-      assert_select "span", ''
-    end
+    assert_xhr_error :msg_friend_not_found
   end
 
   def test_ajax_do_not_block_friendship_friend_not_specified
     do_login :user2
     xhr :get, :block, { :username => users(:user2).username }
-    assert_select_rjs :chained_replace_html, 'error_msg' do |elements|
-      assert_select "span", I18n.t(:msg_friend_not_found)
-    end
-    assert_select_rjs :chained_replace_html, 'notice_msg' do |elements|
-      assert_select "span", ''
-    end
+    assert_xhr_error :msg_friend_not_found
+  end
+
+  def test_ajax_do_not_block_friendship_not_authorized
+    do_login :user1
+    xhr :get, :block, { :username => users(:user2).username, :friend => users(:ryan).username }
+    assert_xhr_error :msg_not_authorized
   end
 
   def test_ajax_do_not_block_friendship_not_logged_in
     xhr :get, :block, { :username => users(:user2).username, :friend => users(:ryan).username }
-    assert_select_rjs :chained_replace_html, 'error_msg' do |elements|
-      assert_select "span", I18n.t(:msg_not_authorized)
-    end
-    assert_select_rjs :chained_replace_html, 'notice_msg' do |elements|
-      assert_select "span", ''
-    end
+    assert_login_redirect
   end
 
   def test_ajax_delete_friendship
     assert_not_nil Friendship.find_by_friend_id_and_user_id(users(:user2).id, users(:ryan).id)
     do_login :ryan
     xhr :get, :destroy, { :username => users(:ryan).username, :friend => users(:user2).username }
-    assert_select_rjs :chained_replace_html, 'friendship_' + users(:user2).id.to_s do |elements|
-      assert_select "span", I18n.t(:link_add_friend)
-    end
-    assert_select_rjs :chained_replace_html, 'error_msg' do |elements|
-      assert_select "span", ''
-    end
-    assert_select_rjs :chained_replace_html, 'notice_msg' do |elements|
-      assert_select "span", I18n.t(:msg_friend_deleted)
-    end
+    assert_rjs_text :link_add_friend, 'friendship_' + users(:user2).id.to_s
+    assert_xhr_notice :msg_friend_deleted
     # If I ever integrate better RJS testing, add these tests:
     # !assert_select_rjs :insert, :bottom, 'friend_list'
     # assert_select_rjs :hide, '.user_row'.each
@@ -490,47 +566,31 @@ class FriendshipsControllerTest < ActionController::TestCase
     assert_nil User.find_by_username(users(:ryan).username + 'xx')
     do_login :user2
     xhr :get, :destroy, { :username => users(:user2).username, :friend => users(:ryan).username + 'xx' }
-    assert_select_rjs :chained_replace_html, 'error_msg' do |elements|
-      assert_select "span", I18n.t(:msg_friend_not_found)
-    end
-    assert_select_rjs :chained_replace_html, 'notice_msg' do |elements|
-      assert_select "span", ''
-    end
+    assert_xhr_error :msg_friend_not_found
   end
 
   def test_ajax_do_not_delete_friendship_friend_not_specified
     do_login :user2
     xhr :get, :destroy, { :username => users(:user2).username }
-    assert_select_rjs :chained_replace_html, 'error_msg' do |elements|
-      assert_select "span", I18n.t(:msg_friend_not_found)
-    end
-    assert_select_rjs :chained_replace_html, 'notice_msg' do |elements|
-      assert_select "span", ''
-    end
+    assert_xhr_error :msg_friend_not_found
+  end
+
+  def test_ajax_do_not_delete_friendship_not_authorized
+    do_login :user1
+    xhr :get, :destroy, { :username => users(:user2).username, :friend => users(:ryan).username }
+    assert_xhr_error :msg_not_authorized
   end
 
   def test_ajax_do_not_delete_friendship_not_logged_in
     xhr :get, :destroy, { :username => users(:user2).username, :friend => users(:ryan).username }
-    assert_select_rjs :chained_replace_html, 'error_msg' do |elements|
-      assert_select "span", I18n.t(:msg_not_authorized)
-    end
-    assert_select_rjs :chained_replace_html, 'notice_msg' do |elements|
-      assert_select "span", ''
-    end
+    assert_login_redirect
   end
 
   def test_ajax_ignore_friendship
     do_login :user2
     xhr :get, :ignore, { :username => users(:user2).username, :friend => users(:ryan).username }
-    assert_select_rjs :chained_replace_html, 'friendship_' + users(:ryan).id.to_s do |elements|
-      assert_select "span", I18n.t(:link_add_friend)
-    end
-    assert_select_rjs :chained_replace_html, 'error_msg' do |elements|
-      assert_select "span", ''
-    end
-    assert_select_rjs :chained_replace_html, 'notice_msg' do |elements|
-      assert_select "span", I18n.t(:msg_friend_ignored)
-    end
+    assert_rjs_text :link_add_friend, 'friendship_' + users(:ryan).id.to_s
+    assert_xhr_notice :msg_friend_ignored
     # If I ever integrate better RJS testing, add these tests:
     # !assert_select_rjs :insert, :bottom, 'friend_list'
     # assert_select_rjs :hide, '.user_row'.each
@@ -540,33 +600,24 @@ class FriendshipsControllerTest < ActionController::TestCase
     assert_nil User.find_by_username(users(:ryan).username + 'xx')
     do_login :user2
     xhr :get, :ignore, { :username => users(:user2).username, :friend => users(:ryan).username + 'xx' }
-    assert_select_rjs :chained_replace_html, 'error_msg' do |elements|
-      assert_select "span", I18n.t(:msg_friend_not_found)
-    end
-    assert_select_rjs :chained_replace_html, 'notice_msg' do |elements|
-      assert_select "span", ''
-    end
+    assert_xhr_error :msg_friend_not_found
   end
 
   def test_ajax_do_not_ignore_friendship_friend_not_specified
     do_login :user2
     xhr :get, :ignore, { :username => users(:user2).username }
-    assert_select_rjs :chained_replace_html, 'error_msg' do |elements|
-      assert_select "span", I18n.t(:msg_friend_not_found)
-    end
-    assert_select_rjs :chained_replace_html, 'notice_msg' do |elements|
-      assert_select "span", ''
-    end
+    assert_xhr_error :msg_friend_not_found
+  end
+
+  def test_ajax_do_not_ignore_friendship_not_authorized
+    do_login :user1
+    xhr :get, :ignore, { :username => users(:user2).username, :friend => users(:ryan).username }
+    assert_xhr_error :msg_not_authorized
   end
 
   def test_ajax_do_not_ignore_friendship_not_logged_in
     xhr :get, :ignore, { :username => users(:user2).username, :friend => users(:ryan).username }
-    assert_select_rjs :chained_replace_html, 'error_msg' do |elements|
-      assert_select "span", I18n.t(:msg_not_authorized)
-    end
-    assert_select_rjs :chained_replace_html, 'notice_msg' do |elements|
-      assert_select "span", ''
-    end
+    assert_login_redirect
   end
 
 end

@@ -4,6 +4,7 @@ class ApplicationController < ActionController::Base
   helper :all # include all helpers, all the time
   protect_from_forgery # See ActionController::RequestForgeryProtection for details
 	include DateLib
+  include StringLib
 
   # Scrub sensitive parameters from your log
   filter_parameter_logging :password
@@ -13,16 +14,46 @@ class ApplicationController < ActionController::Base
 	before_filter :before_filter_init_page
 	before_filter :fetch_logged_in_user
 
+  def current_user
+    @current_user ||=
+      begin
+        @current_user = User.find_by_id(session[:user_id])
+      end
+  end
+
+  def current_user_stub
+    if @current_user_stub == nil or (session[:user_id] != nil and session[:user_id] > 0 and @current_user_stub != nil and @current_user_stub.id == nil)
+      @current_user_stub = User.new
+      if @current_user == nil
+        @current_user_stub.id = session[:user_id]
+        @current_user_stub.username = session[:username]
+        @current_user_stub.first_name = session[:first_name]
+        @current_user_stub.last_name = session[:last_name]
+        @current_user_stub.verified = session[:verified]
+        @current_user_stub.created_at = session[:created_at]
+      else
+        @current_user_stub.id = @current_user.id
+        @current_user_stub.username = @current_user.username
+        @current_user_stub.first_name = @current_user.first_name
+        @current_user_stub.last_name = @current_user.last_name
+        @current_user_stub.verified = @current_user.verified
+        @current_user_stub.created_at = @current_user.created_at
+      end
+    end
+    @current_user_stub
+  end
+
 	def logged_in_check
-		unless @_me == nil
-			if @_me[:id] > 0
-				unless @_me[:verified] or DateLib.is_after((@_me[:created_at] + 1.day), Time.now)
+		unless current_user_stub == nil
+			if current_user_stub.id != nil and current_user_stub.id > 0
+				unless current_user_stub.verified or DateLib.is_after((current_user_stub.created_at + 1.day), Time.now)
 					redirect_to verify_check_path
 				end
 			else
-				redirect_to login_path
+				redirect_to login_path + '?url=' + StringLib.url_encode(request.url)
 			end
 		end
+    true
 	end
 
 	protected
@@ -40,22 +71,18 @@ class ApplicationController < ActionController::Base
 	def fetch_logged_in_user
 		if session[:user_id] == nil and cookies[:user_id] != nil and cookies[:user_id] != '': session[:user_id] = AESCrypt::decrypt(cookies[:user_id]).to_i end
 		if session[:user_id] != nil and session[:user_id] > 0 and (session[:logged_in] == nil or session[:logged_in] == false)
-			@_me = User.find_by_id(session[:user_id])
-			unless @_me == nil
-				session[:username] = @_me.username
-				session[:name] = @_me.first_name
+			@current_user = User.find_by_id(session[:user_id])
+			unless @current_user == nil
+				session[:username] = @current_user.username
+				session[:name] = @current_user.first_name
+				session[:first_name] = @current_user.first_name
+				session[:last_name] = @current_user.last_name
+				session[:verified] = @current_user.verified
+				session[:created_at] = @current_user.created_at
 				session[:logged_in] = true
-        # Save the user object into the session, but with only the attributes and none of the secondary collections/relationships/etc.
-        _user = {}
-        @_me.attributes.each { |key, value| _user[key.to_sym] = value }
-				session[:_me] = _user
-        _user = nil
-#				session[:_me] = @_me
-        @_me.add_login_event
-        @_me = nil
+        @current_user.add_login_event
 			end
 		end
-		@_me = session[:_me]
 	end
 
   def before_filter_init_page
@@ -101,18 +128,18 @@ class ApplicationController < ActionController::Base
 	end
 
   def my_user_id
-    if @_me == nil
+    if current_user_stub == nil
       0
     else
-      @_me[:id]
+      current_user_stub.id
     end
   end
 
   def my_username
-    if @_me == nil
+    if current_user_stub == nil
       ''
     else
-      @_me[:username]
+      current_user_stub.username
     end
   end
 
@@ -139,12 +166,20 @@ class ApplicationController < ActionController::Base
 
 	def logout
     user = User.find_by_id(session[:user_id])
-    unless user == nil
-      user.add_logout_event
-      user = nil
+    unless current_user == nil
+      current_user.add_logout_event
+      @current_user = nil
     end
     session.clear
 		cookies[:user_id] = nil
 	end
+
+  def login_required
+    logged_in_check
+  end
+
+  def authorized?
+    login_required
+  end
 
 end

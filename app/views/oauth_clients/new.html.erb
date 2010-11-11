@@ -1,0 +1,10 @@
+<%
+@page[:title] = t(:title_new_oauth_client)
+@page[:description] = t(:desc_new_oauth_client)
+@page[:keywords] = t(:keywords_new_oauth_client)
+%>
+<h1><%= t(:title_new_oauth_client) %></h1>
+<% form_for :client_application, :url => { :action => :create } do |f| %>
+   <%= render :partial => "form", :locals => { :f => f } %>
+   <%= submit_tag t(:btn_register) %>
+<% end %>

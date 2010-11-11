@@ -41,9 +41,39 @@ class ActiveSupport::TestCase
 
   # Add more helper methods to be used by all tests here...
 
+  def assert_error_redirect(error_name)
+    assert_redirected_to error_path
+    assert_equal flash[:error], t(error_name)
+    assert_equal flash[:notice] || '', ''
+  end
+
   def assert_select_match_text(selector, text)
     css_select(selector).each do |e|
       assert e.match(:child => Regexp.new(text))
+    end
+  end
+
+  def assert_xhr_error(msg_name)
+    assert_xhr_messages msg_name, nil
+  end
+
+  def assert_xhr_messages(error_msg, notice_msg)
+    assert_rjs_text error_msg, 'error_msg'
+    assert_rjs_text notice_msg, 'notice_msg'
+  end
+
+  def assert_xhr_notice(msg_name)
+    assert_xhr_messages nil, msg_name
+  end
+
+  def assert_login_redirect
+    assert_redirected_to login_path + '?url=' + CGI::escape(@request.url)
+  end
+
+  def assert_rjs_text(message = nil, class_name = '', tag_name = 'span')
+    if message != nil and message.is_a?(Symbol): message = t(message) end
+    assert_select_rjs :chained_replace_html, class_name do |elements|
+      assert_select tag_name, message
     end
   end
 
@@ -73,6 +103,10 @@ class ActiveSupport::TestCase
     @controller = UsersController.new
     get :show, :username => users(user).username
     @controller = old_controller
+  end
+
+  def t(*args)
+    I18n.t(args[0], args.extract_options!)
   end
 
 end

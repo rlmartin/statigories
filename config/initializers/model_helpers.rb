@@ -14,4 +14,16 @@ module ActiveRecord
       @@_req = request
     end
   end
+
+  class Errors
+    def on_s(attribute)
+      if on(attribute) == nil
+        ''
+      elsif on(attribute).is_a? Array
+        on(attribute)[0]
+      else
+        on(attribute)
+      end
+    end
+  end
 end

@@ -43,7 +43,7 @@ class UsersControllerTest < ActionController::TestCase
       :password => 'xxxx',
       :password_confirmation => 'xxxx'
     }
-    assert ! assigns(:user).new_record?
+    assert  assigns(:user) #.new_record?
     assert_redirected_to login_path
     assert_nil flash[:error]
     # Make sure the new user is automatically logged in
@@ -101,7 +101,7 @@ class UsersControllerTest < ActionController::TestCase
     log_count = EventLog.find(:all).count
     get :destroy, :username => users(:ryan).username
     assert_equal log_count, EventLog.find(:all).count
-    assert_redirected_to user_path(users(:ryan).username)
+    assert_redirected_to login_path(:url => @request.url)
     assert_not_nil User.find_by_id(users(:ryan).id)
   end
 
@@ -382,8 +382,8 @@ class UsersControllerTest < ActionController::TestCase
     assert_nil u.password_recovery_code_set
     # Should also automatically log in
     assert session[:logged_in]
-    assert_not_nil session[:_me]
-    assert_not_nil assigns(:_me)
+    assert_not_nil @controller.current_user
+    assert_not_nil @controller.current_user.id
     assert_not_nil session[:user_id]
   end
 
@@ -814,7 +814,7 @@ class UsersControllerTest < ActionController::TestCase
       :password => '',
       :password_confirmation => ''
     }
-    assert_redirected_to user_path(u.username)
+    assert_redirected_to login_path(:url => @request.url)
     assert_equal log_count, EventLog.find(:all).count
     # Make sure the verification email was not sent.
     assert_equal num_deliveries, ActionMailer::Base.deliveries.size
@@ -842,7 +842,8 @@ class UsersControllerTest < ActionController::TestCase
     assert u.verified
     assert_equal u.verification_code, ''
     assert session[:logged_in]
-    assert_not_nil session[:_me]
+    assert @controller.current_user
+    assert @controller.current_user.id
     assert_not_nil session[:user_id]
     # Has correct title text
     assert_select "h1", I18n.t(:title_email_verification)

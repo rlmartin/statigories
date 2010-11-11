@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-	before_filter :logged_in_check, :except => [:forgot_password, :process_forgot_password, :reset_password, :process_reset_password, :resend_verify, :process_resend_verify, :show, :verify, :verify_check]
+	before_filter :login_or_oauth_required, :except => [:create, :forgot_password, :new, :process_forgot_password, :process_resend_verify, :process_reset_password, :resend_verify, :reset_password, :search, :show, :show_search, :verify, :verify_check]
 	before_filter :set_page_vars
 	before_filter [:load_user_from_param, :load_permissions_for_user], :only => [:show, :edit, :update, :destroy, :reset_password, :process_reset_password, :verify]
 
@@ -174,7 +174,7 @@ class UsersController < ApplicationController
   end
 
 	def verify_check
-		if @_me == nil or @_me[:id] <= 0: redirect_to new_user_path end
+		if current_user_stub == nil or current_user_stub.id == nil or current_user_stub.id <= 0: redirect_to new_user_path end
 		@page[:title] = t(:title_email_verification)
 	end
 

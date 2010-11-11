@@ -10,7 +10,7 @@
     <li><a href='http://help.goro.am'>Help</a></li>
   </ul>-->
 	<div class='login_panel'><% if session[:logged_in] %>
-		<%= t :welcome_back %>, <%= link_to session[:name], '/user/' + session[:username] %>. <%= link_to t(:link_logout), logout_path %>
+		<%= t :welcome_back %>, <%= link_to current_user_stub.first_name, '/user/' + current_user_stub.username %>. <%= link_to t(:link_logout), logout_path %>
 	<% else %>
 		<%= t :not_logged_in %> <%= link_to t(:link_login), login_path %>
 	<% end %></div>

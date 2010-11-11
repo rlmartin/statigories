@@ -1,6 +1,14 @@
 # Methods added to this helper will be available to all templates in the application.
 module ApplicationHelper
 
+  def current_user
+    @controller.send(:current_user)
+  end
+
+  def current_user_stub
+    @controller.send(:current_user_stub)
+  end
+
   def is_mine
     @controller.send(:is_mine)
   end

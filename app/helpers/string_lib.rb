@@ -71,6 +71,14 @@ module StringLib
     strValue.sub!(Regexp.new("^#{escape_reg_exp(strChar)}+"), "")
     strValue.sub!(Regexp.new("#{escape_reg_exp(strChar)}+$"), "")
   end
+
+  def self.url_decode(str)
+    CGI::unescape(str)
+  end
+  
+  def self.url_encode(str)
+    CGI::escape(str)
+  end
   
   def self.url_has_protocol(strValue)
     strValue.match(/^(((http|https|ftp):\/\/)|\/)/i)

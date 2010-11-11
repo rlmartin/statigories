@@ -1,0 +1,5 @@
+<%
+@page[:title] = t(:title_oauth_authorize_success)
+%>
+<h1><%= t :title_oauth_authorize_success %></h1>
+<div class='hi'><%= t :oauth_authorize_success, :client_application_name => @token.client_application.name, :verifier => @token.verifier %></div>
