@@ -1,0 +1,43 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+no_user_app1_request:
+  client_application: app1
+  type: RequestToken
+no_user_app1_access:
+  client_application: app1
+  type: AccessToken
+  authorized_at: '2010-10-05T12:34:47-0700'
+ryan_app1_request:
+  user: ryan
+  client_application: app1
+  token: 5CqberXgrDjJC9xGQnu3
+  type: RequestToken
+  secret: JFRpY1pWhFRy1PViJrbfQwzFscafZcj2VssB4H0J
+ryan_app1_request_with_default_callback:
+  user: ryan
+  client_application: app1
+  token: lxd5vcYH563TEBHLSSOS
+  type: RequestToken
+  secret: 3pN5Pil9zN3KNp331gACuzqvRGBK9X9rE28uJrVS
+  callback_url: oob
+ryan_app1_request_with_callback:
+  user: ryan
+  client_application: app1
+  token: lxd5vcYH563TEBHLSSOX
+  type: RequestToken
+  secret: 3pN5Pil9zN3KNp331gACuzqvRGBK9X9rE28uJrVJ
+  callback_url: http://application/alternative
+ryan_app1_request_authorized:
+  user: ryan
+  client_application: app1
+  token: 5lIngdWFifyUFwRfQoig
+  type: RequestToken
+  secret: QteZ80afSFXpeZi0q2WxH0kna53LIdGPJYV9BbxX
+  authorized_at: '2010-10-05T12:34:47-0700'
+ryan_app1_access:
+  user: ryan
+  client_application: app1
+  token: eOjkISV0e0jkLADz1plg
+  type: AccessToken
+  secret: q5ZHit659cdoeDD9O30oqpQbW8Gs9TEyfwuF5HRl
+  authorized_at: '2010-10-05T12:34:47-0700'
+
