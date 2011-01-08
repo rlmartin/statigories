@@ -161,7 +161,7 @@ class UserTest < ActiveSupport::TestCase
   end
 
   def test_invalid_email_server
-    u = User.create(:email => "johndoe@xxgmailxx.com", :email_confirmation => "johndoe@xxgmailxx.com", :username => "john", :password => "pwd", :password_confirmation => "pwd", :first_name => "John", :last_name => "Doe")
+    u = User.create(:email => "johndoe@xaxgmailxax.com", :email_confirmation => "johndoe@xaxgmailxax.com", :username => "john", :password => "pwd", :password_confirmation => "pwd", :first_name => "John", :last_name => "Doe")
     assert !u.valid?
     assert u.errors.on(:email)
   end

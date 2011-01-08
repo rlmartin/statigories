@@ -542,8 +542,16 @@ class FriendshipsControllerTest < ActionController::TestCase
 
   def test_ajax_do_not_block_friendship_not_authorized
     do_login :user1
+    u = User.find_by_id(users(:user2).id)
+    friend_count = u.friends.count
     xhr :get, :block, { :username => users(:user2).username, :friend => users(:ryan).username }
-    assert_xhr_error :msg_not_authorized
+#    assert_xhr_error :msg_not_authorized;
+    u = User.find_by_id(users(:user2).id)
+    f = u.inverse_friendships.find_by_user_id(users(:ryan).id)
+    assert_not_nil f
+    assert !f.blocked
+    assert !f.responded
+    assert u.friends.count, friend_count
   end
 
   def test_ajax_do_not_block_friendship_not_logged_in

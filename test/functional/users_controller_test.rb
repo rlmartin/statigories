@@ -472,8 +472,8 @@ class UsersControllerTest < ActionController::TestCase
       :id => users(:ryan).id,
       :first_name => 'John',
       :last_name => 'Doe',
-      :email => 'test5a@mylo.gs',
-      :email_confirmation => 'test5a@mylo.gs',
+      :email => 'test5a@statigories.com',
+      :email_confirmation => 'test5a@statigories.com',
       :username => 'john',
       :password => 'xxxx',
       :password_confirmation => 'xxxx'
@@ -495,7 +495,7 @@ class UsersControllerTest < ActionController::TestCase
     assert_not_equal u.last_name, last_name
     assert_equal u.last_name, 'Doe'
     assert_not_equal u.email, email
-    assert_equal u.email, 'test5a@mylo.gs'
+    assert_equal u.email, 'test5a@statigories.com'
     assert_not_equal u.username, username
     assert_equal u.username, 'john'
     assert_not_equal u.password, password

@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100401103955) do
+ActiveRecord::Schema.define(:version => 20101111134038) do
 
   create_table "client_applications", :force => true do |t|
     t.string   "name"
@@ -125,6 +125,7 @@ ActiveRecord::Schema.define(:version => 20100401103955) do
     t.datetime "invalidated_at"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "access_level",                        :default => -1
   end
 
   add_index "oauth_tokens", ["token"], :name => "index_oauth_tokens_on_token", :unique => true

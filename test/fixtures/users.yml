@@ -1,7 +1,7 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
 ryan:
-  email: test4@mylo.gs
+  email: test4@statigories.com
   password: 9003d1df22eb4d3820015070385194c8
   username: ryan
   first_name: Ryan
@@ -9,7 +9,7 @@ ryan:
   verified: true
 
 user1:
-  email: test1@mylo.gs
+  email: test1@statigories.com
   password: 9003d1df22eb4d3820015070385194c8
   username: john1
   first_name: John1
@@ -17,7 +17,7 @@ user1:
   verified: true
 
 user2:
-  email: test2@mylo.gs
+  email: test2@statigories.com
   password: 9003d1df22eb4d3820015070385194c8
   username: john2
   first_name: John2
@@ -25,7 +25,7 @@ user2:
   verified: false
 
 user3:
-  email: test3@mylo.gs
+  email: test3@statigories.com
   password: 9003d1df22eb4d3820015070385194c8
   username: john3
   first_name: John3
@@ -34,7 +34,7 @@ user3:
   verification_code: 823ba6742fc6a7578bcc20fcdffac2d1
 
 user4:
-  email: test4a@mylo.gs
+  email: test4a@statigories.com
   password: 9003d1df22eb4d3820015070385194c8
   username: john4
   first_name: John4
@@ -43,7 +43,7 @@ user4:
   verification_code: 823ba6742fc6a7578bcc20fcdffac2d1
 
 user5:
-  email: test5@mylo.gs
+  email: test5@statigories.com
   password: 9003d1df22eb4d3820015070385194c8
   username: john5
   first_name: John5
@@ -52,7 +52,7 @@ user5:
   verification_code: 823ba6742fc6a7578bcc20fcdffac2d1
 
 user6:
-  email: test6@mylo.gs
+  email: test6@statigories.com
   password: 9003d1df22eb4d3820015070385194c8
   username: john6
   first_name: John6
@@ -61,7 +61,7 @@ user6:
   verification_code: 823ba6742fc6a7578bcc20fcdffac2d1
 
 user7:
-  email: test7@mylo.gs
+  email: test7@statigories.com
   password: 9003d1df22eb4d3820015070385194c8
   username: john7
   first_name: John7

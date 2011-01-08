@@ -45,7 +45,7 @@ module OAuth
         unless @token.invalidated?    
           if request.post? 
             if user_authorizes_token?
-              @token.authorize!(current_user)
+              @token.authorize!(current_user, params[:access_level])
               if @token.oauth10?
                 @redirect_url = params[:oauth_callback] || @token.client_application.callback_url
               else
@@ -103,7 +103,7 @@ module OAuth
       
       # Override this to match your authorization page form
       def user_authorizes_token?
-        params[:authorize] == '1'
+        params[:access_level] != '0' and params[:access_level] != nil
       end
     end
   end

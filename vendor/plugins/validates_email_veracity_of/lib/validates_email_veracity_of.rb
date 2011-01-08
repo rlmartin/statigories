@@ -67,8 +67,10 @@ class ValidatesEmailVeracityOf #:nodoc:
 
     def servers
       unless @servers
-        @servers = [exchange_servers]
-        @servers << address_servers unless @options[:mx_only]
+        @servers = [(exchange_servers - ['8.15.7.100', '63.251.179.51'])]
+        @servers << (address_servers - ['8.15.7.100', '63.251.179.51']) unless @options[:mx_only]
+#        @servers = [(exchange_servers)]
+#        @servers << (address_servers) unless @options[:mx_only]
         @servers.flatten!
       end
       @servers
@@ -111,7 +113,6 @@ class ValidatesEmailVeracityOf #:nodoc:
       def servers_in(record)
         type = {'exchange' => Resolv::DNS::Resource::IN::MX,
                 'address'  => Resolv::DNS::Resource::IN::A}.fetch(record.to_s.downcase)
-
         Timeout::timeout(@options.fetch(:timeout, 2)) do
           Resolv::DNS.open do |dns|
             dns.getresources(name, type).collect do |s|

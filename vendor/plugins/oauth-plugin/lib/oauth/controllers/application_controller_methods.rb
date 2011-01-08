@@ -26,6 +26,9 @@ module OAuth
       def oauth_required
         if oauthenticate
           if authorized?
+            @can_view = current_token.can_view?
+            @can_edit = current_token.can_edit?
+            @can_delete = current_token.can_delete?
             return true
           else
             invalid_oauth_response
@@ -47,8 +50,7 @@ module OAuth
           login_required
         end
       end
-      
-      
+
       # verifies a request token request
       def verify_oauth_consumer_signature
         begin
@@ -57,6 +59,7 @@ module OAuth
 
             # Store this temporarily in client_application object for use in request token generation 
             @current_client_application.token_callback_url=request_proxy.oauth_callback if request_proxy.oauth_callback
+            @current_client_application.token_access_level=request_proxy.parameters[:oauth_access_level] if request_proxy.parameters[:oauth_access_level]
             
             # return the token secret and the consumer secret
             [nil, @current_client_application.secret]

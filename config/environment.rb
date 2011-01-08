@@ -45,10 +45,10 @@ ActionMailer::Base.smtp_settings = {
   :port => 587,
   :authentication => :plain,
   :enable_starttls_auto => true,
-	:domain => 'mylo.gs',
-  :user_name => 'noreply@mylo.gs',
+	:domain => 'statigories.com',
+  :user_name => 'noreply@statigories.com',
   :password => 'N0-r3P1y'
 }
 
-ActionController::CgiRequest::DEFAULT_SESSION_OPTIONS[:session_domain] = '.mylo.gs'
+ActionController::CgiRequest::DEFAULT_SESSION_OPTIONS[:session_domain] = '.statigories.com'
 

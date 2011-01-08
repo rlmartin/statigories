@@ -3,6 +3,18 @@
 
 en:
   hello_world: "Hello, world"
+  
+  # Access level text
+  access_level_-1: "Full control"
+  access_level_0: "No access"
+  access_level_1: "Read-only access"
+  access_level_2: "Edit-only access"
+  access_level_3: "Edit access"
+  access_level_4: "Delete-only access"
+  access_level_5: "Delete and Read access"
+  access_level_6: "Delete and Edit access"
+  access_level_7: "Full control"
+  access_level_default: "Unknown access level"
 
   # Button text
   btn_add: Add
@@ -21,10 +33,10 @@ en:
   subject_password_reset: "Password reset requested"
 
   # General text
-  app_name: "MyLogs"
+  app_name: "Statigories"
   log_in_prompt: "Please log in."
-  no_reply_email: "noreply@mylo.gs"
-  no_reply_from_name: "MyLogs 2"
+  no_reply_email: "noreply@statigories.com"
+  no_reply_from_name: "Statigories Account Manager"
   sign_up_prompt: "Not a member?"
 
   # Header text
@@ -179,7 +191,7 @@ en:
   # OAuth pages
   #msg_show_oauth_client_additional_text: "We support hmac-sha1 (recommended) as well as plain text in ssl mode."
   msg_show_oauth_client_additional_text: "We support hmac-sha1."
-  oauth_authorize_intro: "Would you like to authorize {{name}} ({{url}}) to access your account?"
+  oauth_authorize_intro: "Would you like to authorize {{name}} ({{url}}) to access your account? {{name}} has requested <strong>{{access_level}}</strong>; you may choose a different access level below, but we cannot guarantee {{name}}'s application will work correctly if you do."
   oauth_authorize_success: "Please return to {{client_application_name}} and enter this verification code when requested: <strong>{{verifier}}</strong>."
   oauth_index_applications_intro: "You have the following client applications registered:"
   oauth_index_no_applications_intro: "Do you have an application you would like to register for use with us using the <a href=\"http://oauth.net\">OAuth</a> standard?<br />You must register your web application before it can make OAuth requests to this service."

@@ -23,6 +23,10 @@ class OauthControllerRequestTokenTest < ActionController::TestCase
     get :request_token, :oauth_callback => 'http://application/alternative'
   end
   
+  def do_get_with_callback_and_access_level(level = -1)
+    get :request_token, :oauth_callback => 'http://application/alternative', :oauth_access_level => level
+  end
+  
   def test_should_be_successful
     do_get
     assert @response.success?
@@ -36,6 +40,54 @@ class OauthControllerRequestTokenTest < ActionController::TestCase
     request_token = OauthToken.find(:first, :order => 'created_at DESC')
     assert_not_nil request_token.callback_url
     assert_equal request_token.callback_url, 'http://application/alternative'
+  end
+  
+  def test_should_be_successful_with_callback_and_default_access_level
+    do_get_with_callback_and_access_level
+    assert @response.success?
+    request_token = OauthToken.find(:first, :order => 'created_at DESC')
+    assert_not_nil request_token.callback_url
+    assert_equal request_token.callback_url, 'http://application/alternative'
+    assert_equal request_token.access_level, -1
+    assert request_token.can_delete?
+    assert request_token.can_edit?
+    assert request_token.can_view?
+  end
+  
+  def test_should_be_successful_with_callback_and_full_access_level
+    do_get_with_callback_and_access_level 7
+    assert @response.success?
+    request_token = OauthToken.find(:first, :order => 'created_at DESC')
+    assert_not_nil request_token.callback_url
+    assert_equal request_token.callback_url, 'http://application/alternative'
+    assert_equal request_token.access_level, 7
+    assert request_token.can_delete?
+    assert request_token.can_edit?
+    assert request_token.can_view?
+  end
+  
+  def test_should_be_successful_with_callback_and_edit_access_level
+    do_get_with_callback_and_access_level 3
+    assert @response.success?
+    request_token = OauthToken.find(:first, :order => 'created_at DESC')
+    assert_not_nil request_token.callback_url
+    assert_equal request_token.callback_url, 'http://application/alternative'
+    assert_equal request_token.access_level, 3
+    assert !request_token.can_delete?
+    assert request_token.can_edit?
+    assert request_token.can_view?
+  end
+  
+  def test_should_be_successful_with_callback_and_read_only_access_level
+    do_get_with_callback_and_access_level 1
+    assert @response.success?
+    request_token = OauthToken.find(:first, :order => 'created_at DESC')
+    assert_not_nil request_token.callback_url
+    assert_equal request_token.callback_url, 'http://application/alternative'
+    assert_equal request_token.access_level, 1
+    assert !request_token.can_delete?
+    assert !request_token.can_edit?
+    assert request_token.can_view?
   end
   
   def test_should_query_for_client_application
@@ -74,18 +126,24 @@ class OauthControllerTokenAuthorizationTest < ActionController::TestCase
     get :authorize, :oauth_token => @request_token.token
   end
 
-  def do_post
+  def do_post(level = -1)
     #@request_token.expects(:authorize!).with(@user)
-    post :authorize,:oauth_token=>@request_token.token,:authorize=>"1"
+    post :authorize,:oauth_token=>@request_token.token, :access_level=>level
     @request_token = OauthToken.find_by_id(@request_token.id)
     assert @request_token.authorized?
     assert !@request_token.invalidated?
   end
 
-  def do_post_default_callback
+  def do_post_without_assertions(level = -1)
+    #@request_token.expects(:authorize!).with(@user)
+    post :authorize,:oauth_token=>@request_token.token, :access_level=>level
+    @request_token = OauthToken.find_by_id(@request_token.id)
+  end
+
+  def do_post_default_callback(level = -1)
     setup_oauth :ryan, :app1, :ryan_app1_request_with_default_callback
     #@request_token.expects(:authorize!).with(@user)
-    post :authorize,:oauth_token=>@request_token.token,:authorize=>"1"
+    post :authorize,:oauth_token=>@request_token.token, :access_level=>level
     @request_token = OauthToken.find_by_id(@request_token.id)
     assert @request_token.authorized?
     assert !@request_token.invalidated?
@@ -93,27 +151,27 @@ class OauthControllerTokenAuthorizationTest < ActionController::TestCase
 
   def do_post_without_user_authorization
     #@request_token.expects(:invalidate!)
-    post :authorize,:oauth_token=>@request_token.token,:authorize=>"0"
+    post :authorize,:oauth_token=>@request_token.token,:access_level=>"0"
     @request_token = OauthToken.find_by_id(@request_token.id)
     assert !@request_token.authorized?
     assert @request_token.invalidated?
   end
 
-  def do_post_with_callback
+  def do_post_with_callback(level = -1)
     setup_oauth :ryan, :app1, :ryan_app1_request_with_callback
     #@request_token.expects(:authorize!).with(@user)
     # This is a test for Oauth 1.0, which is not allowed here, so commenting this out and removing the callback_url.
     #post :authorize,:oauth_token=>@request_token.token,:oauth_callback=>"http://application/alternative",:authorize=>"1"
-    post :authorize,:oauth_token=>@request_token.token,:authorize=>"1"
+    post :authorize,:oauth_token=>@request_token.token, :access_level=>level
     @request_token = OauthToken.find_by_id(@request_token.id)
     assert @request_token.authorized?
     assert !@request_token.invalidated?
   end
 
-  def do_post_with_no_application_callback
+  def do_post_with_no_application_callback(level = -1)
     #@request_token.expects(:authorize!).with(@user)
     @client_application.callback_url = nil
-    post :authorize, :oauth_token => @request_token.token, :authorize=>"1"
+    post :authorize, :oauth_token => @request_token.token, :access_level=>level
     @request_token = OauthToken.find_by_id(@request_token.id)
     assert @request_token.authorized?
     assert !@request_token.invalidated?
@@ -176,15 +234,55 @@ class OauthControllerTokenAuthorizationTest < ActionController::TestCase
   end
 
   def test_should_render_failure_screen_if_token_is_invalidated
+    @request_token.invalidate!
+    do_post_without_assertions
+    assert_template('authorize_failure')
+    assert_select 'h1', t(:title_oauth_authorize_denied)
+  end
+
+  def test_should_render_authorization_form
     #@request_token.expects(:invalidated?).returns(true)
     do_get
     assert_template('authorize')
     assert_select 'h1', t(:title_oauth_authorize)
-    assert_select 'input[type=checkbox][name=authorize]', :count => 1
+    assert_select 'input[type=radio][name=access_level]', :count => 4
+    assert_select 'input[type=radio][name=access_level][value=0]', :count => 1
+    assert_select 'input[type=radio][name=access_level][value=1]', :count => 1
+    assert_select 'input[type=radio][name=access_level][value=3]', :count => 1
+    assert_select 'input[type=radio][name=access_level][value=7]', :count => 1
+    assert_select 'input[type=radio][name=access_level][value=7][checked]', :count => 1
     assert_select 'input[type=submit]', :count => 1
     assert_select 'form[action=?]', authorize_url
   end
   
+  def test_should_authorize_full_access_level
+    do_post 7
+    assert @response.success?
+    assert_template('authorize_success')
+    assert @request_token.can_delete?
+    assert @request_token.can_edit?
+    assert @request_token.can_view?
+  end
+  
+  def test_should_authorize_edit_access_level
+    do_post 3
+    assert @response.success?
+    assert_template('authorize_success')
+    access_token = OauthToken.find(:first, :order => 'created_at DESC')
+    assert !@request_token.can_delete?
+    assert @request_token.can_edit?
+    assert @request_token.can_view?
+  end
+
+  def test_should_authorize_view_access_level
+    do_post 1
+    assert @response.success?
+    assert_template('authorize_success')
+    access_token = OauthToken.find(:first, :order => 'created_at DESC')
+    assert !@request_token.can_delete?
+    assert !@request_token.can_edit?
+    assert @request_token.can_view?
+  end
 
 end
 

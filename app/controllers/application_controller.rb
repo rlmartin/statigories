@@ -58,11 +58,44 @@ class ApplicationController < ActionController::Base
 
 	protected
 
+  def check_authorization(condition, msg)
+    unless condition
+      if oauth?
+        invalid_oauth_response 401, t(msg)
+      else
+        flash[:error] = t(msg)
+        if request.xhr?
+          render 'general_page/auth_response' unless performed?
+        else
+          redirect_to error_path
+        end
+      end
+      return false
+    end
+    true
+  end
+
+  def check_authorization_delete(msg = :msg_not_authorized)
+    check_authorization @can_delete, msg
+  end
+
+  def check_authorization_edit(msg = :msg_not_authorized)
+    check_authorization @can_edit, msg
+  end
+
+  def check_authorization_view(msg = :msg_not_authorized)
+    check_authorization @can_view, msg
+  end
+
   # Redirect to the error page if 'condition' is false. Use 'msg' symbol to set the message from the translation lookup.
   def error_page_on_fail(condition, msg)
     unless condition
-      flash[:error] = t(msg)
-      unless request.xhr?: redirect_to error_path end
+      if oauth?
+        invalid_oauth_response 401, t(msg)
+      else
+        flash[:error] = t(msg)
+        unless request.xhr?: redirect_to error_path end
+      end
       return true
     end
     false
