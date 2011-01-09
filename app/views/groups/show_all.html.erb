@@ -1,0 +1,14 @@
+<h1><%= t(:title_user_groups, :name => @user.full_name) %></h1>
+<% form_tag user_groups_path(@user.username) do %>
+	<div class='input_prompt'><%= t :input_add_group %></div>
+	<div class='input_field'><%= text_field_tag 'name', '' %></div>
+	<div><%= submit_tag t(:btn_create) %></div>
+<% end %>
+<% if @user.groups.count > 0 %>
+  <ul>
+    <%= render :partial => 'groups/group_row', :collection => @user.groups %>
+  </ul>
+<% else %>
+  <div class='notice_msg'><%= t :msg_no_groups_found %></div>
+<% end %>
+

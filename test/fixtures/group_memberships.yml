@@ -1,0 +1,22 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+ryan_family_user1:
+  group: ryan_family
+  friendship: ryan_user1
+
+ryan_family_user2:
+  group: ryan_family
+  friendship: ryan_user2
+
+ryan_friends_user1:
+  group: ryan_friends
+  friendship: ryan_user1
+
+user6_family_user2:
+  group: user6_family
+  friendship: user6_user2
+
+user7_friends_user2:
+  group: user7_friends
+  friendship: user7_user2
+

@@ -1,0 +1,32 @@
+<%
+@page[:title] = t(:title_show_oauth, :name => @client_application.name)
+@page[:description] = t(:desc_show_oauth_client)
+@page[:keywords] = t(:keywords_show_oauth_client)
+%>
+<h1><%= t(:title_show_oauth, :name => @client_application.name) %></h1>
+<p>
+  <label><%= t(:input_oauth_consumer_key) %></label>
+  <code><%= @client_application.key %></code>
+</p>
+<p>
+  <label><%= t(:input_oauth_consumer_secret) %></label>
+  <code><%= @client_application.secret %></code>
+</p>
+<p>
+  <label><%= t(:input_oauth_consumer_request_token_url) %></label>
+  <code>http<%='s' if request.ssl? %>://<%= request.host_with_port %><%= @client_application.oauth_server.request_token_path %></code>
+</p>
+<p>
+  <label><%= t(:input_oauth_consumer_access_token_url) %></label>
+  <code>http<%='s' if request.ssl? %>://<%= request.host_with_port %><%= @client_application.oauth_server.access_token_path %></code>
+</p>
+<p>
+  <label><%= t(:input_oauth_consumer_authorize_url) %></label>
+  <code>http<%='s' if request.ssl? %>://<%= request.host_with_port %><%= @client_application.oauth_server.authorize_path %></code>
+</p>
+
+<p>
+  <%= t(:msg_show_oauth_client_additional_text) %>
+</p>
+<%= link_to t(:link_edit), edit_oauth_client_path(@client_application) %> |
+<%= link_to t(:link_back), oauth_clients_path %>

@@ -1,0 +1,8 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+one:
+  nonce: a_nonce
+  timestamp: 1
+two:
+  nonce: b_nonce
+  timestamp: 2
+

@@ -1,0 +1,13 @@
+<div class='input_prompt required'><%= t :input_oauth_client_name %></div>
+<div class='error_msg'><%= @client_application.errors.on_s(:name) %></div>
+<div class='input_field'><%= text_field_tag 'client_application[name]', @client_application.name %></div>
+<div class='input_prompt required'><%= t :input_oauth_client_application_url %></div>
+<div class='error_msg'><%= @client_application.errors.on_s(:url) %></div>
+<div class='input_field'><%= text_field_tag 'client_application[url]', @client_application.url %></div>
+<div class='input_prompt'><%= t :input_oauth_client_callback_url %></div>
+<div class='error_msg'><%= @client_application.errors.on_s(:callback_url) %></div>
+<div class='input_field'><%= text_field_tag 'client_application[callback_url]', @client_application.callback_url %></div>
+<div class='input_prompt'><%= t :input_oauth_client_support_url %></div>
+<div class='error_msg'><%= @client_application.errors.on_s(:support_url) %></div>
+<div class='input_field'><%= text_field_tag 'client_application[support_url]', @client_application.support_url %></div>
+

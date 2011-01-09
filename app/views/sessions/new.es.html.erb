@@ -1,0 +1,13 @@
+Just an example: is the Spanish version.
+<% form_tag login_path do %>
+<div><%= t :log_in_prompt %></div>
+<div class='error_msg'><%= flash[:error] %></div>
+<div class='input_prompt'><%= t :input_email %></div>
+<div class='input_field'><%= text_field_tag 'email' %></div>
+<div class='input_prompt'><%= t :input_password %></div>
+<div class='input_field'><%= password_field_tag 'password' %></div>
+<div class='input_field'><%= check_box_tag 'remember_me' %> <%= t :input_remember_me %></div>
+<div><%= submit_tag t(:btn_login) %></div>
+<div><%= t :sign_up_prompt %> <%= link_to t(:link_sign_up), new_user_path %></div>
+<div><%= link_to t(:link_forgot_password), forgot_password_path %></div>
+<% end %>

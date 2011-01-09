@@ -1,0 +1,12 @@
+<h1><%= t :title_email_verification %></h1>
+<% if flash[:notice] == '' or flash[:notice] == nil %>
+  <div><%= t :prompt_resend_verification_enter_email %></div>
+  <div class='error_msg'><%= flash[:error] %></div>
+  <% form_tag do %>
+    <div class='input_prompt'><%= t :input_email %></div>
+    <div class='input_field'><%= text_field_tag 'email' %></div>
+	  <div><%= submit_tag t(:btn_send) %></div>
+  <% end %>
+<% else %>
+  <div class='notice_msg'><%= flash[:notice] %></div>
+<% end %>

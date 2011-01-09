@@ -1,0 +1,18 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+app1:
+  name: Test App
+  url: http://mylo.gs
+  support_url: http://mylo.gs/support
+  callback_url: http://mylo.gs/callback
+  key: SE8TrZsFtKWx1aaHicQ
+  secret: dUMi0nHUIrKWm2Er00PotfdPMskwCbcOFDtk8jk8
+  user: ryan
+app2:
+  name: App2
+  url: http://test2.app
+  support_url: http://test2.app/support
+  callback_url: http://test2.app/callback
+  key: 0arELdOaD0CALjrDzk45
+  secret: maLgOMVCyidOrh5i2CKYxhaKgjR0WYpZy6lusEqC
+  user: user1
+

@@ -1,0 +1,20 @@
+<h1><%= t(:title_user_group, :group_name => @group.name, :user_name => @group.user.full_name) %>
+<span id='rename_form' style='display: none;'><% form_tag user_edit_group_path(:username => @group.user.username, :group_name => @group.group_name) do %>
+  <%= text_field_tag 'name', @group.name %> <%= submit_tag t(:btn_save) %>
+<% end %></span>
+<sup><a href='#' onclick="$$('h1 .group_name')[0].toggle(); $('rename_form').toggle(); return false;" class='rename_link'><%= t :link_rename %></a></sup>
+</h1>
+<div><%= link_to t(:link_back_to_groups), user_groups_path(@group.user.username) %></div>
+<div><% form_remote_tag :url => user_group_add_member_dynamic_path(:username => @user.username), :method => :post do %>
+    <span><%= select_tag 'friend', "<option value=''>#{t(:input_add_friend_to_group)}</option>" + options_from_collection_for_select((@user.friends - @group.members), :username, :full_name) %></span>
+    <span><%= submit_tag t(:btn_add) %><%= hidden_field_tag 'group_name', @group.group_name %></span>
+<% end %></div>
+<% if @group.members.count == 0 %>
+<div class='notice_msg'><%= t :msg_group_members_not_found %></div>
+<ul id='group_members_<%= @group.group_name %>'></ul>
+<% else %>
+<ul id='group_members_<%= @group.group_name %>'>
+  <%= render :partial => 'users/user_row', :collection => @group.members %>
+</ul>
+<% end %>
+

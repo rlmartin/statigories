@@ -1,0 +1,14 @@
+<h1><%= t :title_email_verification %></h1>
+<div>
+<% if @verified %>
+  <div class='notice_msg'><%= t :msg_successful_verification_code %></div>
+  <div><%= t :prompt_get_started %> <%= link_to t(:link_go_to_your_page), user_path %></div>
+<% else %>
+  <div class='error_msg'><% if @user == nil %>
+    <%= t :msg_user_not_found %>
+  <% else %>
+    <%= t :msg_invalid_verification_code %>
+  <% end %></div>
+  <div><%= t :prompt_resend_verification %> <%= link_to t(:link_resend_verification), resend_verify_path %></div>
+<% end %>
+</div>

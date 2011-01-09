@@ -1,0 +1,8 @@
+.error_msg { color: #f00; }
+.notice_msg { font-weight: bold; }
+.translation_missing { color: #f00; font-weight: bold; }
+#rename_form form, #rename_form div { display: inline; }
+h1 form input[type=text] { background-color: #ccc; border: 0px; font-family: inherit; font-size: 1em; font-weight: bold; padding: 0px; }
+sup { font-size: 0.5em; }
+.required { color: #f00; }
+

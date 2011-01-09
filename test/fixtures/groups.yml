@@ -1,0 +1,42 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+ryan_family:
+  user: ryan
+  name: Family
+  group_name: family
+
+ryan_friends:
+  user: ryan
+  name: My Friends
+  group_name: my_friends
+
+ryan_work:
+  user: ryan
+  name: Work Friends
+  group_name: work_friends
+
+user1_family:
+  user: user1
+  name: Family
+  group_name: family
+
+user2_family:
+  user: user2
+  name: Family
+  group_name: family
+
+user6_family:
+  user: user6
+  name: Family
+  group_name: family
+
+user6_friends:
+  user: user6
+  name: My Friends
+  group_name: my_friends
+
+user7_friends:
+  user: user7
+  name: My Friends
+  group_name: my_friends
+

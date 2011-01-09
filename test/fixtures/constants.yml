@@ -1,0 +1,145 @@
+--- 
+constants_007: 
+  server_type: dev
+  name: root_url
+  created_at: 2009-11-26 14:23:05
+  updated_at: 2009-11-26 14:23:05
+  array: "0"
+  id: "20"
+  value: http://localhost:3000
+  cast_as: ""
+  lang: ""
+  active: "1"
+constants_008: 
+  server_type: prod
+  name: root_url
+  created_at: 2009-11-26 14:23:17
+  updated_at: 2009-11-26 14:23:17
+  array: "0"
+  id: "21"
+  value: http://statigories.com
+  cast_as: ""
+  lang: ""
+  active: "1"
+constants_009: 
+  server_type: ""
+  name: accepted_languages
+  created_at: 2009-11-27 16:19:53
+  updated_at: 2009-11-27 16:19:53
+  array: "1"
+  id: "23"
+  value: en, es
+  cast_as: ""
+  lang: ""
+  active: "1"
+constants_001: 
+  server_type: ""
+  name: server_type
+  created_at: 2009-11-22 13:01:51
+  updated_at: 2009-11-22 13:01:51
+  array: "0"
+  id: "1"
+  value: dev
+  cast_as: ""
+  lang: ""
+  active: "1"
+constants_002: 
+  server_type: ""
+  name: server_type
+  created_at: 2009-11-22 13:01:51
+  updated_at: 2009-11-22 13:01:51
+  array: "0"
+  id: "2"
+  value: prod
+  cast_as: ""
+  lang: ""
+  active: "0"
+constants_003: 
+  server_type: ""
+  name: server_type
+  created_at: 2009-11-22 13:01:51
+  updated_at: 2009-11-22 13:01:51
+  array: "0"
+  id: "3"
+  value: test
+  cast_as: ""
+  lang: ""
+  active: "0"
+constants_004: 
+  server_type: dev
+  name: google_analytics_key
+  created_at: 2009-11-22 17:07:39
+  updated_at: 2009-11-22 17:07:39
+  array: "0"
+  id: "4"
+  value: ""
+  cast_as: ""
+  lang: ""
+  active: "1"
+constants_005: 
+  server_type: prod
+  name: google_analytics_key
+  created_at: 2009-11-22 17:07:47
+  updated_at: 2009-11-22 17:07:47
+  array: "0"
+  id: "5"
+  value: ""
+  cast_as: ""
+  lang: ""
+  active: "1"
+constants_006: 
+  server_type: dev
+  name: test_emails
+  created_at: 2009-11-24 13:50:34
+  updated_at: 2009-11-24 13:50:34
+  array: "1"
+  id: "19"
+  value: rlmartin@gmail.com, ssisani@gmail.com, test1@statigories.com, test2@statigories.com, test3@statigories.com, test4@statigories.com, test4a@statigories.com, test5@statigories.com, test5a@statigories.com, test6@statigories.com, test7@statigories.com
+  cast_as: ""
+  lang: ""
+  active: "1"
+constants_010: 
+  server_type: ""
+  name: search_default_limit
+  created_at: 2009-12-31 22:57:24
+  updated_at: 2009-12-31 22:57:24
+  array: "0"
+  id: "24"
+  value: 20
+  cast_as: "int"
+  lang: ""
+  active: "1"
+constants_011: 
+  server_type: ""
+  name: send_level_two_emails
+  created_at: 2009-12-31 22:57:24
+  updated_at: 2009-12-31 22:57:24
+  array: "0"
+  id: "27"
+  value: "false"
+  cast_as: "bool"
+  lang: ""
+  active: "1"
+constants_012: 
+  server_type: ""
+  name: show_groups
+  created_at: 2009-12-31 22:57:24
+  updated_at: 2009-12-31 22:57:24
+  array: "0"
+  id: "28"
+  value: "true"
+  cast_as: "bool"
+  lang: ""
+  active: "1"
+constants_013: 
+  server_type: ""
+  name: max_access_level
+  created_at: 2009-12-31 22:57:24
+  updated_at: 2009-12-31 22:57:24
+  array: "0"
+  id: "29"
+  value: "7"
+  cast_as: "int"
+  lang: ""
+  active: "1"
+
