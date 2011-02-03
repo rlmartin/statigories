@@ -93,6 +93,18 @@ ActionController::Routing::Routes.draw do |map|
   map.user_group_remove_member_dynamic 'user/:username/groups_members', :controller => "group_memberships", :action => "destroy", :conditions => { :method => :delete }
   map.user_group_remove_member 'user/:username/groups/:group_name/members/:friend', :controller => "group_memberships", :action => "destroy", :conditions => { :method => :delete }
 
+  # Log Entry routes
+  map.user_log 'user/:username/log/:index', :controller => "log_entries", :action => "show", :conditions => { :method => :get }
+  map.user_edit_log 'user/:username/log/:index', :controller => "log_entries", :action => "show", :conditions => { :method => :post }
+  map.user_edit_log_label 'user/:username/log/:index/label/:label', :controller => "log_entries", :action => "edit_label", :conditions => { :method => :post }
+  map.user_edit_log_label 'user/:username/log/:index/label', :controller => "log_entries", :action => "edit_label", :conditions => { :method => :post }
+  map.user_delete_log 'user/:username/log/:index', :controller => "log_entries", :action => "destroy", :conditions => { :method => :delete }
+  map.user_create_log 'user/:username/log', :controller => "log_entries", :action => "create", :conditions => { :method => :post }
+  map.user_create_log 'user/:username/log/new', :controller => "log_entries", :action => "new", :conditions => { :method => :get }
+  map.user_show_logs 'user/:username/logs/:num/:start', :controller => "log_entries", :action => "show_all", :conditions => { :method => :get }
+  map.user_show_logs 'user/:username/logs/:num', :controller => "log_entries", :action => "show_all", :conditions => { :method => :get }
+  map.user_show_logs 'user/:username/logs', :controller => "log_entries", :action => "show_all", :conditions => { :method => :get }
+
   # Install the default routes as the lowest priority.
   # Note: These default routes make all actions in every controller accessible via GET requests. You should
   # consider removing the them or commenting them out if you're using named routes and resources.

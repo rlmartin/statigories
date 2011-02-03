@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101111134038) do
+ActiveRecord::Schema.define(:version => 20110113125719) do
 
   create_table "client_applications", :force => true do |t|
     t.string   "name"
@@ -104,6 +104,40 @@ ActiveRecord::Schema.define(:version => 20101111134038) do
   add_index "groups", ["user_id", "group_name"], :name => "index_groups_on_user_id_and_group_name", :unique => true
   add_index "groups", ["user_id"], :name => "index_groups_on_user_id"
 
+  create_table "log_entries", :force => true do |t|
+    t.integer  "user_id",                         :null => false
+    t.string   "label",        :default => "",    :null => false
+    t.integer  "access_level", :default => 1,     :null => false
+    t.date     "date",                            :null => false
+    t.integer  "index",        :default => 0,     :null => false
+    t.integer  "integer",      :default => 0,     :null => false
+    t.boolean  "deleted",      :default => false, :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "log_entries", ["user_id", "access_level", "deleted"], :name => "index_log_entries_on_user_id_and_access_level_and_deleted"
+  add_index "log_entries", ["user_id", "index"], :name => "index_log_entries_on_user_id_and_index", :unique => true
+  add_index "log_entries", ["user_id"], :name => "index_log_entries_on_user_id"
+
+  create_table "log_entry_items", :force => true do |t|
+    t.integer  "log_entry_id",                                                     :null => false
+    t.text     "value",                                                            :null => false
+    t.integer  "display_order",                                 :default => 1,     :null => false
+    t.boolean  "deleted",                                       :default => false, :null => false
+    t.integer  "value_int"
+    t.float    "value_float"
+    t.datetime "value_date"
+    t.boolean  "value_bool"
+    t.decimal  "value_lat",     :precision => 22, :scale => 17
+    t.decimal  "value_lng",     :precision => 22, :scale => 17
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "log_entry_items", ["log_entry_id", "deleted"], :name => "index_log_entry_items_on_log_entry_id_and_deleted"
+  add_index "log_entry_items", ["log_entry_id"], :name => "index_log_entry_items_on_log_entry_id"
+
   create_table "oauth_nonces", :force => true do |t|
     t.string   "nonce"
     t.integer  "timestamp"
@@ -129,6 +163,23 @@ ActiveRecord::Schema.define(:version => 20101111134038) do
   end
 
   add_index "oauth_tokens", ["token"], :name => "index_oauth_tokens_on_token", :unique => true
+
+  create_table "taggings", :force => true do |t|
+    t.integer  "tag_id"
+    t.integer  "taggable_id"
+    t.integer  "tagger_id"
+    t.string   "tagger_type"
+    t.string   "taggable_type"
+    t.string   "context"
+    t.datetime "created_at"
+  end
+
+  add_index "taggings", ["tag_id"], :name => "index_taggings_on_tag_id"
+  add_index "taggings", ["taggable_id", "taggable_type", "context"], :name => "index_taggings_on_taggable_id_and_taggable_type_and_context"
+
+  create_table "tags", :force => true do |t|
+    t.string "name"
+  end
 
   create_table "user_agents", :force => true do |t|
     t.string   "user_agent", :default => "",    :null => false

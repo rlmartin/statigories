@@ -21,7 +21,7 @@ test:
 
 migration:
   adapter: mysql
-  database: mylogs_main
+  database: statigories_main
   username: goroam_migration
   password: g0r0am
   pool: 5
@@ -29,8 +29,8 @@ migration:
 
 production:
   adapter: mysql
-  database: mylogs_main
-  username: mylogs_iusr
+  database: statigories_main
+  username: statigories_iusr
   password: g0r0am
   pool: 5
   timeout: 5000

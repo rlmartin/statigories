@@ -1,0 +1,15 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+log_one:
+  user: ryan
+  label: 'Running'
+  access_level: 0
+  date: 2011-01-13 10:00:00 AM
+  deleted: false
+
+log_two:
+  user_id: ryan
+  label: 'Biking'
+  access_level: 1
+  date: 2011-01-13 10:00:00 AM
+  deleted: false

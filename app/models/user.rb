@@ -23,6 +23,7 @@ class User < ActiveRecord::Base
   has_many :inverse_friends, :through => :inverse_friendships, :source => :user, :uniq => true
   has_many :client_applications
   has_many :tokens, :class_name=>"OauthToken",:order=>"authorized_at desc",:include=>[:client_application]
+  has_many :log_entries, :dependent => :destroy
 
 	def to_param
     "#{self.username}" 
