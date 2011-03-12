@@ -1,5 +1,5 @@
 class GroupMembershipsController < ApplicationController
-	before_filter [:load_user_from_param, :load_permissions_for_user, :load_group_from_param, :load_friend_from_param]
+	before_filter :load_user_from_param, :load_permissions_for_user, :load_group_from_param, :load_friend_from_param
   before_filter :check_authorization_delete, :only => [:destroy]
   before_filter :check_authorization_edit, :only => [:create]
 
@@ -32,6 +32,6 @@ class GroupMembershipsController < ApplicationController
   protected
   def load_friend_from_param
     @friend = nil
-    unless params[:friend] == nil: @friend = User.find_by_username(params[:friend]) end
+    @friend = User.find_by_username(params[:friend]) unless params[:friend] == nil
   end
 end

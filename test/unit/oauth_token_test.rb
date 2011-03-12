@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/../test_helper'
+require 'test_helper'
 
 class RequestTokenTest < ActiveSupport::TestCase
 
@@ -95,8 +95,8 @@ class RequestTokenTest < ActiveSupport::TestCase
     @access = @token.exchange!
     assert_not_equal false, @access
     assert @token.invalidated?
-    assert @token.access_level, @access.access_level
-    assert 7, @access.access_level
+    assert_equal @token.access_level, @access.access_level
+    assert_equal 7, @access.access_level
     assert @access.can_view?
     assert @access.can_edit?
     assert @access.can_delete?
@@ -111,8 +111,8 @@ class RequestTokenTest < ActiveSupport::TestCase
     @access = @token.exchange!
     assert_not_equal false, @access
     assert @token.invalidated?
-    assert @token.access_level, @access.access_level
-    assert 3, @access.access_level
+    assert_equal @token.access_level, @access.access_level
+    assert_equal 3, @access.access_level
     assert @access.can_view?
     assert @access.can_edit?
     assert !@access.can_delete?
@@ -127,8 +127,8 @@ class RequestTokenTest < ActiveSupport::TestCase
     @access = @token.exchange!
     assert_not_equal false, @access
     assert @token.invalidated?
-    assert @token.access_level, @access.access_level
-    assert 1, @access.access_level
+    assert_equal @token.access_level, @access.access_level
+    assert_equal 1, @access.access_level
     assert @access.can_view?
     assert !@access.can_edit?
     assert !@access.can_delete?

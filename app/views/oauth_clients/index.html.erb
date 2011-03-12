@@ -10,7 +10,7 @@
       <div><%= link_to token.client_application.name, token.client_application.url %></div>
       <div><%= token.authorized_at %></div>
       <div>
-        <% form_tag :controller => 'oauth', :action => 'revoke' do %>
+        <%= form_tag :controller => 'oauth', :action => 'revoke' do %>
         <%= hidden_field_tag 'token', token.token %>
         <%= submit_tag t(:link_delete_token) %>
         <% end %>
@@ -21,12 +21,12 @@
 <% end %>
 <h3><%= t :oauth_index_subtitle_developer_section %></h3>
 <% if @client_applications.empty? %>
-  <div class='intro_text'><%= t :oauth_index_no_applications_intro %></div>
+  <div class='intro_text'><%= t :oauth_index_no_applications_intro_html %></div>
 <% else %>
   <div class='intro_text'><%= t :oauth_index_applications_intro %></div>
   <ul class='client_application_list'>
   <% @client_applications.each do |client|%>
-    <% div_for client do %>
+    <%= div_for client do %>
       <li><%= link_to client.name, oauth_client_path(client) %>: 
         <%= link_to t(:link_edit), edit_oauth_client_path(client) %>
         <%= link_to t(:link_delete), oauth_client_path(client), :confirm => t(:msg_confirm_delete_oauth_application), :method => :delete %></li>

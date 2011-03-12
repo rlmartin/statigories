@@ -1,113 +1,126 @@
-ActionController::Routing::Routes.draw do |map|
-  map.resources :oauth_clients
+StatigoriesCom::Application.routes.draw do
+  resources :oauth_clients
+  match '/oauth_clients/:action(/:id)', :to => 'oauth_clients'
 
-  map.test_request '/oauth/test_request', :controller => 'oauth', :action => 'test_request'
-  map.access_token '/oauth/access_token', :controller => 'oauth', :action => 'access_token'
-  map.request_token '/oauth/request_token', :controller => 'oauth', :action => 'request_token'
-  map.authorize '/oauth/authorize', :controller => 'oauth', :action => 'authorize'
-  map.oauth '/oauth', :controller => 'oauth', :action => 'index'
-  # The priority is based upon order of creation: first created -> highest priority.
+  match '/oauth/test_request', :to => 'oauth#test_request', :as => :test_request
+  match '/oauth/access_token', :to => 'oauth#access_token', :as => :access_token
+  match '/oauth/request_token', :to => 'oauth#request_token', :as => :request_token
+  match '/oauth/authorize', :to => 'oauth#authorize', :as => :authorize
+  match '/oauth/revoke', :to => 'oauth#revoke'
+  match '/oauth', :to => 'oauth#index', :as => :oauth
+
+  match '/oauthorized/:action', :to => 'oauthorized'
+
+  # The priority is based upon order of creation:
+  # first created -> highest priority.
 
   # Sample of regular route:
-  #   map.connect 'products/:id', :controller => 'catalog', :action => 'view'
+  #   match 'products/:id' => 'catalog#view'
   # Keep in mind you can assign values other than :controller and :action
 
   # Sample of named route:
-  #   map.purchase 'products/:id/purchase', :controller => 'catalog', :action => 'purchase'
+  #   match 'products/:id/purchase' => 'catalog#purchase', :as => :purchase
   # This route can be invoked with purchase_url(:id => product.id)
 
   # Sample resource route (maps HTTP verbs to controller actions automatically):
-  #   map.resources :products
+  #   resources :products
 
   # Sample resource route with options:
-  #   map.resources :products, :member => { :short => :get, :toggle => :post }, :collection => { :sold => :get }
+  #   resources :products do
+  #     member do
+  #       get 'short'
+  #       post 'toggle'
+  #     end
+  #
+  #     collection do
+  #       get 'sold'
+  #     end
+  #   end
 
   # Sample resource route with sub-resources:
-  #   map.resources :products, :has_many => [ :comments, :sales ], :has_one => :seller
-  
+  #   resources :products do
+  #     resources :comments, :sales
+  #     resource :seller
+  #   end
+
   # Sample resource route with more complex sub-resources
-  #   map.resources :products do |products|
-  #     products.resources :comments
-  #     products.resources :sales, :collection => { :recent => :get }
+  #   resources :products do
+  #     resources :comments
+  #     resources :sales do
+  #       get 'recent', :on => :collection
+  #     end
   #   end
 
   # Sample resource route within a namespace:
-  #   map.namespace :admin do |admin|
-  #     # Directs /admin/products/* to Admin::ProductsController (app/controllers/admin/products_controller.rb)
-  #     admin.resources :products
+  #   namespace :admin do
+  #     # Directs /admin/products/* to Admin::ProductsController
+  #     # (app/controllers/admin/products_controller.rb)
+  #     resources :products
   #   end
 
-  # You can have the root of your site routed with map.root -- just remember to delete public/index.html.
-  map.root :controller => "general_page"
+  # You can have the root of your site routed with "root"
+  # just remember to delete public/index.html.
+  # root :to => "welcome#index"
+  root :to => 'general_page#index'
 
   # See how all your routes lay out with "rake routes"
 
   # General pages
-  map.error 'error', :controller => "general_page", :action => "error"
+  match 'error', :to => 'general_page#error', :as => :error
 
 	# Login routes
-  map.login 'login', :controller => "sessions", :action => "create", :conditions => { :method => :post }
-  map.login 'login', :controller => "sessions", :action => "new", :conditions => { :method => :get }
-  map.logout 'logout', :controller => "sessions", :action => "destroy"
+  post 'login', :to => 'sessions#create', :as => :login
+  get 'login', :to => 'sessions#new', :as => :login
+  match 'logout', :to => 'sessions#destroy',:as => :logout
 
 	# User routes
-	map.new_user 'signup', :controller => "users", :action => "create", :conditions => { :method => :post }
-	map.new_user 'signup', :controller => "users", :action => "new", :conditions => { :method => :get }
-	map.forgot_password 'forgot_password', :controller => "users", :action => "process_forgot_password", :conditions => { :method => :post }
-	map.forgot_password 'forgot_password', :controller => "users", :action => "forgot_password", :conditions => { :method => :get }
-	map.resend_verify 'resend_verify', :controller => "users", :action => "process_resend_verify", :conditions => { :method => :post }
-	map.resend_verify 'resend_verify', :controller => "users", :action => "resend_verify", :conditions => { :method => :get }
-	map.verify_check 'verify', :controller => "users", :action => "verify_check"
-	map.verify_user 'user/:username/verify', :controller => "users", :action => "verify"
-	map.edit_user 'user/:username/edit', :controller => "users", :action => "edit", :conditions => { :method => :get }
-	map.reset_password 'user/:username/reset_password', :controller => "users", :action => "process_reset_password", :conditions => { :method => :post }
-	map.reset_password 'user/:username/reset_password', :controller => "users", :action => "reset_password", :conditions => { :method => :get }
-	map.user 'user/:username', :controller => "users", :action => "update", :conditions => { :method => :post }
-	map.user_availability 'user', :controller => "users", :action => "show", :conditions => { :method => :get }
-	map.user 'user/:username', :controller => "users", :action => "show", :conditions => { :method => :get }
-	map.user 'user/:username', :controller => "users", :action => "destroy", :conditions => { :method => :delete }
-	map.users 'users', :controller => "users", :action => "search", :conditions => { :method => :get }
-	map.users 'users/limit/:limit', :controller => "users", :action => "search", :conditions => { :method => :get }
-	map.user_search 'users/search', :controller => "users", :action => "show_search", :conditions => { :method => :get }
-	map.user_search 'users/search', :controller => "users", :action => "search", :conditions => { :method => :post }
+	post 'signup', :to => 'users#create', :as => :new_user
+	get 'signup', :to => 'users#new', :as => :new_user
+	post 'forgot_password', :to => 'users#process_forgot_password', :as => :forgot_password
+	get 'forgot_password', :to => 'users#forgot_password', :as => :forgot_password
+	post 'resend_verify', :to => 'users#process_resend_verify', :as => :resend_verify
+	get 'resend_verify', :to => 'users#resend_verify', :as => :resend_verify
+	match 'verify', :to => 'users#verify_check', :as => :verify_check
+	match 'user/:username/verify', :to => 'users#verify', :as => :verify_user
+	get 'user/:username/edit', :to => 'users#edit', :as => :edit_user
+	post 'user/:username/reset_password', :to => 'users#process_reset_password', :as => :reset_password
+	get 'user/:username/reset_password', :to => 'users#reset_password', :as => :reset_password
+	post 'user(/:username)', :to => 'users#update', :as => :user
+	get 'user+', :to => 'users#exists', :as => :user_availability
+	get 'user/:username', :to => 'users#show', :as => :user
+	delete 'user(/:username)', :to => 'users#destroy', :as => :user
+	get 'users(/limit/:limit)', :to => 'users#search', :as => :users
+	get 'users/search', :to => 'users#show_search', :as => :user_search
+	post 'users/search', :to => 'users#search', :as => :user_search
 
   # Friend routes
-  map.user_friends 'user/:username/friends', :controller => "friendships", :action => "show", :conditions => { :method => :get }
-  map.user_friends 'user/:username/friends', :controller => "friendships", :action => "create", :conditions => { :method => :post }
-  map.user_add_friend 'user/:username/friends/:friend', :controller => "friendships", :action => "create", :conditions => { :method => :post }
-  map.user_block_friend 'user/:username/block_friend/:friend', :controller => "friendships", :action => "block"
-  map.user_friends 'user/:username/friends', :controller => "friendships", :action => "destroy", :conditions => { :method => :delete }
-  map.user_ignore_friend 'user/:username/ignore_friend/:friend', :controller => "friendships", :action => "ignore"
-  map.user_remove_friend 'user/:username/friends/:friend', :controller => "friendships", :action => "destroy", :conditions => { :method => :delete }
+  get 'user/:username/friends', :to => 'friendships#show', :as => :user_friends
+  post 'user/:username/friend(/:friend)', :to => 'friendships#create', :as => :user_add_friend
+  delete 'user/:username/friend(/:friend)', :to => 'friendships#destroy', :as => :user_remove_friend
+  match 'user/:username/block_friend(/:friend)', :to => 'friendships#block', :as => :user_block_friend
+  match 'user/:username/ignore_friend(/:friend)', :to => 'friendships#ignore', :as => :user_ignore_friend
 
   # Group routes
-  map.user_groups 'user/:username/groups', :controller => "groups", :action => "show_all", :conditions => { :method => :get }
-  map.user_groups_form_add_to 'user/:username/groups_add_to', :controller => "groups", :action => "form_add_to"
-  map.user_edit_group 'user/:username/groups', :controller => "groups", :action => "create", :conditions => { :method => :post }
-  map.user_edit_group 'user/:username/groups/:group_name', :controller => "groups", :action => "create", :conditions => { :method => :post }
-  map.user_remove_group 'user/:username/groups', :controller => "groups", :action => "destroy", :conditions => { :method => :delete }
-  map.user_remove_group 'user/:username/groups/:group_name', :controller => "groups", :action => "destroy", :conditions => { :method => :delete }
-  map.user_group 'user/:username/groups/:group_name', :controller => "groups", :action => "show", :conditions => { :method => :get }
-  map.user_group_add_member_dynamic 'user/:username/groups_members', :controller => "group_memberships", :action => "create", :conditions => { :method => :post }
-  map.user_group_add_member 'user/:username/groups/:group_name/members/:friend', :controller => "group_memberships", :action => "create", :conditions => { :method => :post }
-  map.user_group_remove_member_dynamic 'user/:username/groups_members', :controller => "group_memberships", :action => "destroy", :conditions => { :method => :delete }
-  map.user_group_remove_member 'user/:username/groups/:group_name/members/:friend', :controller => "group_memberships", :action => "destroy", :conditions => { :method => :delete }
+  get 'user/:username/groups', :to => 'groups#show_all', :as => :user_groups
+  match 'user/:username/groups_add_to', :to => 'groups#form_add_to', :as => :user_groups_form_add_to
+  post 'user/:username/group(/:group_name)', :to => 'groups#create', :as => :user_edit_group
+  delete 'user/:username/group(/:group_name)', :to => 'groups#destroy', :as => :user_remove_group
+  get 'user/:username/group(/:group_name)', :to => 'groups#show', :as => :user_group
+  post 'user/:username/group_member', :to => 'group_memberships#create', :as => :user_group_add_member_dynamic
+  post 'user/:username/group/:group_name/member/:friend', :to => 'group_memberships#create', :as => :user_group_add_member
+  delete 'user/:username/group_member', :to => 'group_memberships#destroy', :as => :user_group_remove_member_dynamic
+  delete 'user/:username/group/:group_name/member/:friend', :to => 'group_memberships#destroy', :as => :user_group_remove_member
 
   # Log Entry routes
-  map.user_log 'user/:username/log/:index', :controller => "log_entries", :action => "show", :conditions => { :method => :get }
-  map.user_edit_log 'user/:username/log/:index', :controller => "log_entries", :action => "show", :conditions => { :method => :post }
-  map.user_edit_log_label 'user/:username/log/:index/label/:label', :controller => "log_entries", :action => "edit_label", :conditions => { :method => :post }
-  map.user_edit_log_label 'user/:username/log/:index/label', :controller => "log_entries", :action => "edit_label", :conditions => { :method => :post }
-  map.user_delete_log 'user/:username/log/:index', :controller => "log_entries", :action => "destroy", :conditions => { :method => :delete }
-  map.user_create_log 'user/:username/log', :controller => "log_entries", :action => "create", :conditions => { :method => :post }
-  map.user_create_log 'user/:username/log/new', :controller => "log_entries", :action => "new", :conditions => { :method => :get }
-  map.user_show_logs 'user/:username/logs/:num/:start', :controller => "log_entries", :action => "show_all", :conditions => { :method => :get }
-  map.user_show_logs 'user/:username/logs/:num', :controller => "log_entries", :action => "show_all", :conditions => { :method => :get }
-  map.user_show_logs 'user/:username/logs', :controller => "log_entries", :action => "show_all", :conditions => { :method => :get }
+  get 'user/:username/log/:index', :to => 'log_entries#show', :as => :user_log
+  post 'user/:username/log/:index', :to => 'log_entries#edit', :as => :user_edit_log
+  post 'user/:username/log/:index/label(/:label)', :to => 'log_entries#edit_label', :as => :user_edit_log_label
+  delete 'user/:username/log/:index', :to => 'log_entries#destroy', :as => :user_delete_log
+  post 'user/:username/log', :to => 'log_entries#create', :as => :user_create_log
+  get 'user/:username/log/new', :to => 'log_entries#new', :as => :user_create_log
+  get 'user/:username/logs(/:num(/:start))', :to => 'log_entries#show_all', :as => :user_show_logs
 
-  # Install the default routes as the lowest priority.
-  # Note: These default routes make all actions in every controller accessible via GET requests. You should
-  # consider removing the them or commenting them out if you're using named routes and resources.
-  map.connect ':controller/:action/:id'
-  map.connect ':controller/:action/:id.:format'
+  # This is a legacy wild controller route that's not recommended for RESTful applications.
+  # Note: This route will make all actions in every controller accessible via GET requests.
+  # match ':controller(/:action(/:id(.:format)))'
 end

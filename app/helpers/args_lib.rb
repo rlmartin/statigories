@@ -35,7 +35,7 @@ module ArgsLib
     result = nil
     unless args_list == nil
 		  # If the final member of args_list is a Hash, remove the value from the Hash
-		  if args_list[args_list.length - 1].is_a?(Hash): result = args_list[args_list.length - 1].delete(name) end
+		  result = args_list[args_list.length - 1].delete(name) if args_list[args_list.length - 1].is_a?(Hash)
     end
     result
   end

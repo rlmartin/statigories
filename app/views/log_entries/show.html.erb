@@ -1,4 +1,4 @@
-<h1><span><%= @log_entry.tag_list.to_s.titleize %></span><% form_remote_tag :url => user_edit_log_label_path(:username => @user.username, :index => @log_entry.index), :method => :post do %>
+<h1><span><%= @log_entry.tag_list.to_s.titleize %></span><%= form_tag user_edit_log_label_path(:username => @user.username, :index => @log_entry.index), :method => :post, :remote => true do %>
     <span><%= text_field_tag 'tag', @log_entry.tag_list.to_s.titleize, :class => 'disabled', :onclick => '$(this).removeClass(\'disabled\');' %></span>
     <span><%= submit_tag t(:btn_add) %></span>
 <% end %></h1>

@@ -12,7 +12,7 @@ class LogEntryItemTest < ActiveSupport::TestCase
     assert_not_nil i.value
     assert_nil i.log_entry_id
     assert_nil i.id
-    assert_not_nil i.errors.on(:log_entry_id)
+    assert !i.errors[:log_entry_id].empty?
     assert_equal i.errors.count, 1
   end
 
@@ -22,7 +22,7 @@ class LogEntryItemTest < ActiveSupport::TestCase
     assert !i.save
     assert_not_nil i.log_entry_id
     assert_nil i.id
-    assert_not_nil i.errors.on(:value)
+    assert !i.errors[:value].empty?
     assert_equal i.errors.count, 1
   end
 
@@ -44,7 +44,7 @@ class LogEntryItemTest < ActiveSupport::TestCase
     assert_not_nil i.id
     assert_equal i.value, '1'
     assert_equal i.value_bool, true
-    assert_nil i.value_date
+    assert_not_nil i.value_date
     assert_equal i.value_float, 1.0
     assert_equal i.value_int, 1
     assert_nil i.value_lat
@@ -54,7 +54,7 @@ class LogEntryItemTest < ActiveSupport::TestCase
     assert_not_nil i.id
     assert_equal i.value, '0'
     assert_equal i.value_bool, false
-    assert_nil i.value_date
+    assert_not_nil i.value_date
     assert_equal i.value_float, 0.0
     assert_equal i.value_int, 0
     assert_nil i.value_lat
@@ -74,7 +74,7 @@ class LogEntryItemTest < ActiveSupport::TestCase
     assert_not_nil i.id
     assert_equal i.value, '1/1/2010'
     assert_nil i.value_bool
-    assert_equal i.value_date, Date.new(2010, 1, 1)
+    assert_equal i.value_date, DateTime.new(2010, 1, 1, 0, 0, 0, -5.0 / 24)
     assert_nil i.value_float
     assert_nil i.value_int
     assert_nil i.value_lat
@@ -84,7 +84,7 @@ class LogEntryItemTest < ActiveSupport::TestCase
     assert_not_nil i.id
     assert_equal i.value, '1/2/2010 10:08:01 PM'
     assert_nil i.value_bool
-    assert_equal i.value_date, DateTime.new(2010, 1, 2, 22, 8, 1)
+    assert_equal i.value_date, DateTime.new(2010, 1, 2, 22, 8, 1, -5.0 / 24)
     assert_nil i.value_float
     assert_nil i.value_int
     assert_nil i.value_lat
@@ -167,7 +167,7 @@ class LogEntryItemTest < ActiveSupport::TestCase
     assert_not_nil i.id
     assert_equal i.value, '1'
     assert_equal i.value_bool, true
-    assert_nil i.value_date
+    assert_not_nil i.value_date
     assert_equal i.value_float, 1.0
     assert_equal i.value_int, 1
     assert_nil i.value_lat
@@ -191,7 +191,7 @@ class LogEntryItemTest < ActiveSupport::TestCase
     assert_not_nil i.id
     assert_equal i.value, '0'
     assert_equal i.value_bool, false
-    assert_nil i.value_date
+    assert_not_nil i.value_date
     assert_equal i.value_float, 0.0
     assert_equal i.value_int, 0
     assert_nil i.value_lat
@@ -215,7 +215,7 @@ class LogEntryItemTest < ActiveSupport::TestCase
     assert_not_nil i.id
     assert_equal i.value, '1/2/2010 10:08:01 PM'
     assert_nil i.value_bool
-    assert_equal i.value_date, DateTime.new(2010, 1, 2, 22, 8, 1)
+    assert_equal i.value_date, DateTime.new(2010, 1, 2, 22, 8, 1, -5.0 / 24)
     assert_nil i.value_float
     assert_nil i.value_int
     assert_nil i.value_lat
@@ -288,7 +288,7 @@ class LogEntryItemTest < ActiveSupport::TestCase
     i.tag_list = 'tag1'
     assert i.save
     i.tags.reload
-    assert i.tags.count, 1
+    assert_equal i.tags.count, 1
     tagged = LogEntryItem.tagged_with('tag1')
     assert_equal tagged.count, tag_count + 1
     assert_not_nil tagged.index(i)

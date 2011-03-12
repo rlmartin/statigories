@@ -11,7 +11,7 @@ class GroupsControllerTest < ActionController::TestCase
     assert_select "h1", I18n.t(:title_user_groups, :name => assigns(:user).full_name)
     assert_select "li.group_row", :count => assigns(:user).groups.count
     assert_select "li.group_row a[href=#{user_group_path(:username => users(:ryan).username, :group_name => groups(:ryan_family).group_name)}]", groups(:ryan_family).name + ' (' + Group.find_by_id(groups(:ryan_family).id).members.count.to_s + ')'
-    assert_select "li.group_row .group_actions a[onclick*=#{user_remove_group_path(:username => users(:ryan).username, :group_name => groups(:ryan_family).group_name)}]", I18n.t(:link_delete_group)
+    assert_select "li.group_row .group_actions a[href=#{user_remove_group_path(:username => users(:ryan).username, :group_name => groups(:ryan_family).group_name)}][data-method=delete][data-remote=true]", I18n.t(:link_delete_group)
   end
 
   def test_should_show_all_user_groups_no_groups
@@ -53,11 +53,12 @@ class GroupsControllerTest < ActionController::TestCase
     assert_select "a", I18n.t(:link_rename)
     assert_select ".user_row", :count => assigns(:group).members.count
     # Check add friend dropdown - empty (all friends already in this group)
-    assert_select "form[onsubmit*=#{user_group_add_member_dynamic_path(:username => users(:ryan).username)}]", :count => 1
-    assert_select "form[onsubmit*=#{user_group_add_member_dynamic_path(:username => users(:ryan).username)}] input[type=hidden][value=#{groups(:ryan_family).group_name}]", :count => 1
-    assert_select "form[onsubmit*=#{user_group_add_member_dynamic_path(:username => users(:ryan).username)}] select option", :count => 1
-    assert_select "form[onsubmit*=#{user_group_add_member_dynamic_path(:username => users(:ryan).username)}] select option[value='']", I18n.t(:input_add_friend_to_group)
-    assert_select "form[onsubmit*=#{user_group_add_member_dynamic_path(:username => users(:ryan).username)}] input[type=submit][value=#{I18n.t(:btn_add)}]", :count => 1
+    assert_select "form[action=#{user_group_add_member_dynamic_path(:username => users(:ryan).username)}]", :count => 1
+    assert_select "form[action=#{user_group_add_member_dynamic_path(:username => users(:ryan).username)}][data-remote=true]", :count => 1
+    assert_select "form[action=#{user_group_add_member_dynamic_path(:username => users(:ryan).username)}] input[type=hidden][value=#{groups(:ryan_family).group_name}]", :count => 1
+    assert_select "form[action=#{user_group_add_member_dynamic_path(:username => users(:ryan).username)}] select option", :count => 1
+    assert_select "form[action=#{user_group_add_member_dynamic_path(:username => users(:ryan).username)}] select option[value='']", I18n.t(:input_add_friend_to_group)
+    assert_select "form[action=#{user_group_add_member_dynamic_path(:username => users(:ryan).username)}] input[type=submit][value=#{I18n.t(:btn_add)}]", :count => 1
   end
 
   def test_should_show_group_members_no_members
@@ -78,12 +79,13 @@ class GroupsControllerTest < ActionController::TestCase
     assert_select ".notice_msg", I18n.t(:msg_group_members_not_found)
     assert_select ".user_row", :count => 0
     # Check add friend dropdown - full (no friends already in this group)
-    assert_select "form[onsubmit*=#{user_group_add_member_dynamic_path(:username => users(:user2).username)}]", :count => 1
-    assert_select "form[onsubmit*=#{user_group_add_member_dynamic_path(:username => users(:user2).username)}] input[type=hidden][value=#{groups(:user2_family).group_name}]", :count => 1
-    assert_select "form[onsubmit*=#{user_group_add_member_dynamic_path(:username => users(:user2).username)}] select option", :count => 2
-    assert_select "form[onsubmit*=#{user_group_add_member_dynamic_path(:username => users(:user2).username)}] select option[value='']", I18n.t(:input_add_friend_to_group)
-    assert_select "form[onsubmit*=#{user_group_add_member_dynamic_path(:username => users(:user2).username)}] select option[value='#{users(:user4).username}']", users(:user4).full_name
-    assert_select "form[onsubmit*=#{user_group_add_member_dynamic_path(:username => users(:user2).username)}] input[type=submit][value=#{I18n.t(:btn_add)}]", :count => 1
+    assert_select "form[action=#{user_group_add_member_dynamic_path(:username => users(:user2).username)}]", :count => 1
+    assert_select "form[action=#{user_group_add_member_dynamic_path(:username => users(:user2).username)}][data-remote=true]", :count => 1
+    assert_select "form[action=#{user_group_add_member_dynamic_path(:username => users(:user2).username)}] input[type=hidden][value=#{groups(:user2_family).group_name}]", :count => 1
+    assert_select "form[action=#{user_group_add_member_dynamic_path(:username => users(:user2).username)}] select option", :count => 2
+    assert_select "form[action=#{user_group_add_member_dynamic_path(:username => users(:user2).username)}] select option[value='']", I18n.t(:input_add_friend_to_group)
+    assert_select "form[action=#{user_group_add_member_dynamic_path(:username => users(:user2).username)}] select option[value='#{users(:user4).username}']", users(:user4).full_name
+    assert_select "form[action=#{user_group_add_member_dynamic_path(:username => users(:user2).username)}] input[type=submit][value=#{I18n.t(:btn_add)}]", :count => 1
   end
 
   def test_should_not_show_group_members_not_logged_in
@@ -193,14 +195,8 @@ class GroupsControllerTest < ActionController::TestCase
     assert_not_nil Group.find_by_id(groups(:ryan_family).id)
     do_login :ryan
     xhr :get, :destroy, { :username => users(:ryan).username, :group_name => groups(:ryan_family).group_name }
-    assert_select_rjs :chained_replace_html, 'error_msg' do |elements|
-      assert_select "span", ''
-    end
-    assert_select_rjs :chained_replace_html, 'notice_msg' do |elements|
-      assert_select "span", I18n.t(:msg_group_deleted)
-    end
-    # If I ever integrate better RJS testing, add these tests:
-    # assert_select_rjs :hide, '.group_row'.each
+    assert_jquery_notice :msg_group_deleted
+    assert_jquery ".group_row_#{groups(:ryan_family).id}", 'remove'
   end
 
   def test_ajax_do_not_delete_group_group_not_for_user
@@ -209,33 +205,18 @@ class GroupsControllerTest < ActionController::TestCase
     assert_nil u.groups.find_by_group_name(groups(:ryan_family).group_name + 'xx')
     do_login :ryan
     xhr :get, :destroy, { :username => users(:ryan).username, :group_name => groups(:ryan_family).group_name + 'xx' }
-    assert_select_rjs :chained_replace_html, 'error_msg' do |elements|
-      assert_select "span", I18n.t(:msg_group_not_found)
-    end
-    assert_select_rjs :chained_replace_html, 'notice_msg' do |elements|
-      assert_select "span", ''
-    end
+    assert_jquery_error :msg_group_not_found
   end
 
   def test_ajax_do_not_delete_group_group_not_specified
     do_login :ryan
     xhr :get, :destroy, { :username => users(:ryan).username }
-    assert_select_rjs :chained_replace_html, 'error_msg' do |elements|
-      assert_select "span", I18n.t(:msg_group_not_found)
-    end
-    assert_select_rjs :chained_replace_html, 'notice_msg' do |elements|
-      assert_select "span", ''
-    end
+    assert_jquery_error :msg_group_not_found
   end
 
   def test_ajax_do_not_delete_group_not_logged_in
     xhr :get, :destroy, { :username => users(:ryan).username, :group_name => groups(:ryan_family).group_name }
-    assert_select_rjs :chained_replace_html, 'error_msg' do |elements|
-      assert_select "span", I18n.t(:msg_not_authorized)
-    end
-    assert_select_rjs :chained_replace_html, 'notice_msg' do |elements|
-      assert_select "span", ''
-    end
+    assert_jquery_error :msg_not_authorized
   end
 
   def test_should_create_group
@@ -442,15 +423,14 @@ class GroupsControllerTest < ActionController::TestCase
   def test_form_add_to_html
     do_login :ryan
     xhr :get, :form_add_to, { :username => users(:ryan).username, :friend => users(:user1).username }
-    assert_select_rjs :chained_replace_html, "group_form_add_to_#{users(:user1).username}" do |elements|
-      assert_select "form[onsubmit*=#{user_group_add_member_dynamic_path(:username => users(:ryan).username)}]", :count => 1
-      assert_select "form[onsubmit*=#{user_group_add_member_dynamic_path(:username => users(:ryan).username)}] select[name=group_name] option", :count => 3
-      assert_select "form[onsubmit*=#{user_group_add_member_dynamic_path(:username => users(:ryan).username)}] select[name=group_name] option[value=#{groups(:ryan_family).group_name}]", groups(:ryan_family).name
-      assert_select "form[onsubmit*=#{user_group_add_member_dynamic_path(:username => users(:ryan).username)}] select[name=group_name] option[value=#{groups(:ryan_friends).group_name}]", groups(:ryan_friends).name
-      assert_select "form[onsubmit*=#{user_group_add_member_dynamic_path(:username => users(:ryan).username)}] select[name=group_name] option[value=#{groups(:ryan_work).group_name}]", groups(:ryan_work).name
-      assert_select "form[onsubmit*=#{user_group_add_member_dynamic_path(:username => users(:ryan).username)}] input[type=hidden][name=friend][value=#{users(:user1).username}]", :count => 1
-      assert_select "form[onsubmit*=#{user_group_add_member_dynamic_path(:username => users(:ryan).username)}] input[type=submit][value=#{I18n.t(:btn_add)}]", :count => 1
-    end
+    assert_jquery "#group_form_add_to_#{users(:user1).username}", 'html', "form .*action=\\\\\"#{user_group_add_member_dynamic_path(:username => users(:ryan).username)}\\\\\"", false, false, false
+    assert_jquery "#group_form_add_to_#{users(:user1).username}", 'html', "form .*action=\\\\\"#{user_group_add_member_dynamic_path(:username => users(:ryan).username)}\\\\\".*data-remote=\\\\\"true\\\\\"", false, false, false
+    assert_jquery "#group_form_add_to_#{users(:user1).username}", 'html', "form .*action=\\\\\"#{user_group_add_member_dynamic_path(:username => users(:ryan).username)}\\\\\".*>.*<select .*name=\\\\\"group_name\\\\\"", false, false, false
+    assert_jquery "#group_form_add_to_#{users(:user1).username}", 'html', "form .*action=\\\\\"#{user_group_add_member_dynamic_path(:username => users(:ryan).username)}\\\\\".*>.*<select .*name=\\\\\"group_name\\\\\".*>.*<option .*value=\\\\\"#{groups(:ryan_family).group_name}\\\\\".*>#{groups(:ryan_family).name}<", false, false, false
+    assert_jquery "#group_form_add_to_#{users(:user1).username}", 'html', "form .*action=\\\\\"#{user_group_add_member_dynamic_path(:username => users(:ryan).username)}\\\\\".*>.*<select .*name=\\\\\"group_name\\\\\".*>.*<option .*value=\\\\\"#{groups(:ryan_friends).group_name}\\\\\".*>#{groups(:ryan_friends).name}<", false, false, false
+    assert_jquery "#group_form_add_to_#{users(:user1).username}", 'html', "form .*action=\\\\\"#{user_group_add_member_dynamic_path(:username => users(:ryan).username)}\\\\\".*>.*<select .*name=\\\\\"group_name\\\\\".*>.*<option .*value=\\\\\"#{groups(:ryan_work).group_name}\\\\\".*>#{groups(:ryan_work).name}<", false, false, false
+    assert_jquery "#group_form_add_to_#{users(:user1).username}", 'html', "form .*action=\\\\\"#{user_group_add_member_dynamic_path(:username => users(:ryan).username)}\\\\\".*>.*<input .*type=\\\\\"hidden\\\\\".*name=\\\\\"friend\\\\\".*value=\\\\\"#{users(:user1).username}\\\\\"", false, false, false
+    assert_jquery "#group_form_add_to_#{users(:user1).username}", 'html', "form .*action=\\\\\"#{user_group_add_member_dynamic_path(:username => users(:ryan).username)}\\\\\".*>.*<input .*type=\\\\\"submit\\\\\".*value=\\\\\"#{I18n.t(:btn_add)}\\\\\"", false, false, false
     # Tests of the form submit continue in the tests of the group_memberships controller.
   end
 

@@ -15,7 +15,7 @@ class EventLogTest < ActiveSupport::TestCase
     e = EventLog.create(:event_id => Event::LOGIN, :user_id => users(:ryan).id)
     assert_not_nil e
     assert_not_nil e.id
-    assert_nil e.errors.on(:user_agent_id)
+    assert e.errors[:user_agent_id].empty?
     assert_equal e.ip_address, ActionController::TestRequest.new.remote_ip
     assert_equal e.user_agent_id, UserAgent.find_by_user_agent(ActionController::TestRequest.new.user_agent).id
     assert_equal e.errors.count, 0
@@ -24,7 +24,7 @@ class EventLogTest < ActiveSupport::TestCase
   def test_does_not_save_missing_event_id
     e = EventLog.create(:user_id => users(:ryan).id)
     assert_nil e.id
-    assert e.errors.on(:event_id)
+    assert !e.errors[:event_id].empty?
     assert_equal e.errors.count, 1
   end
 

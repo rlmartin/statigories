@@ -8,11 +8,11 @@ class User < ActiveRecord::Base
 	validates_uniqueness_of :username
 	validates_confirmation_of :password
 	validates_confirmation_of :email
+	xss_terminate :except => [:password]
   before_validation :_trim_values
 	after_validation :hash_pwd
 	before_validation :streamline_username
 	before_validation :set_verification_code
-	xss_terminate :except => [:password]
 	validates_email_veracity_of :email
 	after_save :send_verification_email
   has_many :event_logs
@@ -76,7 +76,7 @@ class User < ActiveRecord::Base
   end
 
   def non_blocked_friends
-    friends.find(:all, :include => :friendships, :conditions => 'friendships.blocked = 0')
+    friends.where('friendships.blocked = 0').includes(:friendships)
   end
 
   def full_name
@@ -112,7 +112,7 @@ class User < ActiveRecord::Base
         friendship = friendships.find_by_friend_id(friend.id)
         unless friendship == nil
           gm = group.group_memberships.find_by_friendship_id(friendship.id)
-          unless gm == nil: gm.destroy end
+          gm.destroy unless gm == nil
           gm
         end
       end
@@ -120,8 +120,8 @@ class User < ActiveRecord::Base
   end
 
 	def send_new_friend_request_email(friend = nil)
-		if Constant::get(:send_level_two_emails)
-      UserMailer.deliver_new_friend_request(self, friend)
+		if Const::get(:send_level_two_emails)
+      UserMailer.new_friend_request(self, friend).deliver
     else
       true
     end
@@ -133,12 +133,12 @@ class User < ActiveRecord::Base
       self.password_recovery_code_set = Time.now
       self.save
     end
-		UserMailer.deliver_password_reset(self)
+		UserMailer.password_reset(self).deliver
 	end
 
 	def send_verification_email(force = false)
 		if self.verification_code != "" and (self.verification_code_changed? or force)
-      UserMailer.deliver_email_verification(self)
+      UserMailer.email_verification(self).deliver
     else
       false
     end
@@ -146,25 +146,25 @@ class User < ActiveRecord::Base
 
 	def set_verification_code
 		# For new users or users who change their email address, set the authorization code so they can authorize their email address.
-    if self.email_changed?: self.verified = false end
-		unless self.verified or self.verification_code != "": self.verification_code = StringLib.MD5((self.email || '') + Time.now.to_f.to_s) end
+    self.verified = false if self.email_changed?
+		self.verification_code = StringLib.MD5((self.email || '') + Time.now.to_f.to_s) unless self.verified or self.verification_code != ""
 	end
 
   def unanswered_friend_requests
-    inverse_friends.find(:all, :include => :friendships, :conditions => 'friendships.responded = 0 AND friendships.blocked = 0')
+    inverse_friends.where('friendships.responded = 0 AND friendships.blocked = 0').includes(:friendships)
   end
 
 	private
 	def hash_pwd
 		# Only save hashes of the password, not the password itself.
     if self.password_changed?
-		  unless self.password == nil: self.password = StringLib.MD5(self.password) end
-		  unless self.password_confirmation == nil: self.password_confirmation = StringLib.MD5(self.password_confirmation) end
+		  self.password = StringLib.MD5(self.password) unless self.password == nil
+		  self.password_confirmation = StringLib.MD5(self.password_confirmation) unless self.password_confirmation == nil
     end
 	end
 
 	def streamline_username
 		# Make all usernames lowercase.
-		unless self.username == nil: self.username.downcase! end
+		self.username.downcase! unless self.username == nil
 	end
 end

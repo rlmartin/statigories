@@ -7,31 +7,31 @@ item_one:
   deleted: false
   value_int: 1
   value_float: 1.0
-  value_date: 
+  value_date: 1/1/2011 13:00:00
   value_bool: true
   value_lat:
   value_lng:
 
 item_two:
-  log_entry_id: log_one
+  log_entry: log_one
   value: 2.11
   display_order: 2
   deleted: false
   value_int: 
   value_float: 2.11
-  value_date: 
+  value_date: 1/1/2011 14:11:00
   value_bool: 
   value_lat: 
   value_lng: 
 
 item_three:
-  log_entry_id: log_two
+  log_entry: log_two
   value: 2.11
   display_order: 2
   deleted: false
   value_int: 
   value_float: 2.11
-  value_date: 
+  value_date: 1/1/2011 14:11:00
   value_bool: 
   value_lat: 
   value_lng: 

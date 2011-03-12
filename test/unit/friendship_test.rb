@@ -18,7 +18,7 @@ class FriendshipTest < ActiveSupport::TestCase
     # Failures on the association can only be caught successfully when adding the association (the :through, not the :has_many).
     f = u.friendships.build(:friend => u2)
     assert !f.save
-    assert f.errors.on(:friend_id)
+    assert !f.errors[:friend_id].empty?
     assert_equal u.friends.count, 2
     assert_equal u.inverse_friends.count, 2
     assert_equal u2.friends.count, 1

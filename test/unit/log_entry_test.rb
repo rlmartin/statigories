@@ -4,7 +4,7 @@ class LogEntryTest < ActiveSupport::TestCase
   def test_associations
     le = LogEntry.find_by_id(log_entries(:log_one).id)
     assert_equal le.user, User.find_by_id(users(:ryan))
-    assert le.items.count, 2
+    assert_equal le.items.count, 2
     assert_not_nil le.items.find_by_id(log_entry_items(:item_one).id)
   end
 
@@ -13,7 +13,7 @@ class LogEntryTest < ActiveSupport::TestCase
     le.save
     le.reload
     assert_equal le.tags.count, 1
-    assert_equal le.tags[0].name, 'Running'
+    assert_equal le.tags[0].name, 'running'
     le.label = 'biking workout'
     le.save
     le.reload
@@ -27,7 +27,7 @@ class LogEntryTest < ActiveSupport::TestCase
     le.tag_list = 'tag1, tag2'
     le.save
     le.reload
-    assert_equal lbl, le.tag_list.to_s
+    assert_equal lbl.downcase, le.tag_list.to_s
     assert_not_equal 'tag1, tag2', le.tag_list.to_s
   end
 
@@ -125,7 +125,7 @@ class LogEntryTest < ActiveSupport::TestCase
     assert !le.save
     assert_nil le.user_id
     assert_nil le.id
-    assert_not_nil le.errors.on(:user_id)
+    assert !le.errors[:user_id].empty?
     assert_equal le.errors.count, 1
   end
 
@@ -149,7 +149,7 @@ class LogEntryTest < ActiveSupport::TestCase
     le.label = 'biking'
     assert le.save
     le.tags.reload
-    assert le.tags.count, 1
+    assert_equal le.tags.count, 1
     tagged = LogEntry.tagged_with('biking')
     assert_equal tagged.count, tag_count + 1
     assert_not_nil tagged.index(le)

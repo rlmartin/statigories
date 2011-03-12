@@ -1,6 +1,6 @@
 class LogEntriesController < ApplicationController
   include ArrayLib
-	before_filter [:load_user_from_param, :load_permissions_for_user, :load_log_entry_from_param]
+	before_filter :load_user_from_param, :load_permissions_for_user, :load_log_entry_from_param
   before_filter :check_authorization_edit, :only => [:add_tags, :edit_tags]
 
   def create
@@ -23,11 +23,11 @@ class LogEntriesController < ApplicationController
 
   protected
   def load_log_entry_from_param
-    if @user == nil: redirect_to user_path(params[:username]) end
+    redirect_to user_path(params[:username]) if @user == nil
     @log_entry = nil
     unless @user == nil
       @log_entry = @user.log_entries.find_by_index(params[:index])
-      unless @log_entry == nil: @page[:title] = t(:title_log_entry, :index => @log_entry.index, :tags => @log_entry.tag_list.to_s.titleize) + ' : ' + @page[:title] end
+      @page[:title] = t(:title_log_entry, :index => @log_entry.index, :tags => @log_entry.tag_list.to_s.titleize) + ' : ' + @page[:title] unless @log_entry == nil
     end
   end
 end

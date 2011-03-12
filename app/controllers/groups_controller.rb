@@ -1,5 +1,5 @@
 class GroupsController < ApplicationController
-	before_filter [:load_user_from_param, :load_permissions_for_user, :load_group_from_param]
+	before_filter :load_user_from_param, :load_permissions_for_user, :load_group_from_param
   before_filter :check_authorization_delete, :only => [:destroy]
   before_filter :check_authorization_edit, :only => [:create]
   before_filter :check_authorization_view_for_groups, :only => [:form_add_to, :show_all, :show]

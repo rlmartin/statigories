@@ -1,4 +1,4 @@
 <li class='group_row group_row_<%= group_row.id %>'>
   <div><%= link_to group_row.name + ' (' + group_row.members.count.to_s + ')', user_group_path(:username => group_row.user.username, :group_name => group_row.group_name) %></div>
-  <div class='group_actions'><%= link_to_remote t(:link_delete_group), :url => user_remove_group_path(:username => group_row.user.username, :group_name => group_row.group_name), :method => :delete, :confirm => t(:msg_confirm_delete_group) %></div>
+  <div class='group_actions'><%= link_to t(:link_delete_group), user_remove_group_path(:username => group_row.user.username, :group_name => group_row.group_name), :method => :delete, :confirm => t(:msg_confirm_delete_group), :remote => true %></div>
 </li>
