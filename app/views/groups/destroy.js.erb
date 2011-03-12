@@ -1,0 +1,4 @@
+<% if @success %>
+  $('.group_row_<%= @group.id %>').remove();
+<% end %>
+<%= show_messages_js %>

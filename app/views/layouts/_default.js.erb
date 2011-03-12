@@ -1,0 +1,7 @@
+<%
+container_id = params[:result_id] || 'result'
+%>
+$('#<%= container_id %>').html('<%= prep_jquery(flash[:notice]) %>');
+<%
+flash[:notice] = nil
+%>

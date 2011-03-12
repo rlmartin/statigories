@@ -1,0 +1,4 @@
+<% if @success %>
+  $('#group_form_add_to_<%= params[:friend] %>').html('<%= prep_jquery(render(:partial => 'form_add_to', :locals => { :username => @user.username, :friend => params[:friend] })) %>');
+<% end %>
+<%= show_messages_js %>

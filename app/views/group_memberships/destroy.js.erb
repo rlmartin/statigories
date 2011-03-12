@@ -1,0 +1,7 @@
+<% if @success and @group_membership != nil %>
+  $('#group_membership_<%= @group_membership.id %>').remove();
+  <% if @group != nil %>
+    if ($('#group_members_<%= @group.group_name %>').length > 0) $('.user_row_<%= @group_membership.friend.id %>').remove();
+<%  end
+end %>
+<%= show_messages_js %>
