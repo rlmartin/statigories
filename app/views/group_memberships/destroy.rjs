@@ -1,9 +1,0 @@
-if @success and @group_membership != nil
-  page["group_membership_#{@group_membership.id}"].hide
-  if @group != nil
-    page << "if ($('group_members_#{@group.group_name}') && $$('.user_row_#{@group_membership.friend.id}')) {"
-    page << "$$('.user_row_#{@group_membership.friend.id}').each(Element.hide);"
-    page << "}"
-  end
-end
-finish_rjs page

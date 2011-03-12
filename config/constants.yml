@@ -1,0 +1,28 @@
+default:
+  accepted_languages:
+    value: en, es
+    array: true
+  google_analytics_key:
+    value: 
+  max_access_level:
+    value: 7
+    cast_as: int
+  root_url:
+    value: http://statigories.com
+  search_default_limit:
+    value: 20
+    cast_as: int
+  send_level_two_emails:
+    value: false
+    cast_as: bool
+  show_groups:
+    value: true
+    cast_as: bool
+  test_email_recipient:
+    value: rlmartin@gmail.com
+development:
+  google_analytics_key:
+    value: 
+  root_url:
+    value: http://localhost:3000
+

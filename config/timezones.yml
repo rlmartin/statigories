@@ -1,0 +1,1011 @@
+---
+default:
+  a:
+    name: Alpha Time Zone
+    area: military
+    identifier: Etc/GMT-1
+  adt:
+    name: Atlantic Daylight Time
+    area: north america
+    identifier: Etc/GMT+3
+  aft:
+    name: Afghanistan Time
+    area: asia
+    identifier: Asia/Kabul
+  akdt:
+    name: Alaska Daylight Time
+    area: north america
+    identifier: Etc/GMT+8
+  akst:
+    name: Alaska Standard Time
+    area: north america
+    identifier: Etc/GMT+9
+  almt:
+    name: Alma-Ata Time
+    area: asia
+    identifier: Etc/GMT-6
+  amst:
+    name: Armenia Summer Time
+    area: asia
+    identifier: Etc/GMT-5
+  amt:
+    name: Armenia Time
+    area: asia
+    identifier: Etc/GMT-4
+  anast:
+    name: Anadyr Summer Time
+    area: asia
+    identifier: Etc/GMT-12
+  anat:
+    name: Anadyr Time
+    area: asia
+    identifier: Etc/GMT-12
+  aqtt:
+    name: Aqtobe Time
+    area: asia
+    identifier: Etc/GMT-5
+  art:
+    name: Argentina Time
+    area: south america
+    identifier: Etc/GMT+3
+  ast:
+    name: Atlantic Standard Time
+    area: north america
+    identifier: Etc/GMT+4
+  azost:
+    name: Azores Summer Time
+    area: atlantic
+    identifier: Etc/GMT
+  azot:
+    name: Azores Time
+    area: atlantic
+    identifier: Etc/GMT+1
+  azst:
+    name: Azerbaijan Summer Time
+    area: asia
+    identifier: Etc/GMT-5
+  azt:
+    name: Azerbaijan Time
+    area: asia
+    identifier: Etc/GMT-4
+  b:
+    name: Bravo Time Zone
+    area: military
+    identifier: Etc/GMT-2
+  bnt:
+    name: Brunei Darussalam Time
+    area: asia
+    identifier: Etc/GMT-8
+  bot:
+    name: Bolivia Time
+    area: south america
+    identifier: Etc/GMT+4
+  brst:
+    name: Brasilia Summer Time
+    area: south america
+    identifier: Etc/GMT+2
+  brt:
+    name: Brasília time
+    area: south america
+    identifier: Etc/GMT+3
+  bst:
+    name: Bangladesh Standard Time
+    area: asia
+    identifier: Etc/GMT-6
+  btt:
+    name: Bhutan Time
+    area: asia
+    identifier: Etc/GMT-6
+  c:
+    name: Charlie Time Zone
+    area: military
+    identifier: Etc/GMT-3
+  cast:
+    name: Casey Time
+    area: antarctica
+    identifier: Etc/GMT-8
+  cat:
+    name: Central Africa Time
+    area: africa
+    identifier: Etc/GMT-2
+  cct:
+    name: Cocos Islands Time
+    area: indian ocean
+    identifier: Indian/Cocos
+  cdt:
+    name: Central Daylight Time
+    area: north america
+    identifier: Etc/GMT+5
+  cest:
+    name: Central European Summer Time
+    area: europe
+    identifier: Etc/GMT-2
+  cet:
+    name: Central European Time
+    area: africa
+    identifier: Etc/GMT-1
+  chadt:
+    name: Chatham Island Daylight Time
+    area: pacific
+    identifier: Pacific/Chatham
+  chast:
+    name: Chatham Island Standard Time
+    area: pacific
+    identifier: Pacific/Chatham
+  ckt:
+    name: Cook Island Time
+    area: pacific
+    identifier: Etc/GMT+10
+  clst:
+    name: Chile Summer Time
+    area: south america
+    identifier: Etc/GMT+3
+  clt:
+    name: Chile Standard Time
+    area: south america
+    identifier: Etc/GMT+4
+  cot:
+    name: Colombia Time
+    area: south america
+    identifier: Etc/GMT+5
+  cst:
+    name: Central Standard Time
+    area: north america
+    identifier: Etc/GMT+6
+  cvt:
+    name: Cape Verde Time
+    area: africa
+    identifier: Etc/GMT+1
+  cxt:
+    name: Christmas Island Time
+    area: australia
+    identifier: Etc/GMT-7
+  chst:
+    name: Chamorro Standard Time
+    area: pacific
+    identifier: Etc/GMT-10
+  d:
+    name: Delta Time Zone
+    area: military
+    identifier: Etc/GMT-4
+  davt:
+    name: Davis Time
+    area: antarctica
+    identifier: Etc/GMT-7
+  e:
+    name: Echo Time Zone
+    area: military
+    identifier: Etc/GMT-5
+  easst:
+    name: Easter Island Summer Time
+    area: pacific
+    identifier: Etc/GMT+5
+  east:
+    name: Easter Island Standard Time
+    area: pacific
+    identifier: Etc/GMT+6
+  eat:
+    name: Eastern Africa Time
+    area: africa
+    identifier: Etc/GMT-3
+  ect:
+    name: Ecuador Time
+    area: south america
+    identifier: Etc/GMT+5
+  edt:
+    name: Eastern Daylight Time
+    area: north america
+    identifier: Etc/GMT+4
+  eest:
+    name: Eastern European Summer Time
+    area: africa
+    identifier: Etc/GMT-3
+  eet:
+    name: Eastern European Time
+    area: africa
+    identifier: Etc/GMT-2
+  egst:
+    name: Eastern Greenland Summer Time
+    area: north america
+    identifier: Etc/GMT
+  egt:
+    name: East Greenland Time
+    area: north america
+    identifier: Etc/GMT+1
+  est:
+    name: Eastern Standard Time
+    area: north america
+    identifier: Etc/GMT+5
+  et:
+    name: ! 'Tiempo Del Este '
+    area: north america
+    identifier: Etc/GMT+5
+  f:
+    name: Foxtrot Time Zone
+    area: military
+    identifier: Etc/GMT-6
+  fjst:
+    name: Fiji Summer Time
+    area: pacific
+    identifier: 13
+  fjt:
+    name: Fiji Time
+    area: pacific
+    identifier: Etc/GMT-12
+  fkst:
+    name: Falkland Islands Summer Time
+    area: south america
+    identifier: Etc/GMT+3
+  fkt:
+    name: Falkland Island Time
+    area: south america
+    identifier: Etc/GMT+4
+  fnt:
+    name: Fernando de Noronha Time
+    area: south america
+    identifier: Etc/GMT+2
+  g:
+    name: Golf Time Zone
+    area: military
+    identifier: Etc/GMT-7
+  galt:
+    name: Galapagos Time
+    area: pacific
+    identifier: Etc/GMT+6
+  gamt:
+    name: Gambier Time
+    area: pacific
+    identifier: Etc/GMT+9
+  get:
+    name: Georgia Standard Time
+    area: asia
+    identifier: Etc/GMT-4
+  gft:
+    name: French Guiana Time
+    area: south america
+    identifier: Etc/GMT+3
+  gilt:
+    name: Gilbert Island Time
+    area: pacific
+    identifier: Etc/GMT-12
+  gmt:
+    name: Greenwich Mean Time
+    area: africa
+    identifier: Etc/GMT
+  gst:
+    name: Gulf Standard Time
+    area: asia
+    identifier: Etc/GMT-4
+  gyt:
+    name: Guyana Time
+    area: south america
+    identifier: Etc/GMT+4
+  h:
+    name: Hotel Time Zone
+    area: military
+    identifier: Etc/GMT-8
+  haa:
+    name: Heure Avancée de l'Atlantique
+    area: north america
+    identifier: Etc/GMT+3
+  hac:
+    name: Heure Avancée du Centre
+    area: north america
+    identifier: Etc/GMT+5
+  hadt:
+    name: Hawaii-Aleutian Daylight Time
+    area: north america
+    identifier: Etc/GMT+9
+  hae:
+    name: ! 'Heure Avancée de l''Est '
+    area: north america
+    identifier: Etc/GMT+4
+  hap:
+    name: Heure Avancée du Pacifique
+    area: north america
+    identifier: Etc/GMT+7
+  har:
+    name: Heure Avancée des Rocheuses
+    area: north america
+    identifier: Etc/GMT+6
+  hast:
+    name: Hawaii-Aleutian Standard Time
+    area: north america
+    identifier: Etc/GMT+10
+  hat:
+    name: Heure Avancée de Terre-Neuve
+    area: north america
+    identifier: America/St_Johns
+  hay:
+    name: Heure Avancée du Yukon
+    area: north america
+    identifier: Etc/GMT+8
+  hkt:
+    name: Hong Kong Time
+    area: asia
+    identifier: Etc/GMT-8
+  hlv:
+    name: Hora Legal de Venezuela
+    area: south america
+    identifier: America/Caracas
+  hna:
+    name: Heure Normale de l'Atlantique
+    area: north america
+    identifier: Etc/GMT+4
+  hnc:
+    name: Heure Normale du Centre
+    area: north america
+    identifier: Etc/GMT+6
+  hne:
+    name: Heure Normale de l'Est
+    area: north america
+    identifier: Etc/GMT+5
+  hnp:
+    name: Heure Normale du Pacifique
+    area: north america
+    identifier: Etc/GMT+8
+  hnr:
+    name: Heure Normale des Rocheuses
+    area: north america
+    identifier: Etc/GMT+7
+  hnt:
+    name: Heure Normale de Terre-Neuve
+    area: north america
+    identifier: America/St_Johns
+  hny:
+    name: Heure Normale du Yukon
+    area: north america
+    identifier: Etc/GMT+9
+  hovt:
+    name: Hovd Time
+    area: asia
+    identifier: Etc/GMT-7
+  i:
+    name: India Time Zone
+    area: military
+    identifier: Etc/GMT-9
+  ict:
+    name: Indochina Time
+    area: asia
+    identifier: Etc/GMT-7
+  idt:
+    name: Israel Daylight Time
+    area: asia
+    identifier: Etc/GMT-3
+  iot:
+    name: Indian Chagos Time
+    area: indian ocean
+    identifier: Etc/GMT-6
+  irdt:
+    name: Iran Daylight Time
+    area: asia
+    identifier: Asia/Kabul
+  irkst:
+    name: Irkutsk Summer Time
+    area: asia
+    identifier: Etc/GMT-9
+  irkt:
+    name: Irkutsk Time
+    area: asia
+    identifier: Etc/GMT-8
+  irst:
+    name: Iran Standard Time
+    area: asia
+    identifier: Asia/Tehran
+  ist:
+    name: Israel Standard Time
+    area: asia
+    identifier: Etc/GMT-2
+  jst:
+    name: Japan Standard Time
+    area: asia
+    identifier: Etc/GMT-9
+  k:
+    name: Kilo Time Zone
+    area: military
+    identifier: Etc/GMT-10
+  kgt:
+    name: Kyrgyzstan Time
+    area: asia
+    identifier: Etc/GMT-6
+  krast:
+    name: Krasnoyarsk Summer Time
+    area: asia
+    identifier: Etc/GMT-8
+  krat:
+    name: Krasnoyarsk Time
+    area: asia
+    identifier: Etc/GMT-7
+  kst:
+    name: Korea Standard Time
+    area: asia
+    identifier: Etc/GMT-9
+  kuyt:
+    name: Kuybyshev Time
+    area: europe
+    identifier: Etc/GMT-4
+  l:
+    name: Lima Time Zone
+    area: military
+    identifier: Etc/GMT-11
+  lhdt:
+    name: Lord Howe Daylight Time
+    area: australia
+    identifier: Etc/GMT-11
+  lhst:
+    name: Lord Howe Standard Time
+    area: australia
+    identifier: Australia/Darwin
+  lint:
+    name: Line Islands Time
+    area: pacific
+    identifier: 14
+  m:
+    name: Mike Time Zone
+    area: military
+    identifier: Etc/GMT-12
+  magst:
+    name: Magadan Summer Time
+    area: asia
+    identifier: Etc/GMT-12
+  magt:
+    name: Magadan Time
+    area: asia
+    identifier: Etc/GMT-11
+  mart:
+    name: Marquesas Time
+    area: pacific
+    identifier: Pacific/Marquesas
+  mawt:
+    name: Mawson Time
+    area: antarctica
+    identifier: Etc/GMT-5
+  mdt:
+    name: Mountain Daylight Time
+    area: north america
+    identifier: Etc/GMT+6
+  mht:
+    name: Marshall Islands Time
+    area: pacific
+    identifier: Etc/GMT-12
+  mmt:
+    name: Myanmar Time
+    area: asia
+    identifier: Indian/Cocos
+  msd:
+    name: Moscow Daylight Time
+    area: europe
+    identifier: Etc/GMT-4
+  msk:
+    name: Moscow Standard Time
+    area: europe
+    identifier: Etc/GMT-3
+  mst:
+    name: Mountain Standard Time
+    area: north america
+    identifier: Etc/GMT+7
+  mut:
+    name: Mauritius Time
+    area: africa
+    identifier: Etc/GMT-4
+  mvt:
+    name: Maldives Time
+    area: asia
+    identifier: Etc/GMT-5
+  myt:
+    name: Malaysia Time
+    area: asia
+    identifier: Etc/GMT-8
+  n:
+    name: November Time Zone
+    area: military
+    identifier: Etc/GMT+1
+  nct:
+    name: New Caledonia Time
+    area: pacific
+    identifier: Etc/GMT-11
+  ndt:
+    name: Newfoundland Daylight Time
+    area: north america
+    identifier: America/St_Johns
+  nft:
+    name: Norfolk Time
+    area: australia
+    identifier: Pacific/Norfolk
+  novst:
+    name: Novosibirsk Summer Time
+    area: asia
+    identifier: Etc/GMT-7
+  novt:
+    name: Novosibirsk Time
+    area: asia
+    identifier: Etc/GMT-6
+  npt:
+    name: ! 'Nepal Time '
+    area: asia
+    identifier: Asia/Katmandu
+  nst:
+    name: Newfoundland Standard Time
+    area: north america
+    identifier: America/St_Johns
+  nut:
+    name: Niue Time
+    area: pacific
+    identifier: Etc/GMT+11
+  nzdt:
+    name: New Zealand Daylight Time
+    area: antarctica
+    identifier: 13
+  nzst:
+    name: New Zealand Standard Time
+    area: antarctica
+    identifier: Etc/GMT-12
+  o:
+    name: Oscar Time Zone
+    area: military
+    identifier: Etc/GMT+2
+  omsst:
+    name: Omsk Summer Time
+    area: asia
+    identifier: Etc/GMT-7
+  omst:
+    name: Omsk Standard Time
+    area: asia
+    identifier: Etc/GMT-6
+  p:
+    name: Papa Time Zone
+    area: military
+    identifier: Etc/GMT+3
+  pdt:
+    name: Pacific Daylight Time
+    area: north america
+    identifier: Etc/GMT+7
+  pet:
+    name: Peru Time
+    area: south america
+    identifier: Etc/GMT+5
+  petst:
+    name: Kamchatka Summer Time
+    area: asia
+    identifier: Etc/GMT-12
+  pett:
+    name: Kamchatka Time
+    area: asia
+    identifier: Etc/GMT-12
+  pgt:
+    name: Papua New Guinea Time
+    area: pacific
+    identifier: Etc/GMT-10
+  phot:
+    name: Phoenix Island Time
+    area: pacific
+    identifier: 13
+  pht:
+    name: Philippine Time
+    area: asia
+    identifier: Etc/GMT-8
+  pkt:
+    name: Pakistan Standard Time
+    area: asia
+    identifier: Etc/GMT-5
+  pmdt:
+    name: Pierre & Miquelon Daylight Time
+    area: north america
+    identifier: Etc/GMT+2
+  pmst:
+    name: Pierre & Miquelon Standard Time
+    area: north america
+    identifier: Etc/GMT+3
+  pont:
+    name: Pohnpei Standard Time
+    area: pacific
+    identifier: Etc/GMT-11
+  pst:
+    name: Pacific Standard Time
+    area: north america
+    identifier: Etc/GMT+8
+  pt:
+    name: Tiempo del Pacífico
+    area: north america
+    identifier: Etc/GMT+8
+  pwt:
+    name: Palau Time
+    area: pacific
+    identifier: Etc/GMT-9
+  pyst:
+    name: Paraguay Summer Time
+    area: south america
+    identifier: Etc/GMT+3
+  pyt:
+    name: Paraguay Time
+    area: south america
+    identifier: Etc/GMT+4
+  q:
+    name: Quebec Time Zone
+    area: military
+    identifier: Etc/GMT+4
+  r:
+    name: Romeo Time Zone
+    area: military
+    identifier: Etc/GMT+5
+  ret:
+    name: Reunion Time
+    area: africa
+    identifier: Etc/GMT-4
+  s:
+    name: Sierra Time Zone
+    area: military
+    identifier: Etc/GMT+6
+  samt:
+    name: Samara Time
+    area: europe
+    identifier: Etc/GMT-4
+  sast:
+    name: South Africa Standard Time
+    area: africa
+    identifier: Etc/GMT-2
+  sbt:
+    name: Solomon IslandsTime
+    area: pacific
+    identifier: Etc/GMT-11
+  sct:
+    name: Seychelles Time
+    area: africa
+    identifier: Etc/GMT-4
+  sgt:
+    name: Singapore Time
+    area: asia
+    identifier: Etc/GMT-8
+  srt:
+    name: Suriname Time
+    area: south america
+    identifier: Etc/GMT+3
+  sst:
+    name: Samoa Standard Time
+    area: pacific
+    identifier: Etc/GMT+11
+  t:
+    name: Tango Time Zone
+    area: military
+    identifier: Etc/GMT+7
+  taht:
+    name: Tahiti Time
+    area: pacific
+    identifier: Etc/GMT+10
+  tft:
+    name: French Southern and Antarctic Time
+    area: indian ocean
+    identifier: Etc/GMT-5
+  tjt:
+    name: Tajikistan Time
+    area: asia
+    identifier: Etc/GMT-5
+  tkt:
+    name: Tokelau Time
+    area: pacific
+    identifier: Etc/GMT+10
+  tlt:
+    name: East Timor Time
+    area: asia
+    identifier: Etc/GMT-9
+  tmt:
+    name: Turkmenistan Time
+    area: asia
+    identifier: Etc/GMT-5
+  tvt:
+    name: Tuvalu Time
+    area: pacific
+    identifier: Etc/GMT-12
+  u:
+    name: Uniform Time Zone
+    area: military
+    identifier: Etc/GMT+8
+  ulat:
+    name: Ulaanbaatar Time
+    area: asia
+    identifier: Etc/GMT-8
+  uyst:
+    name: Uruguay Summer Time
+    area: south america
+    identifier: Etc/GMT+2
+  uyt:
+    name: Uruguay Time
+    area: south america
+    identifier: Etc/GMT+3
+  uzt:
+    name: Uzbekistan Time
+    area: asia
+    identifier: Etc/GMT-5
+  v:
+    name: Victor Time Zone
+    area: military
+    identifier: Etc/GMT+9
+  vet:
+    name: Venezuelan Standard Time
+    area: south america
+    identifier: America/Caracas
+  vlast:
+    name: Vladivostok Summer Time
+    area: asia
+    identifier: Etc/GMT-11
+  vlat:
+    name: Vladivostok Time
+    area: asia
+    identifier: Etc/GMT-10
+  vut:
+    name: Vanuatu Time
+    area: pacific
+    identifier: Etc/GMT-11
+  w:
+    name: Whiskey Time Zone
+    area: military
+    identifier: Etc/GMT+10
+  wast:
+    name: West Africa Summer Time
+    area: africa
+    identifier: Etc/GMT-2
+  wat:
+    name: West Africa Time
+    area: africa
+    identifier: Etc/GMT-1
+  wdt:
+    name: Western Daylight Time
+    area: australia
+    identifier: Etc/GMT-9
+  west:
+    name: Western European Summer Time
+    area: africa
+    identifier: Etc/GMT-1
+  wet:
+    name: Western European Time
+    area: africa
+    identifier: Etc/GMT
+  wft:
+    name: Wallis and Futuna Time
+    area: pacific
+    identifier: Etc/GMT-12
+  wgst:
+    name: Western Greenland Summer Time
+    area: north america
+    identifier: Etc/GMT+2
+  wgt:
+    name: West Greenland Time
+    area: north america
+    identifier: Etc/GMT+3
+  wib:
+    name: Western Indonesian Time
+    area: asia
+    identifier: Etc/GMT-7
+  wit:
+    name: Eastern Indonesian Time
+    area: asia
+    identifier: Etc/GMT-9
+  wita:
+    name: Central Indonesian Time
+    area: asia
+    identifier: Etc/GMT-8
+  wst:
+    name: Western Sahara Summer Time
+    area: africa
+    identifier: Etc/GMT-1
+  wt:
+    name: Western Sahara Standard Time
+    area: africa
+    identifier: Etc/GMT
+  x:
+    name: X-ray Time Zone
+    area: military
+    identifier: Etc/GMT+11
+  y:
+    name: Yankee Time Zone
+    area: military
+    identifier: Etc/GMT+12
+  yakst:
+    name: Yakutsk Summer Time
+    area: asia
+    identifier: Etc/GMT-10
+  yakt:
+    name: Yakutsk Time
+    area: asia
+    identifier: Etc/GMT-9
+  yapt:
+    name: Yap Time
+    area: pacific
+    identifier: Etc/GMT-10
+  yekst:
+    name: Yekaterinburg Summer Time
+    area: asia
+    identifier: Etc/GMT-6
+  yekt:
+    name: Yekaterinburg Time
+    area: asia
+    identifier: Etc/GMT-5
+  z:
+    name: Zulu Time Zone
+    area: military
+    identifier: Etc/GMT
+atlantic:
+  adt:
+    name: Atlantic Daylight Time
+    area: atlantic
+    identifier: Etc/GMT+3
+  ast:
+    name: Atlantic Standard Time
+    area: atlantic
+    identifier: Etc/GMT+4
+  haa:
+    name: Heure Avancée de l'Atlantique
+    area: atlantic
+    identifier: Etc/GMT+3
+  hna:
+    name: Heure Normale de l'Atlantique
+    area: atlantic
+    identifier: Etc/GMT+4
+south america:
+  amst:
+    name: Amazon Summer Time
+    area: south america
+    identifier: Etc/GMT+3
+  amt:
+    name: Amazon Time
+    area: south america
+    identifier: Etc/GMT+4
+caribbean:
+  ast:
+    name: Atlantic Standard Time
+    area: caribbean
+    identifier: Etc/GMT+4
+  cdt:
+    name: Cuba Daylight Time
+    area: caribbean
+    identifier: Etc/GMT+4
+  cst:
+    name: Cuba Standard Time
+    area: caribbean
+    identifier: Etc/GMT+5
+  edt:
+    name: Eastern Daylight Time
+    area: caribbean
+    identifier: Etc/GMT+4
+  est:
+    name: Eastern Standard Time
+    area: caribbean
+    identifier: Etc/GMT+5
+  et:
+    name: Tiempo del Este
+    area: caribbean
+    identifier: Etc/GMT+5
+  hae:
+    name: ! 'Heure Avancée de l''Est '
+    area: caribbean
+    identifier: Etc/GMT+4
+  hna:
+    name: Heure Normale de l'Atlantique
+    area: caribbean
+    identifier: Etc/GMT+4
+  hne:
+    name: Heure Normale de l'Est
+    area: caribbean
+    identifier: Etc/GMT+5
+asia:
+  ast:
+    name: Arabia Standard Time
+    area: asia
+    identifier: Etc/GMT-3
+  cst:
+    name: China Standard Time
+    area: asia
+    identifier: Etc/GMT-8
+  eest:
+    name: Eastern European Summer Time
+    area: asia
+    identifier: Etc/GMT-3
+  eet:
+    name: Eastern European Time
+    area: asia
+    identifier: Etc/GMT-2
+  ist:
+    name: India Standard Time
+    area: asia
+    identifier: Asia/Calcutta
+europe:
+  bst:
+    name: British Summer Time
+    area: europe
+    identifier: Etc/GMT-1
+  cet:
+    name: Central European Time
+    area: europe
+    identifier: Etc/GMT-1
+  eest:
+    name: Eastern European Summer Time
+    area: europe
+    identifier: Etc/GMT-3
+  eet:
+    name: Eastern European Time
+    area: europe
+    identifier: Etc/GMT-2
+  gmt:
+    name: Greenwich Mean Time
+    area: europe
+    identifier: Etc/GMT
+  ist:
+    name: Irish Standard Time
+    area: europe
+    identifier: Etc/GMT-1
+  west:
+    name: Western European Summer Time
+    area: europe
+    identifier: Etc/GMT-1
+  wet:
+    name: Western European Time
+    area: europe
+    identifier: Etc/GMT
+australia:
+  cdt:
+    name: Central Daylight Time
+    area: australia
+    identifier: Australia/Darwin
+  cst:
+    name: Central Standard Time
+    area: australia
+    identifier: Australia/Darwin
+  edt:
+    name: Eastern Daylight Time
+    area: australia
+    identifier: Etc/GMT-11
+  est:
+    name: Eastern Standard Time
+    area: australia
+    identifier: Etc/GMT-10
+  wst:
+    name: Western Standard Time
+    area: australia
+    identifier: Etc/GMT-8
+central america:
+  cst:
+    name: Central Standard Time
+    area: central america
+    identifier: Etc/GMT+6
+  est:
+    name: Eastern Standard Time
+    area: central america
+    identifier: Etc/GMT+5
+  et:
+    name: Tiempo del Este
+    area: central america
+    identifier: Etc/GMT+5
+  hnc:
+    name: Heure Normale du Centre
+    area: central america
+    identifier: Etc/GMT+6
+  hne:
+    name: Heure Normale de l'Est
+    area: central america
+    identifier: Etc/GMT+5
+indian ocean:
+  eat:
+    name: East Africa Time
+    area: indian ocean
+    identifier: Etc/GMT-3
+pacific:
+  edt:
+    name: Eastern Daylight Time
+    area: pacific
+    identifier: Etc/GMT-11
+  nzdt:
+    name: New Zealand Daylight Time
+    area: pacific
+    identifier: 13
+  nzst:
+    name: New Zealand Standard Time
+    area: pacific
+    identifier: Etc/GMT-12
+  pst:
+    name: Pitcairn Standard Time
+    area: pacific
+    identifier: Etc/GMT+8
+  wst:
+    name: West Samoa Time
+    area: pacific
+    identifier: Etc/GMT+11
