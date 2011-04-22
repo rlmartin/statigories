@@ -1,3 +1,5 @@
+require 'bundler/capistrano'
+
 set :application, "statigories.com"
 # Note that this IP address may change for future deployments.
 set :launch_ip, "75.101.154.86" # "statigories.com"
@@ -94,8 +96,8 @@ end
 #  `svn commit public/sitemap/static.xml -m ""`
 #end
 
-task :after_migrate do
-  # No fixtures and no constants in the DB, so don't need this.
+# No fixtures and no constants in the DB, so don't need this.
+#task :after_migrate do
 #	run "cd #{deploy_to}/current; rake db:fixtures:load FIXTURES_PATH=db/fixtures RAILS_ENV=migration"
 #	set :db_pass, Capistrano::CLI.password_prompt("MySQL Password:")
 #	run 'mysql -e "UPDATE constants SET active = 0 WHERE name = \'server_type\'" -u goroam_iusr -h localhost -p -D goroam_geo' do |ch, stream, out|
@@ -104,15 +106,17 @@ task :after_migrate do
 #	run 'mysql -e "UPDATE constants SET active = 1 WHERE name = \'server_type\' AND value = \'prod\'" -u goroam_iusr -h localhost -p -D goroam_geo' do |ch, stream, out|
 #     ch.send_data "#{db_pass}\n" if out=~ /^Enter password:/
 #  end
-end
+#end
 
-task :before_migrate do
+#task :before_migrate do
 #  `rake db:fixtures:dump_constants`
 #  `svn commit db/fixtures/constants.yml -m ""`
 #  `scp -i ~/Documents/id-linux-keypair root@#{launch_ip}:#{release_path}/db/fixtures db/fixtures/constants.yml`
-end
+#end
 
-task :after_symlink, :roles => :app do
+task :set_permissions, :roles => :app do
 	run "chown -hR root:www-data #{deploy_to}"
 end
+
+after "deploy:symlink", "set_permissions"
 
