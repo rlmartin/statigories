@@ -7,7 +7,9 @@ class CreateLogEntryItems < ActiveRecord::Migration
       t.boolean :deleted, :null => false, :default => 0
       t.integer :value_int
       t.float :value_float
-      t.datetime :value_date
+      t.datetime :value_datetime
+      t.date :value_date
+      t.time :value_time
       t.boolean :value_bool
       t.column :value_lat, :decimal, :precision => 22, :scale => 17
       t.column :value_lng, :decimal, :precision => 22, :scale => 17

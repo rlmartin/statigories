@@ -10,6 +10,10 @@ class LogEntry < ActiveRecord::Base
   ANONYMOUS = 0
   PRIVATE = -1
 
+  def active_items
+    items.where('deleted = 0').order('display_order')
+  end
+
   protected
   def check_access_level
     # Default access_level = 1 (public)

@@ -88,6 +88,10 @@ module StringLib
     self.is?(strValue, :date)
   end
 
+  def self.is_datetime?(strValue)
+    self.is?(strValue, :datetime)
+  end
+
   def self.is_float?(strValue)
     self.is?(strValue, :float)
   end
@@ -162,6 +166,98 @@ module StringLib
     dtDate
   end
 
+  def self.parse_log(str)
+    arrItems = []
+    strLabel = str.to_s
+    strItems = ''
+    # The overall entry tag is anything before the first colon.
+    re = Regexp.new(Const::get(:parse_entry_label_start))
+    arrMatch = re.match(strLabel)
+    if arrMatch and arrMatch[:label].strip != ''
+      strItems = arrMatch[:items].to_s.strip
+      strLabel = arrMatch[:label].strip
+    else
+      arrItem = self.parse_log_item(strLabel)
+      if arrItem != nil and arrItem[:label] != nil and arrItem[:label].strip != ''
+        strItems = arrItem[:value].to_s.strip
+        strLabel = arrItem[:label].strip
+      end
+    end
+    unless strItems == ''
+      # The items are a comma-delimited list after the tag.
+      arrItemList = strItems.split(Const::get(:log_entry_item_delimiter))
+      arrItemList.each { | item |
+        arrItem = self.parse_log_item(item)
+        arrItems << arrItem unless arrItem == nil
+      }
+    end
+    { strLabel => arrItems }
+  end
+
+  def self.parse_log_item(strItem)
+    arrResult = nil
+    unless strItem == nil or strItem.to_s.strip! == ''
+      arrExceptions = Const::get(:parse_entry_item_exceptions)
+      reStart = Regexp.new(Const::get(:parse_entry_label_start))
+      reEnd = Regexp.new(Const::get(:parse_entry_label_end))
+      strValue = nil
+      strTag = ''
+      arrExceptions.each { |strPattern|
+        strValue = strItem.match('^' + strPattern)
+        if strValue
+          strValue = strValue[0]
+          strTag = StringLib.right_of(strItem, strValue)
+          arrMatch = reEnd.match(strTag)
+          if arrMatch and arrMatch[:label].strip != ''
+            strTag = arrMatch[:label].strip
+            strValue += arrMatch[:items].to_s.rstrip
+          end
+        else
+          strValue = strItem.match(strPattern + '$')
+          if strValue
+            strValue = strValue[0]
+            strTag = StringLib.left_of_rev(strItem, strValue)
+            arrMatch = reStart.match(strTag)
+            if arrMatch and arrMatch[:label].strip != ''
+              strTag = arrMatch[:label].strip
+              strValue += arrMatch[:items].to_s.rstrip
+            end
+          end
+        end
+        break if strValue
+      }
+      unless strValue
+        arrMatch = reStart.match(strItem)
+        if arrMatch and arrMatch[:label].strip != ''
+          if arrMatch[:items].to_s.rstrip == ''
+            strValue = arrMatch[:label].strip
+          else
+            strTag = arrMatch[:label].strip
+            strValue = arrMatch[:items].to_s.rstrip
+          end
+        else
+          arrMatch = reEnd.match(strItem)
+          if arrMatch and arrMatch[:label].strip != ''
+            if arrMatch[:items].to_s.rstrip == ''
+              strValue = arrMatch[:label].strip
+            else
+              strTag = arrMatch[:label].strip
+              strValue = arrMatch[:items].to_s.rstrip
+            end
+          else
+            strValue = strItem
+          end
+        end
+      end
+      arrResult = { :label => strTag.strip, :value => strValue }
+    end
+    arrResult
+  end
+
+  def self.parse_num(str)
+    str.match('^[+-]?\d+(\.\d+)?').to_s
+  end
+
   def self.right(strValue, iNumChars)
     if iNumChars < strValue.length
       strValue.slice((strValue.length - iNumChars), iNumChars)
@@ -216,7 +312,9 @@ module StringLib
   def self.to_time(str)
     d = self.parse_date(str.to_s)
     unless d == nil
-      DateTime.civil(0, 1, 1, d.hour, d.min, d.sec, d.utc_offset.to_f / 86400)
+      # Since this is just time, I'm dropping the UTC offset here.
+      DateTime.civil(0, 1, 1, d.hour, d.min, d.sec)
+#      DateTime.civil(0, 1, 1, d.hour, d.min, d.sec, d.utc_offset.to_f / 86400)
     else
       nil
     end

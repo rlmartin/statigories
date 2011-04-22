@@ -42,10 +42,12 @@ module ApplicationHelper
   def show_messages_js
     if @success
       "$('#error_msg').html('#{prep_jquery('')}').hide();
-      $('#notice_msg').html('#{prep_jquery(flash[:notice])}').show();".html_safe
+      $('#notice_msg').html('#{prep_jquery(flash[:notice])}').show();
+      _init();".html_safe
     else
       "$('#notice_msg').html('#{prep_jquery('')}').hide();
-      $('#error_msg').html('#{prep_jquery(flash[:error])}').show();".html_safe
+      $('#error_msg').html('#{prep_jquery(flash[:error])}').show();
+      _init();".html_safe
     end
   end
 

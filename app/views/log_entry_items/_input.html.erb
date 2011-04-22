@@ -1,0 +1,9 @@
+<% if @can_edit %>
+<<%= defined?(tag_name) && tag_name != nil && tag_name != '' ? tag_name : 'div' %> class='item'>
+<label><%= text_field_tag 'item[][tags]', input.tag_list.join(', '), :class => 'editable disabled clear-default', 'data-default' => t(:default_log_entry_item_label), 'data-event-in' => 'click', 'data-event-out' => 'blur' %>: </label>
+  <%= text_field_tag 'item[][value]', input.value, :class => 'editable disabled', 'data-event-in' => 'click', 'data-event-out' => 'blur' %>
+  <%= hidden_field_tag 'item[][id]', input.id %>
+</<%= defined?(tag_name) && tag_name != nil && tag_name != '' ? tag_name : 'div' %>>
+<% else %>
+<label><%= input.tag_list.join(', ') %></label> <%= input.value %>
+<% end %>

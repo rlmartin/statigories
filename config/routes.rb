@@ -67,6 +67,7 @@ StatigoriesCom::Application.routes.draw do
 
   # General pages
   match 'error', :to => 'general_page#error', :as => :error
+  match 'javascripts/js_vars', :to => 'general_page#js_vars', :as => :js_vars
 
 	# Login routes
   post 'login', :to => 'sessions#create', :as => :login
@@ -112,13 +113,15 @@ StatigoriesCom::Application.routes.draw do
   delete 'user/:username/group/:group_name/member/:friend', :to => 'group_memberships#destroy', :as => :user_group_remove_member
 
   # Log Entry routes
+  get 'user/:username/log/new', :to => 'log_entries#new', :as => :user_new_log
+  match 'user/:username/log/quick(/*entry)', :to => 'log_entries#quick_add', :as => :log_entry_quick_add
   get 'user/:username/log/:index', :to => 'log_entries#show', :as => :user_log
   post 'user/:username/log/:index', :to => 'log_entries#edit', :as => :user_edit_log
   post 'user/:username/log/:index/label(/:label)', :to => 'log_entries#edit_label', :as => :user_edit_log_label
   delete 'user/:username/log/:index', :to => 'log_entries#destroy', :as => :user_delete_log
   post 'user/:username/log', :to => 'log_entries#create', :as => :user_create_log
-  get 'user/:username/log/new', :to => 'log_entries#new', :as => :user_create_log
   get 'user/:username/logs(/:num(/:start))', :to => 'log_entries#show_all', :as => :user_show_logs
+  get 'log_entry_item_input(/:id)', :to => 'log_entry_items#input', :as => :log_entry_item_input
 
   # This is a legacy wild controller route that's not recommended for RESTful applications.
   # Note: This route will make all actions in every controller accessible via GET requests.

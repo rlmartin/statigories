@@ -1,2 +1,3 @@
-Home page
-<%= flash[:error] %>
+<%= link_to t(:link_add_log), user_new_log_path(:username => current_user.username) %><br />
+<%= link_to t(:link_add_log), log_entry_quick_add_path(:username => current_user.username) %><br />
+

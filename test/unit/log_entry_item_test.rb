@@ -44,7 +44,9 @@ class LogEntryItemTest < ActiveSupport::TestCase
     assert_not_nil i.id
     assert_equal i.value, '1'
     assert_equal i.value_bool, true
-    assert_not_nil i.value_date
+    assert_equal i.value_datetime.to_datetime.to_s, DateTime.civil(Date.today.year, Date.today.month, Date.today.day, 13, 0, 1, timezone_offset).getutc.to_s
+    assert_equal i.value_date, Date.today
+    assert_equal i.value_time, DateTime.civil(0, 1, 1, 13, 0, 0)
     assert_equal i.value_float, 1.0
     assert_equal i.value_int, 1
     assert_nil i.value_lat
@@ -54,7 +56,9 @@ class LogEntryItemTest < ActiveSupport::TestCase
     assert_not_nil i.id
     assert_equal i.value, '0'
     assert_equal i.value_bool, false
-    assert_not_nil i.value_date
+    assert_equal i.value_datetime.to_datetime.to_s, DateTime.civil(Date.today.year, Date.today.month, Date.today.day, 12, 0, 1, timezone_offset).getutc.to_s
+    assert_equal i.value_date, Date.today
+    assert_equal i.value_time, DateTime.civil(0, 1, 1, 12, 0, 0)
     assert_equal i.value_float, 0.0
     assert_equal i.value_int, 0
     assert_nil i.value_lat
@@ -64,7 +68,9 @@ class LogEntryItemTest < ActiveSupport::TestCase
     assert_not_nil i.id
     assert_equal i.value, '1.1'
     assert_nil i.value_bool
+    assert_nil i.value_datetime
     assert_nil i.value_date
+    assert_nil i.value_time
     assert_equal i.value_float, 1.1
     assert_nil i.value_int
     assert_nil i.value_lat
@@ -74,7 +80,9 @@ class LogEntryItemTest < ActiveSupport::TestCase
     assert_not_nil i.id
     assert_equal i.value, '1/1/2010'
     assert_nil i.value_bool
-    assert_equal i.value_date, DateTime.new(2010, 1, 1, 0, 0, 0, -5.0 / 24)
+    assert_equal i.value_datetime.to_datetime.to_s, DateTime.civil(2010, 1, 1, 0, 0, 0, timezone_offset(Time.parse('1/1/2010'))).getutc.to_s
+    assert_equal i.value_date, Date.parse('1/1/2010')
+    assert_equal i.value_time, DateTime.civil(0, 1, 1, 0, 0, 0)
     assert_nil i.value_float
     assert_nil i.value_int
     assert_nil i.value_lat
@@ -84,7 +92,9 @@ class LogEntryItemTest < ActiveSupport::TestCase
     assert_not_nil i.id
     assert_equal i.value, '1/2/2010 10:08:01 PM'
     assert_nil i.value_bool
-    assert_equal i.value_date, DateTime.new(2010, 1, 2, 22, 8, 1, -5.0 / 24)
+    assert_equal i.value_datetime.to_datetime.to_s, DateTime.civil(2010, 1, 2, 22, 8, 1, timezone_offset(Time.parse('1/2/2010'))).getutc.to_s
+    assert_equal i.value_date, Date.parse('2/1/2010')
+    assert_equal i.value_time, DateTime.civil(0, 1, 1, 22, 8, 1)
     assert_nil i.value_float
     assert_nil i.value_int
     assert_nil i.value_lat
@@ -94,7 +104,9 @@ class LogEntryItemTest < ActiveSupport::TestCase
     assert_not_nil i.id
     assert_equal i.value, '(1.1, 2.1)'
     assert_nil i.value_bool
+    assert_nil i.value_datetime
     assert_nil i.value_date
+    assert_nil i.value_time
     assert_nil i.value_float
     assert_nil i.value_int
     assert_equal i.value_lat, 1.1
@@ -104,7 +116,9 @@ class LogEntryItemTest < ActiveSupport::TestCase
     assert_not_nil i.id
     assert_equal i.value, '1.2, 2.2'
     assert_nil i.value_bool
+    assert_nil i.value_datetime
     assert_nil i.value_date
+    assert_nil i.value_time
     assert_nil i.value_float
     assert_nil i.value_int
     assert_equal i.value_lat, 1.2
@@ -114,7 +128,9 @@ class LogEntryItemTest < ActiveSupport::TestCase
     assert_not_nil i.id
     assert_equal i.value, '{1.3, 2.3}'
     assert_nil i.value_bool
+    assert_nil i.value_datetime
     assert_nil i.value_date
+    assert_nil i.value_time
     assert_nil i.value_float
     assert_nil i.value_int
     assert_equal i.value_lat, 1.3
@@ -124,7 +140,9 @@ class LogEntryItemTest < ActiveSupport::TestCase
     assert_not_nil i.id
     assert_equal i.value, '[1.4, 2.4]'
     assert_nil i.value_bool
+    assert_nil i.value_datetime
     assert_nil i.value_date
+    assert_nil i.value_time
     assert_nil i.value_float
     assert_nil i.value_int
     assert_equal i.value_lat, 1.4
@@ -134,7 +152,9 @@ class LogEntryItemTest < ActiveSupport::TestCase
     assert_not_nil i.id
     assert_equal i.value, '[1.4x, 2.4]'
     assert_nil i.value_bool
+    assert_nil i.value_datetime
     assert_nil i.value_date
+    assert_nil i.value_time
     assert_nil i.value_float
     assert_nil i.value_int
     assert_nil i.value_lat
@@ -144,7 +164,9 @@ class LogEntryItemTest < ActiveSupport::TestCase
     assert_not_nil i.id
     assert_equal i.value, '1z'
     assert_nil i.value_bool
+    assert_nil i.value_datetime
     assert_nil i.value_date
+    assert_nil i.value_time
     assert_nil i.value_float
     assert_nil i.value_int
     assert_nil i.value_lat
@@ -154,7 +176,9 @@ class LogEntryItemTest < ActiveSupport::TestCase
     assert_not_nil i.id
     assert_equal i.value, '1/1/z2010'
     assert_nil i.value_bool
+    assert_nil i.value_datetime
     assert_nil i.value_date
+    assert_nil i.value_time
     assert_nil i.value_float
     assert_nil i.value_int
     assert_nil i.value_lat
@@ -167,7 +191,9 @@ class LogEntryItemTest < ActiveSupport::TestCase
     assert_not_nil i.id
     assert_equal i.value, '1'
     assert_equal i.value_bool, true
-    assert_not_nil i.value_date
+    assert_equal i.value_datetime.to_datetime.to_s, DateTime.civil(Date.today.year, Date.today.month, Date.today.day, 13, 0, 1, timezone_offset).getutc.to_s
+    assert_equal i.value_date, Date.today
+    assert_equal i.value_time, DateTime.civil(0, 1, 1, 13, 0, 0).to_time
     assert_equal i.value_float, 1.0
     assert_equal i.value_int, 1
     assert_nil i.value_lat
@@ -179,7 +205,9 @@ class LogEntryItemTest < ActiveSupport::TestCase
     assert_not_nil i.id
     assert_equal i.value, '1x'
     assert_nil i.value_bool
+    assert_nil i.value_datetime
     assert_nil i.value_date
+    assert_nil i.value_time
     assert_nil i.value_float
     assert_nil i.value_int
     assert_nil i.value_lat
@@ -191,7 +219,9 @@ class LogEntryItemTest < ActiveSupport::TestCase
     assert_not_nil i.id
     assert_equal i.value, '0'
     assert_equal i.value_bool, false
-    assert_not_nil i.value_date
+    assert_equal i.value_datetime.to_datetime.to_s, DateTime.civil(Date.today.year, Date.today.month, Date.today.day, 12, 0, 1, timezone_offset).getutc.to_s
+    assert_equal i.value_date, Date.today
+    assert_equal i.value_time, DateTime.civil(2000, 1, 1, 12, 0, 0)
     assert_equal i.value_float, 0.0
     assert_equal i.value_int, 0
     assert_nil i.value_lat
@@ -203,7 +233,9 @@ class LogEntryItemTest < ActiveSupport::TestCase
     assert_not_nil i.id
     assert_equal i.value, '[1.4, 2.4]'
     assert_nil i.value_bool
+    assert_nil i.value_datetime
     assert_nil i.value_date
+    assert_nil i.value_time
     assert_nil i.value_float
     assert_nil i.value_int
     assert_equal i.value_lat, 1.4
@@ -215,7 +247,9 @@ class LogEntryItemTest < ActiveSupport::TestCase
     assert_not_nil i.id
     assert_equal i.value, '1/2/2010 10:08:01 PM'
     assert_nil i.value_bool
-    assert_equal i.value_date, DateTime.new(2010, 1, 2, 22, 8, 1, -5.0 / 24)
+    assert_equal i.value_datetime.to_datetime.to_s, DateTime.civil(2010, 1, 2, 22, 8, 1, timezone_offset(Time.parse('1/2/2010'))).getutc.to_s
+    assert_equal i.value_date, Date.parse('2/1/2010')
+    assert_equal i.value_time, DateTime.civil(2000, 1, 1, 22, 8, 1).to_time
     assert_nil i.value_float
     assert_nil i.value_int
     assert_nil i.value_lat

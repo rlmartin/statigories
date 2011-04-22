@@ -26,26 +26,6 @@ ActiveRecord::Schema.define(:version => 20110113125719) do
 
   add_index "client_applications", ["key"], :name => "index_client_applications_on_key", :unique => true
 
-  create_table "constants", :force => true do |t|
-    t.string   "name",        :default => ""
-    t.string   "value",       :default => ""
-    t.string   "server_type", :default => ""
-    t.string   "lang",        :default => ""
-    t.string   "cast_as",     :default => ""
-    t.boolean  "array",       :default => false
-    t.boolean  "active",      :default => true
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "constants", ["active"], :name => "index_constants_on_active"
-  add_index "constants", ["cast_as"], :name => "index_constants_on_cast_as"
-  add_index "constants", ["lang"], :name => "index_constants_on_lang"
-  add_index "constants", ["name"], :name => "index_constants_on_name"
-  add_index "constants", ["server_type", "active", "name"], :name => "index_constants_on_server_type_and_active_and_name"
-  add_index "constants", ["server_type", "active"], :name => "index_constants_on_server_type_and_active"
-  add_index "constants", ["server_type"], :name => "index_constants_on_server_type"
-
   create_table "event_log_extras", :force => true do |t|
     t.integer  "event_log_id", :null => false
     t.text     "data",         :null => false
@@ -122,16 +102,18 @@ ActiveRecord::Schema.define(:version => 20110113125719) do
   add_index "log_entries", ["user_id"], :name => "index_log_entries_on_user_id"
 
   create_table "log_entry_items", :force => true do |t|
-    t.integer  "log_entry_id",                                                     :null => false
-    t.text     "value",                                                            :null => false
-    t.integer  "display_order",                                 :default => 1,     :null => false
-    t.boolean  "deleted",                                       :default => false, :null => false
+    t.integer  "log_entry_id",                                                      :null => false
+    t.text     "value",                                                             :null => false
+    t.integer  "display_order",                                  :default => 1,     :null => false
+    t.boolean  "deleted",                                        :default => false, :null => false
     t.integer  "value_int"
     t.float    "value_float"
-    t.datetime "value_date"
+    t.datetime "value_datetime"
+    t.date     "value_date"
+    t.time     "value_time"
     t.boolean  "value_bool"
-    t.decimal  "value_lat",     :precision => 22, :scale => 17
-    t.decimal  "value_lng",     :precision => 22, :scale => 17
+    t.decimal  "value_lat",      :precision => 22, :scale => 17
+    t.decimal  "value_lng",      :precision => 22, :scale => 17
     t.datetime "created_at"
     t.datetime "updated_at"
   end

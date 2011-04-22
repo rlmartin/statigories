@@ -34,6 +34,9 @@ en:
 
   # General text
   app_name: "Statigories"
+  confirm_discard: "You have unsaved changes that will be discarded if you leave the page."
+  default_log_entry_item_label: "Item"
+  default_log_entry_label: "New Entry"
   log_in_prompt: "Please log in."
   no_reply_email: "noreply@statigories.com"
   no_reply_from_name: "Statigories Account Manager"
@@ -68,6 +71,8 @@ en:
 
   # Link text
   link_add_friend: "Add Friend"
+  link_add_log: "Add Log"
+  link_add_log_entry_item: "Add Item"
   link_add_to_group: "Add to Group"
   link_back: "Back"
   link_back_to_groups: "Back to group list"
@@ -118,6 +123,8 @@ en:
   msg_invalid_password_recovery_code: "Sorry, this password recovery code is invalid.  Try <a href='/forgot_password'>re-sending the password recovery email</a>."
   msg_log_entry_not_found: "Sorry, we could not find this log entry."
   msg_log_entry_private: "Sorry, this log entry is private. If this is your own log entry, please login and try again."
+  msg_log_entry_quick_add_missing: "No entry specified."
+  msg_log_entry_saved: "Log entry saved."
   msg_need_verification_explanation: "We're sorry, but you have not yet verified your email address.  Please take the time to do so now - check your email and click on the link provided."
   msg_no_groups_found: "No groups found."
   msg_not_authorized: "Sorry, you are not authorized to perform this action."

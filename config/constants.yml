@@ -4,9 +4,20 @@ default:
     array: true
   google_analytics_key:
     value: 
+  log_entry_item_delimiter:
+    value: ","
+  log_entry_item_delimiter_run:
+    value: ","
   max_access_level:
     value: 7
     cast_as: int
+  parse_entry_label_start:
+    value: "^(\"(?<label>.+?)\":?|'(?<label>.+?)':?|\\((?<label>.+?)\\):?|\\[(?<label>.+?)\\]:?|\\{(?<label>.+?)\\}:?|(?<label>.+?):)\\s*(?<items>.*)"
+  parse_entry_label_end:
+    value: "(?<items>.+?):?\\s+(\"(?<label>.+?)\"|'(?<label>.+?)'|\\((?<label>.+?)\\)|\\[(?<label>.+?)\\]|\\{(?<label>.+?)\\}|(?<label>.+?))$"
+  parse_entry_item_exceptions:
+    value: "\\d\\d?:\\d\\d(:\\d\\d)?\\s*(a|am|p|pm)?, \\d\\d?[/\\-\\.]\\d\\d?[/\\-\\.]\\d\\d(\\d\\d)?, [+-]?\\d+(\\.\\d+)?"
+    array: true
   root_url:
     value: http://statigories.com
   search_default_limit:

@@ -205,6 +205,7 @@ class ApplicationController < ActionController::Base
 	end
 
   def set_model_request
+    Thread.current['request'] = request
     ActiveRecord::Base::_set_request(request)
   end
 

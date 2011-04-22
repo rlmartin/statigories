@@ -159,6 +159,10 @@ class ActiveSupport::TestCase
     @controller = old_controller
   end
 
+  def timezone_offset(now = Time.now)
+    StringLib.to_timezone(now.zone).current_period.utc_offset.to_f / 86400
+  end
+
   #def t(*args)
   #  I18n.t(args[0], args.extract_options!)
   #end
