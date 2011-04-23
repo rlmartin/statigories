@@ -1,0 +1,6 @@
+<ul id='group_memberships_for_<%= edit_for_user.username %>'><%  edit_for_user.inverse_group_memberships.each do | gm |
+      if gm.group.user_id == my_user_id %>
+        <%= render :partial => 'group_memberships/group_membership_row', :locals => { :group_membership_row => gm, :friend_username => edit_for_user.username } %>
+    <%  end
+    end %></ul>
+<div id='group_form_add_to_<%= edit_for_user.username %>'><%= link_to t(:link_add_to_group), user_groups_form_add_to_path(:username => my_username, :friend => edit_for_user.username), :remote => true %></div>

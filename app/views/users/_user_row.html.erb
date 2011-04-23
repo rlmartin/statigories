@@ -1,0 +1,5 @@
+<li class='user_row_<%= user_row.id %>'>
+  <div class='user user_row'><%= link_to user_row.first_name + ' ' + user_row.last_name, user_path(user_row) %></div>
+  <div class='friend_action'><%= render :partial => 'friendships/edit', :locals => { :edit => user_row } %></div>
+  <% if @can_view and Const::get(:show_groups) %><div class='group_action'><%= render :partial => 'group_memberships/edit_for_user', :locals => { :edit_for_user => user_row } %></div><% end %>
+</li>

@@ -1,0 +1,9 @@
+<h1><%= t :title_user_search %></h1>
+<% if @users.count == 0 %>
+  <div class='error_msg'><%= t(:msg_user_search_none_found) %></div>
+<% else %>
+  <ul id='search_results'>
+  <%= render :partial => 'users/user_row', :collection => @users %>
+  </ul>
+<% end %>
+

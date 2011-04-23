@@ -1,0 +1,248 @@
+# Sample localization file for English. Add more files in this directory for other locales.
+# See http://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
+
+en:
+  hello_world: "Hello, world"
+  
+  # Access level text
+  access_level_-1: "Full control"
+  access_level_0: "No access"
+  access_level_1: "Read-only access"
+  access_level_2: "Edit-only access"
+  access_level_3: "Edit access"
+  access_level_4: "Delete-only access"
+  access_level_5: "Delete and Read access"
+  access_level_6: "Delete and Edit access"
+  access_level_7: "Full control"
+  access_level_default: "Unknown access level"
+
+  # Button text
+  btn_add: Add
+  btn_check_availability: "Check Availability"
+  btn_create: Create
+  btn_edit: Edit
+  btn_login: Login
+  btn_register: Register
+  btn_save: Save
+  btn_search: Search
+  btn_send: Send
+
+  # Email subject lines
+  subject_email_verification: "Please verify your email address"
+  subject_new_friend_request: "You have a new friend!"
+  subject_password_reset: "Password reset requested"
+
+  # General text
+  app_name: "Statigories"
+  confirm_discard: "You have unsaved changes that will be discarded if you leave the page."
+  default_log_entry_item_label: "Item"
+  default_log_entry_label: "New Entry"
+  log_in_prompt: "Please log in."
+  no_reply_email: "noreply@statigories.com"
+  no_reply_from_name: "Statigories Account Manager"
+  sign_up_prompt: "Not a member?"
+
+  # Header text
+  not_logged_in: "Not logged in."
+  welcome_back: "Welcome back"
+
+  # Input prompts
+  input_add_friend_to_group: "Add friend to this group:"
+  input_add_group: "New Group:"
+  input_confirm_email: "Confirm Email:"
+  input_confirm_password: "Confirm Password:"
+  input_email: "Email:"
+  input_first_name: "First Name:"
+  input_last_name: "Last Name:"
+  input_oauth_authorize_prompt: "Yes, authorize access"
+  input_oauth_client_name: "Application Name:"
+  input_oauth_client_application_url: "Application URL:"
+  input_oauth_client_callback_url: "Callback URL:"
+  input_oauth_client_support_url: "Support URL:"
+  input_oauth_consumer_key: "Consumer Key:"
+  input_oauth_consumer_access_token_url: "Access Token URL:"
+  input_oauth_consumer_authorize_url: "Authorize URL:"
+  input_oauth_consumer_request_token_url: "Request Token URL:"
+  input_oauth_consumer_secret: "Consumer Secret:"
+  input_password: "Password:"
+  input_remember_me: "Remember me on this computer"
+  input_username: "Username:"
+  input_user_search_text: "Search Text:"
+
+  # Link text
+  link_add_friend: "Add Friend"
+  link_add_log: "Add Log"
+  link_add_log_entry_item: "Add Item"
+  link_add_to_group: "Add to Group"
+  link_back: "Back"
+  link_back_to_groups: "Back to group list"
+  link_delete: "Delete"
+  link_delete_friend: "Remove Friend"
+  link_delete_group: "Remove"
+  link_delete_token: "Revoke!"
+  link_delete_user: "Delete My Account"
+  link_edit: "Edit"
+  link_forgot_password: "Forgot your password?"
+  link_block_friend_request: "Block"
+  link_ignore_friend_request: "Ignore"
+  link_login: "Log In"
+  link_login_again: "Log in again"
+  link_logout: "Log Out"
+  link_oauth_register: "Register your application"
+  link_return_to_friends: "Back to friends list."
+  link_rename: "Rename"
+  link_short_delete: "(x)"
+  link_show: "Show"
+  link_sign_up: "Sign up for a new account."
+  link_user_friends: "My Friends"
+  link_user_groups: "My Groups"
+
+  # Messages
+  msg_confirm_delete_group: "Are you sure you want to delete this group?"
+  msg_confirm_delete_oauth_application: "Are you sure?"
+  msg_confirm_delete_user: "Are you sure you want to delete your account? There is no way to undo this."
+  msg_email_error: "There was an error sending the email."
+  msg_email_not_found: "Sorry, we could not find this email address."
+  msg_friend_added: "You have successfully added this friend."
+  msg_friend_blocked: "You have blocked this user."
+  msg_friend_deleted: "You have removed this friend."
+  msg_friend_ignored: "You have ignored this friend request."
+  msg_friend_not_found: "Sorry, we could not find this friend."
+  msg_general_error: "Sorry, there was an error."
+  msg_group_already_exists: "You already have a group with this name."
+  msg_group_created: "Group added successfully."
+  msg_group_deleted: "Group removed successfully."
+  msg_group_edited: "Group edited successfully."
+  msg_group_membership_created: "You have added %{friend_name} to %{group_name}."
+  msg_group_membership_not_created: "Sorry, there was an error adding %{friend_name} to %{group_name}."
+  msg_group_membership_removed: "You have removed %{friend_name} from %{group_name}."
+  msg_group_membership_not_removed: "Sorry, there was an error removing %{friend_name} from %{group_name}."
+  msg_group_not_found: "Sorry, we could not find this group."
+  msg_invalid_group_name: "Invalid group name."
+  msg_invalid_login: "Login failed. The email address and/or password was not correct."
+  msg_invalid_password_recovery_code: "Sorry, this password recovery code is invalid.  Try <a href='/forgot_password'>re-sending the password recovery email</a>."
+  msg_log_entry_not_found: "Sorry, we could not find this log entry."
+  msg_log_entry_private: "Sorry, this log entry is private. If this is your own log entry, please login and try again."
+  msg_log_entry_quick_add_missing: "No entry specified."
+  msg_log_entry_saved: "Log entry saved."
+  msg_need_verification_explanation: "We're sorry, but you have not yet verified your email address.  Please take the time to do so now - check your email and click on the link provided."
+  msg_no_groups_found: "No groups found."
+  msg_not_authorized: "Sorry, you are not authorized to perform this action."
+  msg_oauth_client_deleted: "Destroyed the client application registration."
+  msg_oauth_client_not_saved: "Sorry, we could not register your application."
+  msg_oauth_client_saved: "Registered the information successfully."
+  msg_oauth_client_updated: "Updated the client information successfully."
+  msg_oauth_token_revoked: "You've revoked the token for %{name}."
+  msg_profile_saved: "Your changes have been saved."
+  msg_successful_logout: "Logout Successful"
+  msg_user_not_found: "Sorry, this user was not found."
+  msg_user_search_none_found: "No users matched this search."
+  msg_username_available: "Score! You can have this username."
+  msg_username_taken: "Sorry, this username is not available."
+  msg_view_groups_no_access: "Sorry, you do not have access to view this user's groups."
+
+  # Page Titles
+  section_title_user_friend_requests: "Pending friend requests:"
+  section_title_user_friends: "Your friends:"
+  subtitle_users: ": User"
+  title_create_group_membership: "Add to Group"
+  title_delete_group: "Delete Group"
+  title_edit_oauth: "Edit your application"
+  title_edit_user: "Edit My Profile"
+  title_error: "Error"
+  title_error_user_not_found: "Not Found"
+  title_log_entry: "%{tags} : Log Entry #%{index}"
+  title_login: "Log In"
+  title_logout: "Log Out"
+  title_new_oauth_client: "Register a new application"
+  title_oauth_authorize: "Authorize access to your account"
+  title_oauth_authorize_denied: "You have disallowed this request"
+  title_oauth_authorize_success: "You have allowed this request"
+  title_oauth_index: "Client Applications"
+  title_show_oauth: "OAuth details for %{name}"
+  title_signup: "Create User"
+  title_user_delete: "Delete"
+  title_user_friends: "%{name}'s Friends"
+  title_user_groups: "%{name}'s Groups"
+  title_user_group_html: "%{user_name}'s <span class='group_name'>%{group_name}</span>"
+  title_user_search: "Search Users"
+  title_verification_needed: "Please verify your email address"
+
+  # Page descriptions
+  desc_new_oauth_client: "Register your application for API access to our system."
+  desc_show_oauth_client: "View the details of your OAuth connection to this application."
+
+  # Page keywords
+  keywords_new_oauth_client: "api access oauth register application"
+  keywords_show_oauth_client: "api access oauth view application details"
+
+  # Pages
+  # Email verification
+  link_go_to_your_page: "Go to your homepage."
+  link_resend_verification: "re-sending the verification email."
+  msg_already_verified: "This email has already been verified. Please <a href='/login'>log in</a> to begin using your account."
+  msg_group_members_not_found: "This group has no members."
+  msg_group_not_found: "Group not found."
+  msg_invalid_verification_code: "Invalid verification code."
+  msg_must_verify_html: "Before you contiune using your account, please take the time to <a href='/verify'>verify your email address</a>."
+  msg_successful_verification_code: "Email verified."
+  msg_verification_sent: "Email sent.  You should receive an email with your verification code within a few minutes.  Be sure to check your junk email and add noreply@statigories.com to your safe senders list to ensure delivery."
+  prompt_resend_verification: "Having trouble? If you have not yet received the verification email, please check your junk email and add noreply@statigories.com to your safe senders list. If you still don't see the email, try "
+  prompt_resend_verification_enter_email: "If you have not received your email verification code, enter your email address below and we'll send it again."
+  prompt_get_started: "Get started logging now."
+  title_email_verification: "Verify Email"
+
+  # Forgot/Reset Password
+  title_forgot_password: "Forgot Password"
+  msg_password_set: "Password saved."
+  msg_reset_password_sent: "Email sent successfully.  Within a few minutes, you should receive an email with instructions about how to reset your password.  Be sure to check your junk email and add noreply@statigories.com to your safe senders list to ensure delivery."
+  prompt_forgot_password: "Forgot your password? Enter your email address below and we'll send you an email to begin the password reset process."
+  prompt_reset_password: "Enter your new password below."
+
+  # OAuth pages
+  #msg_show_oauth_client_additional_text: "We support hmac-sha1 (recommended) as well as plain text in ssl mode."
+  msg_show_oauth_client_additional_text: "We support hmac-sha1."
+  oauth_authorize_intro: "Would you like to authorize %{name} (%{url}) to access your account? %{name} has requested <strong>%{access_level}</strong>; you may choose a different access level below, but we cannot guarantee %{name}'s application will work correctly if you do."
+  oauth_authorize_success: "Please return to %{client_application_name} and enter this verification code when requested: <strong>%{verifier}</strong>."
+  oauth_index_applications_intro: "You have the following client applications registered:"
+  oauth_index_no_applications_intro_html: "Do you have an application you would like to register for use with us using the <a href=\"http://oauth.net\">OAuth</a> standard?<br />You must register your web application before it can make OAuth requests to this service."
+  oauth_index_subtitle_developer_section: "Application Developers"
+  oauth_index_token_intro: "You have authorized the following applications to access your account:"
+
+  # Model errors
+  error_group_membership_group_does_not_match_friendship: "not associated with this group's owner"
+  activerecord:
+    errors:
+      templates:
+        header:
+          one: "1 error prohibited this %{object_name} from being saved"
+          other: "%{count} errors prohibited this %{object_name} from being saved"
+        body: "there were problems with the following fields:"
+      messages:
+        accepted: "must be accepted"
+        blank: "can't be blank"
+        confirmation: "doesn't match confirmation"
+        empty: "can't be empty"
+        equal_to: "must be equal to %{count}"
+        even: "must be even"
+        exclusion: "is reserved"
+        greater_than: "must be greater than %{count}"
+        greater_than_or_equal_to: "must be greater than or equal to %{count}"
+        inclusion: "is not included in the list"
+        invalid: "is invalid"
+        less_than: "must be less than %{count}"
+        less_than_or_equal_to: "must be less than or equal to %{count}"
+        not_a_number: "is not a number"
+        odd: "must be odd"
+        taken: "is already taken"
+        too_long: "is too long (maximum is %{count} characters)"
+        too_short: "is too short (minimum is %{count} characters)"
+        wrong_length: "is the wrong length (should be %{count} characters)"
+      models:
+        friendship:
+          message: "Unknown error creating friend."
+          attributes:
+            friend_id:
+              blank: "Missing associated friend."
+              taken: "You have already added this user as a friend."
+

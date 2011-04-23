@@ -1,0 +1,7 @@
+<% if @success %>
+  if ($('#group_membership_<%= @group_membership.id %>').length == 0) {
+    $('#group_memberships_for_<%= @friend.username %>').append('<%= prep_jquery(render(:partial => 'group_memberships/group_membership_row', :locals => { :group_membership_row => @group_membership, :friend_username => @friend.username })) %>');
+    $('#group_members_<%= @group.group_name %>').append('<%= prep_jquery(render(:partial => 'users/user_row', :locals => { :user_row => @friend })) %>');
+  }
+<% end %>
+<%= show_messages_js %>
