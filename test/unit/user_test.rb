@@ -9,82 +9,82 @@ class UserTest < ActiveSupport::TestCase
 
   def test_should_not_be_vaild_without_email
     u = User.create(:username => "john", :password => "pwd", :first_name => "John", :last_name => "Doe")
-    assert u.errors.on(:email)
+    assert !u.errors[:email].empty?
   end
 
   def test_should_not_be_vaild_without_username
     u = User.create(:email => "johndoe@gmail.com", :password => "pwd", :first_name => "John", :last_name => "Doe")
-    assert u.errors.on(:username)
+    assert !u.errors[:username].empty?
   end
 
   def test_should_not_be_vaild_without_password
     u = User.create(:email => "johndoe@gmail.com", :username => "john", :first_name => "John", :last_name => "Doe")
-    assert u.errors.on(:password)
+    assert !u.errors[:password].empty?
   end
 
   def test_should_not_be_vaild_without_first_name
     u = User.create(:email => "johndoe@gmail.com", :username => "john", :password => "pwd", :last_name => "Doe")
-    assert u.errors.on(:first_name)
+    assert !u.errors[:first_name].empty?
   end
 
   def test_should_not_be_vaild_without_last_name
     u = User.create(:email => "johndoe@gmail.com", :username => "john", :password => "pwd", :first_name => "John")
-    assert u.errors.on(:last_name)
+    assert !u.errors[:last_name].empty?
   end
 
   def test_invalid_email_format
     u = User.create(:email => "johndoe", :username => "john", :password => "pwd", :first_name => "John", :last_name => "Doe")
-    assert u.errors.on(:email)
+    assert !u.errors[:email].empty?
   end
 
   def test_invalid_email_format_at
     u = User.create(:email => "johndoe@", :username => "john", :password => "pwd", :first_name => "John", :last_name => "Doe")
-    assert u.errors.on(:email)
+    assert !u.errors[:email].empty?
   end
 
   def test_missing_email_confirmation
     u = User.create(:email => "johndoe@gmail.com", :username => "john", :password => "pwd", :password_confirmation => "pwd", :first_name => "John", :last_name => "Doe")
-    assert u.errors.on(:email_confirmation)
+    assert !u.errors[:email_confirmation].empty?
   end
 
   def test_incorrect_email_confirmation
     u = User.create(:email => "johndoe@gmail.com", :email_confirmation => "johndoe1@gmail.com", :username => "john", :password => "pwd", :password_confirmation => "pwd", :first_name => "John", :last_name => "Doe")
-    assert u.errors.on(:email)
+    assert !u.errors[:email].empty?
   end
 
   def test_missing_password_confirmation
     u = User.create(:email => "johndoe@gmail.com", :email_confirmation => "johndoe@gmail.com", :username => "john", :password => "pwd", :first_name => "John", :last_name => "Doe")
-    assert u.errors.on(:password_confirmation)
+    assert !u.errors[:password_confirmation].empty?
   end
 
   def test_incorrect_password_confirmation
     u = User.create(:email => "johndoe@gmail.com", :email_confirmation => "johndoe@gmail.com", :username => "john", :password => "pwd", :password_confirmation => "pwd1", :first_name => "John", :last_name => "Doe")
-    assert u.errors.on(:password)
+    assert !u.errors[:password].empty?
   end
 
   def test_invalid_username_space
     u = User.create(:email => "johndoe@gmail.com", :email_confirmation => "johndoe@gmail.com", :username => "jo hn", :password => "pwd", :password_confirmation => "pwd", :first_name => "John", :last_name => "Doe")
-    assert u.errors.on(:username)
+    assert !u.errors[:username].empty?
   end
 
   def test_invalid_username_exclamation
     u = User.create(:email => "johndoe@gmail.com", :email_confirmation => "johndoe@gmail.com", :username => "jo!hn", :password => "pwd", :password_confirmation => "pwd", :first_name => "John", :last_name => "Doe")
-    assert u.errors.on(:username)
+    assert !u.errors[:username].empty?
   end
 
   def test_invalid_username_dash
     u = User.create(:email => "johndoe@gmail.com", :email_confirmation => "johndoe@gmail.com", :username => "jo-hn", :password => "pwd", :password_confirmation => "pwd", :first_name => "John", :last_name => "Doe")
-    assert u.errors.on(:username)
+    assert !u.errors[:username].empty?
   end
 
   def test_email_already_exists
     u = User.create(:email => users(:ryan).email, :email_confirmation => users(:ryan).email, :username => "john", :password => "pwd", :password_confirmation => "pwd", :first_name => "John", :last_name => "Doe")
-    assert u.errors.on(:email)
+    assert !u.errors[:email].empty?
   end
 
   def test_username_already_exists
     u = User.create(:email => "johndoe@gmail.com", :email_confirmation => "johndoe@gmail.com", :username => users(:ryan).username, :password => "pwd", :password_confirmation => "pwd", :first_name => "John", :last_name => "Doe")
-    assert u.errors.on(:username)
+    assert !u.errors[:username].empty?
   end
 
   def test_successful_update_without_email_or_password
@@ -139,31 +139,31 @@ class UserTest < ActiveSupport::TestCase
   def test_unsuccessful_update_without_email_confirmation
     u = User.find_by_username(users(:ryan).username)
     u.update_attributes(:email => "johndoe@gmail.com")
-    assert u.errors.on(:email_confirmation)
+    assert !u.errors[:email_confirmation].empty?
   end
 
   def test_unsuccessful_update_invalid_email_confirmation
     u = User.find_by_username(users(:ryan).username)
     u.update_attributes(:email => "johndoe@gmail.com", :email_confirmation => "johndoe1@gmail.com")
-    assert u.errors.on(:email)
+    assert !u.errors[:email].empty?
   end
 
   def test_unsuccessful_update_without_password_confirmation
     u = User.find_by_username(users(:ryan).username)
     u.update_attributes(:password => "newpwd")
-    assert u.errors.on(:password_confirmation)
+    assert !u.errors[:password_confirmation].empty?
   end
 
   def test_unsuccessful_update_invalid_password_confirmation
     u = User.find_by_username(users(:ryan).username)
     u.update_attributes(:password => "newpwd", :password_confirmation => "newpwd1")
-    assert u.errors.on(:password)
+    assert !u.errors[:password].empty?
   end
 
   def test_invalid_email_server
     u = User.create(:email => "johndoe@xaxgmailxax.com", :email_confirmation => "johndoe@xaxgmailxax.com", :username => "john", :password => "pwd", :password_confirmation => "pwd", :first_name => "John", :last_name => "Doe")
     assert !u.valid?
-    assert u.errors.on(:email)
+    assert !u.errors[:email].empty?
   end
 
   def test_attributes_trimmed
@@ -204,13 +204,13 @@ class UserTest < ActiveSupport::TestCase
     num_deliveries = ActionMailer::Base.deliveries.size
     # Change an existing user, so this can test using a valid "test" email address.
     u = User.find_by_email(users(:ryan).email)
-    unless u == nil: u.update_attributes(:email => "xx" + users(:ryan).email, :email_confirmation => "xx" + users(:ryan).email) end
+    u.update_attributes(:email => "xx" + users(:ryan).email, :email_confirmation => "xx" + users(:ryan).email) unless u == nil
     u = User.create(:email => users(:ryan).email, :email_confirmation => users(:ryan).email, :username => "john", :password => "pwd", :password_confirmation => "pwd", :first_name => "John", :last_name => "Doe")
     assert u.valid?
     assert_not_equal u.id, nil
     assert_equal u.password, Digest::MD5.hexdigest("pwd")
-    # Make sure the verification email was "sent"
-    assert_equal num_deliveries + 1, ActionMailer::Base.deliveries.size
+    # Make sure the verification email was "sent" to both the edited user and the new user.
+    assert_equal num_deliveries + 2, ActionMailer::Base.deliveries.size
   end
 
   def test_should_send_forgot_password_email
@@ -376,7 +376,7 @@ class UserTest < ActiveSupport::TestCase
     assert_equal u.groups.count, 3
     g = u.groups.find_by_id(groups(:ryan_family).id)
     assert_not_nil g
-    assert g.members.count, 2
+    assert_equal g.members.count, 2
   end
 
   def test_new_group

@@ -1,0 +1,8 @@
+<% if @friend != nil and @friend.id > 0 and @success %>
+  $('#friendship_<%= @friend.id %>').html('<%= prep_jquery(render(:partial => 'edit', :locals => { :edit => @friend })) %>');
+  $('ul:not(#search_results) .user_row_<%= @friend.id %>').remove();
+  <% if @friend_added %>
+  $('#friend_list').append('<%= prep_jquery(render(:partial => 'users/user_row', :locals => { :user_row => @friend})) %>');
+  <% end %>
+<% end %>
+<%= show_messages_js %>

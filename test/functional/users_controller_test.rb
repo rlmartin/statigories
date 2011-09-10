@@ -7,14 +7,14 @@ class UsersControllerTest < ActionController::TestCase
     # Check when not logged in.
     get :show, :username => users(:user1).username
     assert_select "div.login_panel a", :count => 1
-    assert_select "div.login_panel a[href=#{login_path}]", I18n.t(:link_login)
+    assert_select "div.login_panel a[href=#{login_path}]", t(:link_login)
     # Check header info when logged in.
     do_login
     get :show, :username => users(:user1).username
     assert_select "div.login_panel a", :count => 2
     assert_select "div.login_panel a[href=#{user_path(users(:ryan))}]", :count => 1
     assert_select "div.login_panel a[href=#{user_path(users(:ryan))}]", users(:ryan).first_name
-    assert_select "div.login_panel a[href=#{logout_path}]", I18n.t(:link_logout)
+    assert_select "div.login_panel a[href=#{logout_path}]", t(:link_logout)
   end
 
   def test_should_show_signup
@@ -24,11 +24,11 @@ class UsersControllerTest < ActionController::TestCase
     assert_not_nil assigns(:user)
     assert_not_nil assigns(:submit_to)
     # Has correct title text
-    assert_select "h1", I18n.t(:title_signup)
+    assert_select "h1", t(:title_signup)
     # Has correct submit URL
     assert_select "form[action=#{new_user_path}]", :count => 1
     # Has correct button text
-    assert_select "form input[type=submit][value=#{I18n.t(:btn_create)}]", :count => 1
+    assert_select "form input[type=submit][value=#{t(:btn_create)}]", :count => 1
     # Does not show "Delete account" button
     assert_select "form input[type=hidden][name=_method][value=delete]", :count => 0
   end
@@ -66,13 +66,13 @@ class UsersControllerTest < ActionController::TestCase
     assert_template :edit
     assert_not_nil assigns(:user)
     assert_not_nil assigns(:submit_to)
-    assert assigns(:user).errors.on(:email)
+    assert !assigns(:user).errors[:email].empty?
     # Has correct title text
-    assert_select "h1", I18n.t(:title_signup)
+    assert_select "h1", t(:title_signup)
     # Has correct submit URL
     assert_select "form[action=#{new_user_path}]", :count => 1
     # Has correct button text
-    assert_select "form input[type=submit][value=#{I18n.t(:btn_create)}]", :count => 1
+    assert_select "form input[type=submit][value=#{t(:btn_create)}]", :count => 1
     # Does not show "Delete account" button
     assert_select "form input[type=hidden][name=_method][value=delete]", :count => 0
     # Old values still displayed
@@ -89,11 +89,11 @@ class UsersControllerTest < ActionController::TestCase
     assert_equal EventLog.find(:last).event_id, Event::USER_DELETED
     assert_equal EventLog.find(:last).event_data, users(:ryan).id.to_s
     assert_nil User.find_by_id(users(:ryan).id)
-    assert_select "h1", I18n.t(:title_user_delete)
+    assert_select "h1", t(:title_user_delete)
     # Check that user is logged out after delete.
     assert_nil session[:logged_in]
     assert_select "div.login_panel a", :count => 1
-    assert_select "div.login_panel a[href=#{login_path}]", I18n.t(:link_login)
+    assert_select "div.login_panel a[href=#{login_path}]", t(:link_login)
   end
 
   def test_should_not_delete_user_when_not_logged_in
@@ -123,20 +123,19 @@ class UsersControllerTest < ActionController::TestCase
     assert_not_nil assigns(:user)
     assert_not_nil assigns(:submit_to)
     # Has correct title text
-    assert_select "h1", I18n.t(:title_edit_user)
-    # Has correct submit URL, for both the edit form and the delete button
-    assert_select "form[action=#{user_path}]", :count => 2
+    assert_select "h1", t(:title_edit_user)
+    # Has correct submit URL, for the edit form
+    assert_select "form[action=#{user_path(:username => users(:ryan).username)}][method=post]", :count => 1
     # Has correct button text
-    assert_select "form input[type=submit][value=#{I18n.t(:btn_save)}]", :count => 1
+    assert_select "form input[type=submit][value=#{t(:btn_save)}]", :count => 1
     # Shows "Delete account" button
-    assert_select "form input[type=hidden][name=_method][value=delete]", :count => 1
+    assert_select "a[href=#{user_path(:username => users(:ryan).username)}][data-method=delete]:not([data-remote])", t(:link_delete_user)
   end
 
   def test_should_not_show_edit_for_different_user
     do_login
     get :edit, :username => users(:user1).username
     assert_redirected_to user_path(users(:user1).username)
-    assert_template :show
     assert_not_nil assigns(:user)
   end
 
@@ -162,7 +161,7 @@ class UsersControllerTest < ActionController::TestCase
     # Has no edit button
     assert_select "form[method=get][action=#{edit_user_path(users(:user1).username)}]", :count => 0
     # Has friends link
-    assert_select "a[href=#{user_friends_path(users(:user1).username)}]", I18n.t(:link_user_friends)
+    assert_select "a[href=#{user_friends_path(users(:user1).username)}]", t(:link_user_friends)
   end
 
   def test_should_show_edit_button_for_own_profile
@@ -176,17 +175,17 @@ class UsersControllerTest < ActionController::TestCase
     # Has no edit button
     assert_select "form[method=get][action=#{edit_user_path(users(:ryan).username)}]", :count => 1
     # Has friends link
-    assert_select "a[href=#{user_friends_path(users(:ryan).username)}]", I18n.t(:link_user_friends)
+    assert_select "a[href=#{user_friends_path(users(:ryan).username)}]", t(:link_user_friends)
   end
 
   def test_should_show_forgot_password_form
     get :forgot_password
     assert_response :success
     assert_template :forgot_password
-    assert_select "h1", I18n.t(:title_forgot_password)
+    assert_select "h1", t(:title_forgot_password)
     assert_select "form[action=#{forgot_password_path}]", :count => 1
     assert_select "form[action=#{forgot_password_path}] input[type=text][name=email]", :count => 1
-    assert_select "form[action=#{forgot_password_path}] input[type=submit][value=#{I18n.t(:btn_send)}]", :count => 1
+    assert_select "form[action=#{forgot_password_path}] input[type=submit][value=#{t(:btn_send)}]", :count => 1
   end
 
   def test_should_send_forgot_password_email_also_check_msg_sent_event
@@ -214,9 +213,9 @@ class UsersControllerTest < ActionController::TestCase
     # Check results page
     assert_response :success
     assert_template :forgot_password
-    assert_select "h1", I18n.t(:title_forgot_password)
+    assert_select "h1", t(:title_forgot_password)
     assert_select "form[action=#{forgot_password_path}]", :count => 0
-    assert_select "div.notice_msg", I18n.t(:msg_reset_password_sent)
+    assert_select "div.notice_msg", t(:msg_reset_password_sent)
     assert_select "div.error_msg", :count => 1
     assert_select "div.error_msg", ''
   end
@@ -228,21 +227,21 @@ class UsersControllerTest < ActionController::TestCase
     # Check results page
     assert_response :success
     assert_template :forgot_password
-    assert_select "h1", I18n.t(:title_forgot_password)
+    assert_select "h1", t(:title_forgot_password)
     assert_select "form[action=#{forgot_password_path}]", :count => 1
     assert_select "div.notice_msg", :count => 1
     assert_select "div.notice_msg", ''
-    assert_select "div.error_msg", I18n.t(:msg_email_not_found)
+    assert_select "div.error_msg", t(:msg_email_not_found)
   end
 
   def test_should_show_resend_verify_form
     get :resend_verify
     assert_response :success
     assert_template :resend_verify
-    assert_select "h1", I18n.t(:title_email_verification)
+    assert_select "h1", t(:title_email_verification)
     assert_select "form[action=#{resend_verify_path}]", :count => 1
     assert_select "form[action=#{resend_verify_path}] input[type=text][name=email]", :count => 1
-    assert_select "form[action=#{resend_verify_path}] input[type=submit][value=#{I18n.t(:btn_send)}]", :count => 1
+    assert_select "form[action=#{resend_verify_path}] input[type=submit][value=#{t(:btn_send)}]", :count => 1
   end
 
   def test_should_resend_verify_email
@@ -257,9 +256,9 @@ class UsersControllerTest < ActionController::TestCase
     # Check results page
     assert_response :success
     assert_template :resend_verify
-    assert_select "h1", I18n.t(:title_email_verification)
+    assert_select "h1", t(:title_email_verification)
     assert_select "form[action=#{resend_verify_path}]", :count => 0
-    assert_select "div.notice_msg", I18n.t(:msg_verification_sent)
+    assert_select "div.notice_msg", t(:msg_verification_sent)
     assert_select "div.error_msg", :count => 1
     assert_select "div.error_msg", ''
   end
@@ -286,9 +285,9 @@ class UsersControllerTest < ActionController::TestCase
     # Check results page
     assert_response :success
     assert_template :resend_verify
-    assert_select "h1", I18n.t(:title_email_verification)
+    assert_select "h1", t(:title_email_verification)
     assert_select "form[action=#{resend_verify_path}]", :count => 0
-    assert_select "div.notice_msg", I18n.t(:msg_verification_sent)
+    assert_select "div.notice_msg", t(:msg_verification_sent)
     assert_select "div.error_msg", :count => 1
     assert_select "div.error_msg", ''
   end
@@ -300,13 +299,13 @@ class UsersControllerTest < ActionController::TestCase
     # Check results page
     assert_response :success
     assert_template :resend_verify
-    assert_select "h1", I18n.t(:title_email_verification)
+    assert_select "h1", t(:title_email_verification)
     assert_select "form[action=#{resend_verify_path}]", :count => 1
     assert_select "form[action=#{resend_verify_path}] input[type=text][name=email]", :count => 1
-    assert_select "form[action=#{resend_verify_path}] input[type=submit][value=#{I18n.t(:btn_send)}]", :count => 1
+    assert_select "form[action=#{resend_verify_path}] input[type=submit][value=#{t(:btn_send)}]", :count => 1
     assert_select "div.notice_msg", :count => 1
     assert_select "div.notice_msg", ''
-    assert_select "div.error_msg", I18n.t(:msg_email_not_found)
+    assert_select "div.error_msg", t(:msg_email_not_found)
   end
 
   def test_should_not_resend_verify_email_already_verified
@@ -316,10 +315,10 @@ class UsersControllerTest < ActionController::TestCase
     # Check results page
     assert_response :success
     assert_template :resend_verify
-    assert_select "h1", I18n.t(:title_email_verification)
+    assert_select "h1", t(:title_email_verification)
     assert_select "form[action=#{resend_verify_path}]", :count => 1
     assert_select "form[action=#{resend_verify_path}] input[type=text][name=email]", :count => 1
-    assert_select "form[action=#{resend_verify_path}] input[type=submit][value=#{I18n.t(:btn_send)}]", :count => 1
+    assert_select "form[action=#{resend_verify_path}] input[type=submit][value=#{t(:btn_send)}]", :count => 1
     assert_select "div.notice_msg", :count => 1
     assert_select "div.notice_msg", ''
     # The HTML is being cleaned up here, so this just makes sure the error message is not blank.
@@ -333,11 +332,11 @@ class UsersControllerTest < ActionController::TestCase
     get :reset_password, { :username => users(:ryan).username, :code => code}
     assert_response :success
     assert_template :reset_password
-    assert_select "h1", I18n.t(:title_forgot_password)
+    assert_select "h1", t(:title_forgot_password)
     assert_select "form[action=#{reset_password_path(users(:ryan))}]", :count => 1
     assert_select "form[action=#{reset_password_path(users(:ryan))}] input[type=password][name='user[password]']", :count => 1
     assert_select "form[action=#{reset_password_path(users(:ryan))}] input[type=password][name='user[password_confirmation]']", :count => 1
-    assert_select "form[action=#{reset_password_path(users(:ryan))}] input[type=submit][value=#{I18n.t(:btn_save)}]", :count => 1
+    assert_select "form[action=#{reset_password_path(users(:ryan))}] input[type=submit][value=#{t(:btn_save)}]", :count => 1
     assert_select "form[action=#{reset_password_path(users(:ryan))}] input[type=hidden][name=password_recovery_code][value=#{code}]", :count => 1
   end
 
@@ -345,9 +344,9 @@ class UsersControllerTest < ActionController::TestCase
     get :reset_password, :username => 'xx' + users(:ryan).username
     assert_response :success
     assert_template :reset_password
-    assert_select "h1", I18n.t(:title_forgot_password)
+    assert_select "h1", t(:title_forgot_password)
     assert_select "form[action=#{reset_password_path(users(:ryan))}]", :count => 0
-    assert_select "div.error_msg", I18n.t(:msg_user_not_found)
+    assert_select "div.error_msg", t(:msg_user_not_found)
   end
 
   def test_should_not_show_reset_password_form_invalid_code
@@ -357,7 +356,7 @@ class UsersControllerTest < ActionController::TestCase
     get :reset_password, { :username => users(:ryan).username, :code => code + 'xx'}
     assert_response :success
     assert_template :reset_password
-    assert_select "h1", I18n.t(:title_forgot_password)
+    assert_select "h1", t(:title_forgot_password)
     assert_select "form[action=#{reset_password_path(users(:ryan))}]", :count => 0
     # The HTML is being cleaned up here, so this just makes sure the error message is not blank.
     assert_select "div.error_msg", /.+/
@@ -370,11 +369,11 @@ class UsersControllerTest < ActionController::TestCase
     post :process_reset_password, { :username => users(:ryan).username, :password_recovery_code => code, :user => { :password => 'pwd1', :password_confirmation => 'pwd1' } }
     assert_response :success
     assert_template :reset_password
-    assert_select "h1", I18n.t(:title_forgot_password)
+    assert_select "h1", t(:title_forgot_password)
     assert_select "form[action=#{reset_password_path(users(:ryan))}]", :count => 0
     assert_select "div.error_msg", :count => 1
     assert_select "div.error_msg", ''
-    assert_select "div.notice_msg", I18n.t(:msg_password_set)
+    assert_select "div.notice_msg", t(:msg_password_set)
     # Check user
     u = User.find_by_id(users(:ryan).id)
     assert_equal u.password, Digest::MD5.hexdigest('pwd1')
@@ -391,9 +390,9 @@ class UsersControllerTest < ActionController::TestCase
     post :process_reset_password, { :username => 'xx' + users(:ryan).username, :password_recovery_code => 'xx', :user => { :password => 'pwd1', :password_confirmation => 'pwd1' } }
     assert_response :success
     assert_template :reset_password
-    assert_select "h1", I18n.t(:title_forgot_password)
+    assert_select "h1", t(:title_forgot_password)
     assert_select "form[action=#{reset_password_path(users(:ryan))}]", :count => 0
-    assert_select "div.error_msg", I18n.t(:msg_user_not_found)
+    assert_select "div.error_msg", t(:msg_user_not_found)
     assert_select "div.notice_msg", :count => 1
     assert_select "div.notice_msg", ''
   end
@@ -405,7 +404,7 @@ class UsersControllerTest < ActionController::TestCase
     post :process_reset_password, { :username => users(:ryan).username, :password_recovery_code => code + 'xx', :user => { :password => 'pwd1', :password_confirmation => 'pwd1' } }
     assert_response :success
     assert_template :reset_password
-    assert_select "h1", I18n.t(:title_forgot_password)
+    assert_select "h1", t(:title_forgot_password)
     assert_select "form[action=#{reset_password_path(users(:ryan))}]", :count => 1
     assert_select "div.error_msg", /.+/
     assert_select "div.notice_msg", :count => 1
@@ -429,9 +428,9 @@ class UsersControllerTest < ActionController::TestCase
     post :process_reset_password, { :username => users(:ryan).username, :password_recovery_code => code, :user => { :password => 'pwd1', :password_confirmation => 'pwd2' } }
     assert_response :success
     assert_template :reset_password
-    assert_select "h1", I18n.t(:title_forgot_password)
+    assert_select "h1", t(:title_forgot_password)
     assert_select "form[action=#{reset_password_path(users(:ryan))}]", :count => 1
-    assert_select "div.error_msg", I18n.t(:msg_general_error)
+    assert_select "div.error_msg", t(:msg_general_error)
     assert_select "form[action=#{reset_password_path(users(:ryan))}] div.error_msg", /.+/
     assert_select "div.notice_msg", :count => 1
     assert_select "div.notice_msg", ''
@@ -448,12 +447,12 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   def test_should_verify_username_availability
-    xml_http_request :get, :show, :user => { :username => users(:ryan).username + 'xx' }
+    xhr :get, :exists, :user => { :username => users(:ryan).username + 'xx' }
     assert_nil assigns(:user)
   end
 
   def test_should_verify_username_not_availabile
-    xml_http_request :get, :show, :username => users(:ryan).username
+    xhr :get, :show, :username => users(:ryan).username
     assert_not_nil assigns(:user)
   end
 
@@ -482,7 +481,7 @@ class UsersControllerTest < ActionController::TestCase
     assert_redirected_to user_path(:username => 'john')
     assert_nil flash[:error]
     assert_not_nil flash[:notice]
-    assert_equal flash[:notice], I18n.t(:msg_profile_saved)
+    assert_equal flash[:notice], t(:msg_profile_saved)
     # One logged event for each: user edited, msg sent
     assert_equal log_count + 2, EventLog.find(:all).count
     assert_equal EventLog.find(:last).event_id, Event::USER_EDITED
@@ -526,7 +525,7 @@ class UsersControllerTest < ActionController::TestCase
     assert_redirected_to user_path(:username => 'john')
     assert_nil flash[:error]
     assert_not_nil flash[:notice]
-    assert_equal flash[:notice], I18n.t(:msg_profile_saved)
+    assert_equal flash[:notice], t(:msg_profile_saved)
     assert_equal log_count + 1, EventLog.find(:all).count
     assert_equal EventLog.find(:last).event_id, Event::USER_EDITED
     # Make sure the verification email was not sent.
@@ -555,13 +554,12 @@ class UsersControllerTest < ActionController::TestCase
     password = u.password
     do_login :user2
     log_count = EventLog.find(:all).count
-    post :update, :user => {
+    post :update, :username => 'john', :user => {
       :id => users(:user2).id,
       :first_name => 'John',
       :last_name => 'Doe',
       :email => '',
       :email_confirmation => '',
-      :username => 'john',
       :password => '',
       :password_confirmation => ''
     }
@@ -569,7 +567,7 @@ class UsersControllerTest < ActionController::TestCase
     assert_redirected_to user_path(:username => 'john')
     assert_nil flash[:error]
     assert_not_nil flash[:notice]
-    assert_equal flash[:notice], I18n.t(:msg_profile_saved)
+    assert_equal flash[:notice], t(:msg_profile_saved)
     # One logged event for each: user edited, msg sent
     assert_equal log_count + 2, EventLog.find(:all).count
     assert_equal EventLog.find(:last).event_id, Event::USER_EDITED
@@ -613,18 +611,18 @@ class UsersControllerTest < ActionController::TestCase
     assert_template :edit
     assert_not_nil assigns(:user)
     assert_not_nil assigns(:submit_to)
-    assert assigns(:user).errors.on(:email)
+    assert !assigns(:user).errors[:email].empty?
     assert_equal log_count, EventLog.find(:all).count
     # Make sure the verification email was not sent.
     assert_equal num_deliveries, ActionMailer::Base.deliveries.size
     # Has correct title text
-    assert_select "h1", I18n.t(:title_edit_user)
+    assert_select "h1", t(:title_edit_user)
     # Has correct submit URL
     assert_select "form[action=#{user_path(users(:user2).username)}]", :count => 1
     # Has correct button text
-    assert_select "form input[type=submit][value=#{I18n.t(:btn_save)}]", :count => 1
+    assert_select "form input[type=submit][value=#{t(:btn_save)}]", :count => 1
     # Shows "Delete account" button
-    assert_select "form input[type=hidden][name=_method][value=delete]", :count => 1
+    assert_select "a[href=#{user_path(:username => users(:user2).username)}][data-method=delete]:not([data-remote])", t(:link_delete_user)
     # Old values still displayed
     assert_equal assigns(:user).email, 'test4@mylo.gs'
     # Check the user
@@ -665,18 +663,18 @@ class UsersControllerTest < ActionController::TestCase
     assert_template :edit
     assert_not_nil assigns(:user)
     assert_not_nil assigns(:submit_to)
-    assert assigns(:user).errors.on(:email)
+    assert !assigns(:user).errors[:email].empty?
     assert_equal log_count, EventLog.find(:all).count
     # Make sure the verification email was not sent.
     assert_equal num_deliveries, ActionMailer::Base.deliveries.size
     # Has correct title text
-    assert_select "h1", I18n.t(:title_edit_user)
+    assert_select "h1", t(:title_edit_user)
     # Has correct submit URL
     assert_select "form[action=#{user_path(users(:user2).username)}]", :count => 1
     # Has correct button text
-    assert_select "form input[type=submit][value=#{I18n.t(:btn_save)}]", :count => 1
+    assert_select "form input[type=submit][value=#{t(:btn_save)}]", :count => 1
     # Shows "Delete account" button
-    assert_select "form input[type=hidden][name=_method][value=delete]", :count => 1
+    assert_select "a[href=#{user_path(:username => users(:user2).username)}][data-method=delete]:not([data-remote])", t(:link_delete_user)
     # Old values still displayed
     assert_equal assigns(:user).email, 'test4@mylo.gs1'
     # Check the user
@@ -717,18 +715,18 @@ class UsersControllerTest < ActionController::TestCase
     assert_template :edit
     assert_not_nil assigns(:user)
     assert_not_nil assigns(:submit_to)
-    assert assigns(:user).errors.on(:password)
+    assert !assigns(:user).errors[:password].empty?
     assert_equal log_count, EventLog.find(:all).count
     # Make sure the verification email was not sent.
     assert_equal num_deliveries, ActionMailer::Base.deliveries.size
     # Has correct title text
-    assert_select "h1", I18n.t(:title_edit_user)
+    assert_select "h1", t(:title_edit_user)
     # Has correct submit URL
     assert_select "form[action=#{user_path(users(:user2).username)}]", :count => 1
     # Has correct button text
-    assert_select "form input[type=submit][value=#{I18n.t(:btn_save)}]", :count => 1
+    assert_select "form input[type=submit][value=#{t(:btn_save)}]", :count => 1
     # Shows "Delete account" button
-    assert_select "form input[type=hidden][name=_method][value=delete]", :count => 1
+    assert_select "a[href=#{user_path(:username => users(:user2).username)}][data-method=delete]:not([data-remote])", t(:link_delete_user)
     # Check the user
     u = User.find_by_id(users(:user2).id)
     assert_equal u.first_name, first_name
@@ -767,18 +765,18 @@ class UsersControllerTest < ActionController::TestCase
     assert_template :edit
     assert_not_nil assigns(:user)
     assert_not_nil assigns(:submit_to)
-    assert assigns(:user).errors.on(:username)
+    assert !assigns(:user).errors[:username].empty?
     assert_equal log_count, EventLog.find(:all).count
     # Make sure the verification email was not sent.
     assert_equal num_deliveries, ActionMailer::Base.deliveries.size
     # Has correct title text
-    assert_select "h1", I18n.t(:title_edit_user)
+    assert_select "h1", t(:title_edit_user)
     # Has correct submit URL
     assert_select "form[action=#{user_path(users(:user2).username)}]", :count => 1
     # Has correct button text
-    assert_select "form input[type=submit][value=#{I18n.t(:btn_save)}]", :count => 1
+    assert_select "form input[type=submit][value=#{t(:btn_save)}]", :count => 1
     # Shows "Delete account" button
-    assert_select "form input[type=hidden][name=_method][value=delete]", :count => 1
+    assert_select "a[href=#{user_path(:username => users(:user2).username)}][data-method=delete]:not([data-remote])", t(:link_delete_user)
     # Old values still displayed
     assert_equal assigns(:user).username, users(:ryan).username
     # Check the user
@@ -835,7 +833,7 @@ class UsersControllerTest < ActionController::TestCase
   def test_should_show_and_do_verify
     get :verify, { :username => users(:user3).username, :code => users(:user3).verification_code }
     assert_response :success
-    assert_select "div.notice_msg", I18n.t(:msg_successful_verification_code)
+    assert_select "div.notice_msg", t(:msg_successful_verification_code)
     assert_select "div.error_msg", :count => 1
     assert_select "div.error_msg", ''
     u = User.find_by_id(users(:user3).id)
@@ -846,7 +844,7 @@ class UsersControllerTest < ActionController::TestCase
     assert @controller.current_user.id
     assert_not_nil session[:user_id]
     # Has correct title text
-    assert_select "h1", I18n.t(:title_email_verification)
+    assert_select "h1", t(:title_email_verification)
   end
 
   def test_should_show_verify_already_verified
@@ -854,11 +852,11 @@ class UsersControllerTest < ActionController::TestCase
     assert u.verified
     get :verify, { :username => users(:ryan).username }
     assert_response :success
-    assert_select "div.notice_msg", I18n.t(:msg_successful_verification_code)
+    assert_select "div.notice_msg", t(:msg_successful_verification_code)
     assert_select "div.error_msg", :count => 1
     assert_select "div.error_msg", ''
     # Has correct title text
-    assert_select "h1", I18n.t(:title_email_verification)
+    assert_select "h1", t(:title_email_verification)
   end
 
   def test_should_not_verify_invalid_code
@@ -866,11 +864,11 @@ class UsersControllerTest < ActionController::TestCase
     assert_response :success
     assert_select "div.notice_msg", :count => 1
     assert_select "div.notice_msg", ''
-    assert_select "div.error_msg", I18n.t(:msg_invalid_verification_code)
+    assert_select "div.error_msg", t(:msg_invalid_verification_code)
     u = User.find_by_id(users(:user3).id)
     assert !u.verified
     # Has correct title text
-    assert_select "h1", I18n.t(:title_email_verification)
+    assert_select "h1", t(:title_email_verification)
   end
 
   def test_should_not_verify_user_not_found
@@ -879,9 +877,9 @@ class UsersControllerTest < ActionController::TestCase
     assert_response :success
     assert_select "div.notice_msg", :count => 1
     assert_select "div.notice_msg", ''
-    assert_select "div.error_msg", I18n.t(:msg_user_not_found)
+    assert_select "div.error_msg", t(:msg_user_not_found)
     # Has correct title text
-    assert_select "h1", I18n.t(:title_email_verification)
+    assert_select "h1", t(:title_email_verification)
   end
 
   def test_verify_check_not_displayed
@@ -901,7 +899,7 @@ class UsersControllerTest < ActionController::TestCase
     get :edit, :username => users(:user3).username
     assert_redirected_to verify_check_path
     get :verify_check
-    assert_select "h1", I18n.t(:title_verification_needed)
+    assert_select "h1", t(:title_verification_needed)
   end
 
   def test_verify_check_not_displayed_not_logged_in
@@ -911,18 +909,14 @@ class UsersControllerTest < ActionController::TestCase
 
   def test_check_username_availability_ajax_available
     assert_nil User.find_by_username(users(:ryan).username + 'xx')
-    xhr :get, :show, :username => users(:ryan).username + 'xx'
-    assert_select_rjs :chained_replace_html, 'availability_results' do |elements|
-      assert_select "span", I18n.t(:msg_username_available)
-    end
+    xhr :get, :exists, :username => users(:ryan).username + 'xx'
+    assert_jquery '#result', 'html', :msg_username_available
   end
 
   def test_check_username_availability_ajax_not_available
     assert_not_nil User.find_by_id(users(:ryan).id)
-    xhr :get, :show, :username => users(:ryan).username
-    assert_select_rjs :chained_replace_html, 'availability_results' do |elements|
-      assert_select "span", I18n.t(:msg_username_taken)
-    end
+    xhr :get, :exists, :username => users(:ryan).username
+    assert_jquery '#result', 'html', :msg_username_taken
   end
 
   def test_user_default_search
@@ -930,7 +924,7 @@ class UsersControllerTest < ActionController::TestCase
     assert_response :success
     assert_template :search
     num_users = User.find(:all).count
-    assert_select 'li .user_row', :count => (num_users > Constant::get(:search_default_limit) ? Constant::get(:search_default_limit) : num_users)
+    assert_select 'li .user_row', :count => (num_users > Const::get(:search_default_limit) ? Const::get(:search_default_limit) : num_users)
   end
 
   def test_user_default_search_with_limit
@@ -960,7 +954,7 @@ class UsersControllerTest < ActionController::TestCase
     assert_response :success
     assert_template :show_search
     assert_select 'form input[type=text][name=text]', :count => 1
-    assert_select "form input[type=submit][value=#{I18n.t(:btn_search)}]", :count => 1
+    assert_select "form input[type=submit][value=#{t(:btn_search)}]", :count => 1
   end
 
   def test_default_user_search_post_with_text
@@ -968,7 +962,7 @@ class UsersControllerTest < ActionController::TestCase
     assert_response :success
     assert_template :search
     num_users = User.find(:all).count
-    assert_select 'li .user_row', :count => (num_users > Constant::get(:search_default_limit) ? Constant::get(:search_default_limit) : num_users)
+    assert_select 'li .user_row', :count => (num_users > Const::get(:search_default_limit) ? Const::get(:search_default_limit) : num_users)
   end
 
   def test_user_search_post_with_text
@@ -991,7 +985,7 @@ class UsersControllerTest < ActionController::TestCase
     assert_response :success
     assert_template :search
     assert_select "li .user_row a[href=#{user_path(users(:user1).username)}]", users(:user1).first_name + ' ' + users(:user1).last_name
-    assert_select "li .friend_action a[onclick*=#{user_remove_friend_path(:username => users(:ryan).username, :friend => users(:user1).username)}]", I18n.t(:link_delete_friend)
+    assert_select "li .friend_action a[href=#{user_remove_friend_path(:username => users(:ryan).username, :friend => users(:user1).username)}][data-method=delete][data-remote]", t(:link_delete_friend)
   end
 
   def test_friendship_links_for_friend
@@ -999,10 +993,10 @@ class UsersControllerTest < ActionController::TestCase
     get :show, { :username => users(:user1).username }
     assert_response :success
     assert_template :show
-    assert_select ".friend_action a[onclick*=#{user_remove_friend_path(:username => users(:ryan).username, :friend => users(:user1).username)}]", I18n.t(:link_delete_friend)
-    #assert_select ".friend_action a[onclick*=#{user_add_friend_path(:username => users(:ryan).username, :friend => users(:user1).username)}]", :count => 0
-    assert_select ".friend_action a[onclick*=#{user_ignore_friend_path(:username => users(:ryan).username, :friend => users(:user1).username)}]", :count => 0
-    assert_select ".friend_action a[onclick*=#{user_block_friend_path(:username => users(:ryan).username, :friend => users(:user1).username)}]", :count => 0
+    assert_select ".friend_action a[href=#{user_remove_friend_path(:username => users(:ryan).username, :friend => users(:user1).username)}][data-remote][data-method=delete]", t(:link_delete_friend)
+    assert_select ".friend_action a[href=#{user_add_friend_path(:username => users(:ryan).username, :friend => users(:user1).username)}][data-remote][data-method=post]", :count => 0
+    assert_select ".friend_action a[href=#{user_ignore_friend_path(:username => users(:ryan).username, :friend => users(:user1).username)}]", :count => 0
+    assert_select ".friend_action a[href=#{user_block_friend_path(:username => users(:ryan).username, :friend => users(:user1).username)}]", :count => 0
     u = User.find_by_id(users(:user1).id)
     assert_not_nil u
     u2 = User.find_by_id(users(:ryan).id)
@@ -1010,10 +1004,10 @@ class UsersControllerTest < ActionController::TestCase
     get :show, { :username => users(:user1).username }
     assert_response :success
     assert_template :show
-    assert_select ".friend_action a[onclick*=#{user_remove_friend_path(:username => users(:ryan).username, :friend => users(:user1).username)}]", I18n.t(:link_delete_friend)
-    #assert_select ".friend_action a[onclick*=#{user_add_friend_path(:username => users(:ryan).username, :friend => users(:user1).username)}]", :count => 0
-    assert_select ".friend_action a[onclick*=#{user_ignore_friend_path(:username => users(:ryan).username, :friend => users(:user1).username)}]", :count => 0
-    assert_select ".friend_action a[onclick*=#{user_block_friend_path(:username => users(:ryan).username, :friend => users(:user1).username)}]", :count => 0
+    assert_select ".friend_action a[href=#{user_remove_friend_path(:username => users(:ryan).username, :friend => users(:user1).username)}][data-remote][data-method=delete]", t(:link_delete_friend)
+    assert_select ".friend_action a[href=#{user_add_friend_path(:username => users(:ryan).username, :friend => users(:user1).username)}][data-remote][data-method=post]", :count => 0
+    assert_select ".friend_action a[href=#{user_ignore_friend_path(:username => users(:ryan).username, :friend => users(:user1).username)}]", :count => 0
+    assert_select ".friend_action a[href=#{user_block_friend_path(:username => users(:ryan).username, :friend => users(:user1).username)}]", :count => 0
   end
 
   def test_friendship_links_for_requested_friend
@@ -1021,10 +1015,10 @@ class UsersControllerTest < ActionController::TestCase
     get :show, { :username => users(:ryan).username }
     assert_response :success
     assert_template :show
-    assert_select ".friend_action a[onclick*=#{user_add_friend_path(:username => users(:user1).username, :friend => users(:ryan).username)}]", I18n.t(:link_add_friend)
-    assert_select ".friend_action a[onclick*=#{user_remove_friend_path(:username => users(:user1).username, :friend => users(:ryan).username)}][onclick*=delete]", :count => 0
-    assert_select ".friend_action a[onclick*=#{user_ignore_friend_path(:username => users(:user1).username, :friend => users(:ryan).username)}]", I18n.t(:link_ignore_friend_request)
-    assert_select ".friend_action a[onclick*=#{user_block_friend_path(:username => users(:user1).username, :friend => users(:ryan).username)}]", I18n.t(:link_block_friend_request)
+    assert_select ".friend_action a[href=#{user_add_friend_path(:username => users(:user1).username, :friend => users(:ryan).username)}][data-remote][data-method=post]", t(:link_add_friend)
+    assert_select ".friend_action a[href=#{user_remove_friend_path(:username => users(:user1).username, :friend => users(:ryan).username)}][onclick*=delete]", :count => 0
+    assert_select ".friend_action a[href=#{user_ignore_friend_path(:username => users(:user1).username, :friend => users(:ryan).username)}]", t(:link_ignore_friend_request)
+    assert_select ".friend_action a[href=#{user_block_friend_path(:username => users(:user1).username, :friend => users(:ryan).username)}]", t(:link_block_friend_request)
     u = User.find_by_id(users(:user1).id)
     assert_not_nil u
     u2 = User.find_by_id(users(:ryan).id)
@@ -1032,10 +1026,10 @@ class UsersControllerTest < ActionController::TestCase
     get :show, { :username => users(:ryan).username }
     assert_response :success
     assert_template :show
-    assert_select ".friend_action a[onclick*=#{user_remove_friend_path(:username => users(:user1).username, :friend => users(:ryan).username)}]", I18n.t(:link_delete_friend)
-    #assert_select ".friend_action a[onclick*=#{user_add_friend_path(:username => users(:user1).username, :friend => users(:ryan).username)}][onclick*=create]", :count => 0
-    assert_select ".friend_action a[onclick*=#{user_ignore_friend_path(:username => users(:user1).username, :friend => users(:ryan).username)}]", :count => 0
-    assert_select ".friend_action a[onclick*=#{user_block_friend_path(:username => users(:user1).username, :friend => users(:ryan).username)}]", :count => 0
+    assert_select ".friend_action a[href=#{user_remove_friend_path(:username => users(:user1).username, :friend => users(:ryan).username)}][data-remote][data-method=delete]", t(:link_delete_friend)
+    assert_select ".friend_action a[href=#{user_add_friend_path(:username => users(:user1).username, :friend => users(:ryan).username)}][data-remote][data-method=post]", :count => 0
+    assert_select ".friend_action a[href=#{user_ignore_friend_path(:username => users(:user1).username, :friend => users(:ryan).username)}]", :count => 0
+    assert_select ".friend_action a[href=#{user_block_friend_path(:username => users(:user1).username, :friend => users(:ryan).username)}]", :count => 0
   end
 
   def test_friendship_links_for_non_friend
@@ -1043,10 +1037,10 @@ class UsersControllerTest < ActionController::TestCase
     get :show, { :username => users(:user3).username }
     assert_response :success
     assert_template :show
-    assert_select ".friend_action a[onclick*=#{user_add_friend_path(:username => users(:ryan).username, :friend => users(:user3).username)}]", I18n.t(:link_add_friend)
-    #assert_select ".friend_action a[onclick*=#{user_remove_friend_path(:username => users(:ryan).username, :friend => users(:user3).username)}]", :count => 0
-    assert_select ".friend_action a[onclick*=#{user_ignore_friend_path(:username => users(:ryan).username, :friend => users(:user3).username)}]", :count => 0
-    assert_select ".friend_action a[onclick*=#{user_block_friend_path(:username => users(:ryan).username, :friend => users(:user3).username)}]", :count => 0
+    assert_select ".friend_action a[href=#{user_add_friend_path(:username => users(:ryan).username, :friend => users(:user3).username)}][data-remote][data-method=post]", t(:link_add_friend)
+    assert_select ".friend_action a[href=#{user_remove_friend_path(:username => users(:ryan).username, :friend => users(:user3).username)}][data-remote][data-method=delete]", :count => 0
+    assert_select ".friend_action a[href=#{user_ignore_friend_path(:username => users(:ryan).username, :friend => users(:user3).username)}]", :count => 0
+    assert_select ".friend_action a[href=#{user_block_friend_path(:username => users(:ryan).username, :friend => users(:user3).username)}]", :count => 0
     u = User.find_by_id(users(:ryan).id)
     assert_not_nil u
     u2 = User.find_by_id(users(:user3).id)
@@ -1054,10 +1048,10 @@ class UsersControllerTest < ActionController::TestCase
     get :show, { :username => users(:user3).username }
     assert_response :success
     assert_template :show
-    assert_select ".friend_action a[onclick*=#{user_remove_friend_path(:username => users(:ryan).username, :friend => users(:user3).username)}]", I18n.t(:link_delete_friend)
-    #assert_select ".friend_action a[onclick*=#{user_add_friend_path(:username => users(:ryan).username, :friend => users(:user3).username)}]", :count => 0
-    assert_select ".friend_action a[onclick*=#{user_ignore_friend_path(:username => users(:ryan).username, :friend => users(:user3).username)}]", :count => 0
-    assert_select ".friend_action a[onclick*=#{user_block_friend_path(:username => users(:ryan).username, :friend => users(:user3).username)}]", :count => 0
+    assert_select ".friend_action a[href=#{user_remove_friend_path(:username => users(:ryan).username, :friend => users(:user3).username)}][data-remote][data-method=delete]", t(:link_delete_friend)
+    assert_select ".friend_action a[href=#{user_add_friend_path(:username => users(:ryan).username, :friend => users(:user3).username)}][data-remote][data-method=post]", :count => 0
+    assert_select ".friend_action a[href=#{user_ignore_friend_path(:username => users(:ryan).username, :friend => users(:user3).username)}]", :count => 0
+    assert_select ".friend_action a[href=#{user_block_friend_path(:username => users(:ryan).username, :friend => users(:user3).username)}]", :count => 0
   end
 
   def test_should_show_group_links_for_user
@@ -1067,7 +1061,7 @@ class UsersControllerTest < ActionController::TestCase
     assert_response :success
     assert_template :show
     # Has groups link
-    assert_select "a[href=#{user_groups_path(users(:ryan).username)}]", I18n.t(:link_user_groups)
+    assert_select "a[href=#{user_groups_path(users(:ryan).username)}]", t(:link_user_groups)
   end
 
   def test_should_not_show_group_links_for_non_logged_in_user

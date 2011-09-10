@@ -4,7 +4,7 @@ class ClientApplication < ActiveRecord::Base
   has_many :tokens, :class_name => "OauthToken"
   validates_presence_of :name, :url, :key, :secret
   validates_uniqueness_of :key
-  before_validation_on_create :generate_keys
+  before_validation :generate_keys, :on => :create
 
   validates_format_of :url, :with => /\Ahttp(s?):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/i
   validates_format_of :support_url, :with => /\Ahttp(s?):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/i, :allow_blank=>true
@@ -35,7 +35,7 @@ class ClientApplication < ActiveRecord::Base
   end
   
   def oauth_server
-    @oauth_server ||= OAuth::Server.new(Constant::get(:root_url))
+    @oauth_server ||= OAuth::Server.new(Const::get(:root_url))
   end
   
   def credentials

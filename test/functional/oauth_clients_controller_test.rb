@@ -1,5 +1,5 @@
-require File.dirname(__FILE__) + '/../test_helper'
-require File.dirname(__FILE__) + '/../oauth_controller_test_helper'
+require 'test_helper'
+require 'oauth_controller_test_helper'
 require 'oauth/client/action_controller_request'
 
 class OauthClientsController; def rescue_action(e) raise e end; end
@@ -334,8 +334,8 @@ class OauthClientsControllerUpdateTest < ActionController::TestCase
     assert_equal assigns(:client_application).id, client_applications(:app1).id
     assert_equal User.find_by_id(users(:ryan).id).client_applications.find_by_id(client_applications(:app1).id).name, client_applications(:app1).name
     assert_select 'h1', t(:title_edit_oauth)
-    assert_select 'div.error_msg', :count => 1, :text => assigns(:client_application).errors.on_s(:name)
-    assert_select 'div.error_msg', :count => 1, :text => assigns(:client_application).errors.on_s(:url)
+    assert_select 'div.error_msg', :count => 1, :text => assigns(:client_application).errors[:name][0].to_s
+    assert_select 'div.error_msg', :count => 1, :text => assigns(:client_application).errors[:url][0].to_s
     assert_select 'input[type=text][value=]', :count => 1
     assert_select 'input[type=text][value=invalid_url]', :count => 1
     assert_select "input[type=submit][value=#{t(:btn_save)}]", :count => 1

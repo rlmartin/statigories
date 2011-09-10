@@ -18,12 +18,12 @@ class GroupFriendTest < ActiveSupport::TestCase
   def test_required_attributes
     gm = GroupMembership.create(:group_id => groups(:ryan_family).id)
     assert_nil gm.id
-    assert_not_nil gm.errors.on(:friendship_id)
-    assert_nil gm.errors.on(:group_id)
+    assert !gm.errors[:friendship_id].empty?
+    assert gm.errors[:group_id].empty?
     gm = GroupMembership.create(:friendship_id => friendships(:ryan_user1).id)
     assert_nil gm.id
-    assert_nil gm.errors.on(:friendship_id)
-    assert_not_nil gm.errors.on(:group_id)
+    assert gm.errors[:friendship_id].empty?
+    assert !gm.errors[:group_id].empty?
   end
 
   def test_uniqueness
@@ -37,7 +37,7 @@ class GroupFriendTest < ActiveSupport::TestCase
     assert_equal gm.group, g
     gm = GroupMembership.create(:friendship_id => f.id, :group_id => g.id)
     assert_nil gm.id
-    assert_not_nil gm.errors.on(:friendship_id)
+    assert !gm.errors[:friendship_id].empty?
   end
 
   def test_friendship_matches_group_owner
@@ -47,8 +47,8 @@ class GroupFriendTest < ActiveSupport::TestCase
     assert_nil GroupMembership.find_by_friendship_id_and_group_id(friendships(:user3_user1).id, groups(:user1_family).id)
     gm = GroupMembership.create(:friendship_id => friendships(:user3_user1).id, :group_id => groups(:user1_family).id)
     assert_nil gm.id
-    assert_not_nil gm.errors.on(:friendship_id)
-    assert_equal gm.errors.on(:friendship_id), I18n.t(:error_group_membership_group_does_not_match_friendship)
+    assert !gm.errors[:friendship_id].empty?
+    assert gm.errors[:friendship_id].include?(I18n.t(:error_group_membership_group_does_not_match_friendship))
   end
 
   def test_inverse_group_memberships

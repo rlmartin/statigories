@@ -28,8 +28,8 @@ class GroupTest < ActiveSupport::TestCase
   def test_required_attributes
     g = Group.create(:name => "This is a test Group.")
     assert_nil g.id
-    assert_not_nil g.errors.on(:user_id)
-    assert_nil g.errors.on(:group_name)
+    assert !g.errors[:user_id].empty?
+    assert g.errors[:group_name].empty?
   end
 
   def test_unique_groups_for_users
@@ -37,10 +37,10 @@ class GroupTest < ActiveSupport::TestCase
     assert_not_nil g
     g2 = Group.create(:user_id => users(:ryan).id, :name => groups(:ryan_family).group_name)
     assert_nil g2.id
-    assert_not_nil g2.errors.on(:group_name)
+    assert !g2.errors[:group_name].empty?
     g2 = Group.create(:user_id => users(:user3).id, :name => groups(:ryan_family).group_name)
     assert_not_nil g2.id
-    assert_nil g2.errors.on(:group_name)
+    assert g2.errors[:group_name].empty?
   end
 
   def test_add_member

@@ -2,7 +2,7 @@
 <% @page[:subtitle] = '' %>
 <h1><%= t :title_user_search %></h1>
 <div>
-  <% form_tag do %>
+  <%= form_tag do %>
 	<div class='input_prompt'><%= t :input_user_search_text %></div>
 	<div class='input_field'><%= text_field_tag 'text' %></div>
 	<div><%= submit_tag t(:btn_search) %></div>

@@ -16,7 +16,7 @@ class Group < ActiveRecord::Base
   end
 
   def self.find_by_group_name_and_username(group_name, username)
-    find(:first, :joins => 'JOIN users ON users.id = groups.user_id', :conditions => [ 'group_name=? AND users.username=?', group_name, username ])
+    where([ 'group_name=? AND users.username=?', group_name, username ]).joins('JOIN users ON users.id = groups.user_id').first
   end
 
   def members

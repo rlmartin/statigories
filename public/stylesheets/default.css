@@ -2,7 +2,11 @@
 .notice_msg { font-weight: bold; }
 .translation_missing { color: #f00; font-weight: bold; }
 #rename_form form, #rename_form div { display: inline; }
-h1 form input[type=text] { background-color: #ccc; border: 0px; font-family: inherit; font-size: 1em; font-weight: bold; padding: 0px; }
+form input[type=text] { background-color: #ccc; border: 0px; font-family: inherit; font-size: 1em; font-weight: bold; padding: 0px; }
+form input[type=text].disabled { background-color: inherit; border: 0px; color: inherit; cursor: pointer; font-family: inherit; font-size: 1em; font-weight: inherit; padding: 0px; }
+textarea { width: 100%; }
 sup { font-size: 0.5em; }
 .required { color: #f00; }
+.hidden { display: none; }
+#screen__ { background-color: #000; display: none; height: 100%; left: 0px; position: fixed; top: 0px; width: 100%; z-index: 1000; }
 

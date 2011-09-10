@@ -1,6 +1,6 @@
 class FriendshipsController < ApplicationController
 	before_filter :logged_in_check, :except => :show
-	before_filter [:load_user_from_param, :load_permissions_for_user]
+	before_filter :load_user_from_param, :load_permissions_for_user
   before_filter :load_friend, :only => [:block, :create, :destroy, :ignore]
   before_filter :check_authorization_delete, :only => [:destroy]
   before_filter :check_authorization_edit, :only => [:block, :create, :ignore]

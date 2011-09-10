@@ -1,5 +1,5 @@
-# Filters added to this controller apply to all controllers in the application.
-# Likewise, all the methods added will be available for all controllers.
+require 'aes_crypt'
+
 class ApplicationController < ActionController::Base
   helper :all # include all helpers, all the time
   protect_from_forgery # See ActionController::RequestForgeryProtection for details
@@ -7,7 +7,6 @@ class ApplicationController < ActionController::Base
   include StringLib
 
   # Scrub sensitive parameters from your log
-  filter_parameter_logging :password
 
   before_filter :set_model_request
 	before_filter :set_locale
@@ -47,10 +46,22 @@ class ApplicationController < ActionController::Base
 		unless current_user_stub == nil
 			if current_user_stub.id != nil and current_user_stub.id > 0
 				unless current_user_stub.verified or DateLib.is_after((current_user_stub.created_at + 1.day), Time.now)
-					redirect_to verify_check_path
+          respond_to do |format|
+            format.js { render 'users/verify_check' }
+            format.any { redirect_to verify_check_path }
+          end
 				end
 			else
-				redirect_to login_path + '?url=' + StringLib.url_encode(request.url)
+        if request.xhr?
+          unless performed?
+            respond_to do |format|
+              format.js { render 'sessions/new' }
+              format.any { redirect_to login_path + '?url=' + StringLib.url_encode(request.url) }
+            end
+          end
+        else
+  				redirect_to login_path + '?url=' + StringLib.url_encode(request.url)
+        end
 			end
 		end
     true
@@ -94,7 +105,7 @@ class ApplicationController < ActionController::Base
         invalid_oauth_response 401, t(msg)
       else
         flash[:error] = t(msg)
-        unless request.xhr?: redirect_to error_path end
+        redirect_to error_path unless request.xhr?
       end
       return true
     end
@@ -102,7 +113,7 @@ class ApplicationController < ActionController::Base
   end
 
 	def fetch_logged_in_user
-		if session[:user_id] == nil and cookies[:user_id] != nil and cookies[:user_id] != '': session[:user_id] = AESCrypt::decrypt(cookies[:user_id]).to_i end
+		session[:user_id] = AESCrypt::decrypt(cookies[:user_id]).to_i if session[:user_id] == nil and cookies[:user_id] != nil and cookies[:user_id] != ''
 		if session[:user_id] != nil and session[:user_id] > 0 and (session[:logged_in] == nil or session[:logged_in] == false)
 			@current_user = User.find_by_id(session[:user_id])
 			unless @current_user == nil
@@ -135,11 +146,11 @@ class ApplicationController < ActionController::Base
   end
 
   def load_group_from_param
-    if @user == nil: redirect_to user_path(params[:username]) end
+    redirect_to user_path(params[:username]) if @user == nil
     @group = nil
     unless @user == nil
       @group = @user.groups.find_by_group_name(params[:group_name])
-      unless @group == nil: @page[:title] = @group.name + ' : ' + @page[:title] end
+      @page[:title] = @group.name + ' : ' + @page[:title] unless @group == nil
     end
   end
 
@@ -153,7 +164,7 @@ class ApplicationController < ActionController::Base
 
 	def load_user_from_param
 		@page[:title] = t(:title_error_user_not_found)
-    if params[:username] == nil and params[:user][:username] != nil: params[:username] = params[:user][:username] end
+    params[:username] = params[:user][:username] if params[:username] == nil and params[:user][:username] != nil
 		@user = User.find_by_username(params[:username])
 		if @user != nil
 			@page[:title] = @user.first_name + ' ' + @user.last_name
@@ -178,7 +189,7 @@ class ApplicationController < ActionController::Base
 
 	def set_locale
 		I18n.locale = :en
-		if Constant::get(:accepted_languages).include?(request.subdomains.last): I18n.locale = request.subdomains.last.to_sym end
+		I18n.locale = request.subdomains.last.to_sym if Const::get(:accepted_languages).include?(request.subdomains.last)
 	end
 
 	def set_logged_in(user_id, remember_me)
@@ -194,6 +205,7 @@ class ApplicationController < ActionController::Base
 	end
 
   def set_model_request
+    Thread.current['request'] = request
     ActiveRecord::Base::_set_request(request)
   end
 

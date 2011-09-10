@@ -1,4 +1,4 @@
-require "mocha"
+#require "mocha"
 module OAuthControllerTestHelper
   
   # Some custom stuff since we're using Mocha
@@ -42,7 +42,7 @@ module OAuthControllerTestHelper
   
   def login(user = :ryan, redirect_url = nil)
     do_login user, redirect_url
-    if session[:logged_in]: @user = User.find_by_id(users(user).id) end
+    @user = User.find_by_id(users(user).id) if session[:logged_in]
     #@controller.stubs(:local_request?).returns(true)
 #    @user = mock_model(User, :login => "ron")
 #    @controller.stubs(:current_user).returns(@user)

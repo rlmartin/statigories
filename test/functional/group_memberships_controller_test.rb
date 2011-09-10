@@ -146,25 +146,15 @@ class GroupMembershipsControllerTest < ActionController::TestCase
   def test_ajax_add_group_membership
     do_login :user1
     xhr :get, :create, { :username => users(:user1).username, :group_name => groups(:user1_family).group_name, :friend => users(:user2).username }
-    assert_select_rjs :chained_replace_html, 'error_msg' do |elements|
-      assert_select "span", ''
-    end
-    assert_select_rjs :chained_replace_html, 'notice_msg' do |elements|
-      assert_select "span", I18n.t(:msg_group_membership_created, :friend_name => users(:user2).first_name + ' ' + users(:user2).last_name, :group_name => groups(:user1_family).name)
-    end
+    assert_jquery_notice I18n.t(:msg_group_membership_created, :friend_name => users(:user2).first_name + ' ' + users(:user2).last_name, :group_name => groups(:user1_family).name)
     # This could use some checking of the inserted js "if" statements here.
-    assert_select_rjs :insert, :bottom, 'group_memberships_for_' + users(:user2).username
-    assert_select_rjs :insert, :bottom, 'group_members_' + groups(:user1_family).group_name
+    assert_jquery '#group_memberships_for_' + users(:user2).username, 'append', user_group_remove_member_path(:username => users(:user1).username, :group_name => groups(:user1_family).group_name, :friend => users(:user2).username)
+    assert_jquery '#group_members_' + groups(:user1_family).group_name, 'append', user_group_remove_member_path(:username => users(:user1).username, :group_name => groups(:user1_family).group_name, :friend => users(:user2).username)
   end
 
   def test_ajax_do_not_add_group_membership_not_logged_in
     xhr :get, :create, { :username => users(:user1).username, :group_name => groups(:user1_family).group_name, :friend => users(:user2).username }
-    assert_select_rjs :chained_replace_html, 'error_msg' do |elements|
-      assert_select "span", I18n.t(:msg_not_authorized)
-    end
-    assert_select_rjs :chained_replace_html, 'notice_msg' do |elements|
-      assert_select "span", ''
-    end
+    assert_jquery_error :msg_not_authorized
   end
 
   def test_destroy_group_membership
@@ -297,24 +287,15 @@ class GroupMembershipsControllerTest < ActionController::TestCase
   def test_ajax_destroy_group_membership
     do_login :ryan
     xhr :get, :destroy, { :username => users(:ryan).username, :group_name => groups(:ryan_family).group_name, :friend => users(:user1).username }
-    assert_select_rjs :chained_replace_html, :hide, "group_membership_#{assigns(:group_membership).id}"
+    assert_jquery "#group_membership_#{assigns(:group_membership).id}", 'remove'
+    assert_jquery ".user_row_#{assigns(:group_membership).friend.id}", 'remove'
     # This needs a test of the inserted js/prototype code here, but this testing suite can't handle it.
-    assert_select_rjs :chained_replace_html, 'error_msg' do |elements|
-      assert_select "span", ''
-    end
-    assert_select_rjs :chained_replace_html, 'notice_msg' do |elements|
-      assert_select "span", I18n.t(:msg_group_membership_removed, :friend_name => users(:user1).first_name + ' ' + users(:user1).last_name, :group_name => groups(:ryan_family).name)
-    end
+    assert_jquery_notice I18n.t(:msg_group_membership_removed, :friend_name => users(:user1).first_name + ' ' + users(:user1).last_name, :group_name => groups(:ryan_family).name)
   end
 
   def test_ajax_do_not_destroy_group_membership_not_logged_in
     xhr :get, :destroy, { :username => users(:ryan).username, :group_name => groups(:ryan_family).group_name, :friend => users(:user1).username }
-    assert_select_rjs :chained_replace_html, 'error_msg' do |elements|
-      assert_select "span", I18n.t(:msg_not_authorized)
-    end
-    assert_select_rjs :chained_replace_html, 'notice_msg' do |elements|
-      assert_select "span", ''
-    end
+    assert_jquery_error :msg_not_authorized
   end
 
 end

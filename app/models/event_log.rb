@@ -9,11 +9,12 @@ class EventLog < ActiveRecord::Base
   before_validation :set_request_data
   before_save :_process_data_before
   after_save :_process_data_after
+  xss_terminate :except => [:event_data]
 
   def set_request_data(request = nil)
     # Make sure there is a default request
-    if request == nil: request = @@_req end
-    if request == nil: request = { :remote_ip => '', :user_agent => '' } end
+    request = @@_req if request == nil
+    request = { :remote_ip => '', :user_agent => '' } if request == nil
     _ua = ''
     _ip = ''
     if request.is_a?(Hash)
@@ -25,18 +26,18 @@ class EventLog < ActiveRecord::Base
     end
     if self.user_agent_id == nil
       ua = UserAgent.find_by_user_agent(_ua)
-      if ua == nil: ua = UserAgent.create(:user_agent => _ua) end
+      ua = UserAgent.create(:user_agent => _ua) if ua == nil
       self.user_agent_id = ua.id
       ua = nil
     end
 
-    if self.ip_address == nil or self.ip_address == '': self.ip_address = _ip end
+    self.ip_address = _ip if self.ip_address == nil or self.ip_address == ''
   end
 
   private
   def _process_data_before
     # Automatically detect whether or not to push the data into the extra table.
-    if self.event_data == nil: self.event_data = '' end
+    self.event_data = '' if self.event_data == nil
     if self.event_data.length > 255
       self._extra = self.event_data
       self.event_data = ''
@@ -45,6 +46,6 @@ class EventLog < ActiveRecord::Base
 
   def _process_data_after
     # Automatically detect whether or not to push the data into the extra table.
-    if self.id != nil and self._extra != nil and self._extra != '': self.event_log_extras.create(:data => self._extra) end
+    self.event_log_extras.create(:data => self._extra) if self.id != nil and self._extra != nil and self._extra != ''
   end
 end

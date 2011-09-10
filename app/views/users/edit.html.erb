@@ -1,26 +1,26 @@
 <% @is_edit = (params[:action] == 'edit' or params[:action] == 'update') %>
 <h1><%= (@is_edit ? t(:title_edit_user) : t(:title_signup)) %></h1>
 <div>
-<% form_tag @submit_to do %>
+<%= form_tag @submit_to do %>
 	<div class='error_msg'><%= flash[:error] %></div>
 	<div class='input_prompt'><%= t :input_first_name %></div>
-	<div class='error_msg'><%= @user.errors.on(:first_name) %></div>
+	<div class='error_msg'><%= @user.errors[:first_name][0] %></div>
 	<div class='input_field'><%= text_field_tag 'user[first_name]', @user.first_name %></div>
 	<div class='input_prompt'><%= t :input_last_name %></div>
-	<div class='error_msg'><%= @user.errors.on(:last_name) %></div>
+	<div class='error_msg'><%= @user.errors[:last_name][0] %></div>
 	<div class='input_field'><%= text_field_tag 'user[last_name]', @user.last_name %></div>
 	<div class='input_prompt'><%= t :input_email %></div>
-	<div class='error_msg'><%= @user.errors.on(:email) %></div>
+	<div class='error_msg'><%= @user.errors[:email][0] %></div>
 	<div class='input_field'><%= text_field_tag 'user[email]', @user.email %></div>
 	<div class='input_prompt'><%= t :input_confirm_email %></div>
 	<div class='input_field'><%= text_field_tag 'user[email_confirmation]' %></div>
 	<div class='input_prompt'><%= t :input_username %></div>
-	<div class='error_msg'><%= @user.errors.on(:username) %></div>
+	<div class='error_msg'><%= @user.errors[:username][0] %></div>
 	<div class='input_field'><%= text_field_tag 'user[username]', @user.username %></div>
 	<div class='input_prompt'><div id='availability_results'>&nbsp;</div></div>
-	<div class='input_field'><%= submit_to_remote 'btn_check_availability', t(:btn_check_availability), :url => user_availability_path, :method => :get %></div>
+	<div class='input_field'><%= link_to t(:btn_check_availability), user_availability_path(:result_id => 'availability_results'), :method => :get, :remote => true, :id => 'btn_check_availability', 'data-params' => 'user[username], user[email]' %></div>
 	<div class='input_prompt'><%= t :input_password %></div>
-	<div class='error_msg'><%= @user.errors.on(:password) %></div>
+	<div class='error_msg'><%= @user.errors[:password][0] %></div>
 	<div class='input_field'><%= password_field_tag 'user[password]' %></div>
 	<div class='input_prompt'><%= t :input_confirm_password %></div>
 	<div class='input_field'><%= password_field_tag 'user[password_confirmation]' %></div>
@@ -30,6 +30,6 @@
 </div>
 <% unless @user.id == nil or @user.id <= 0 %>
 <div>
-<%= button_to t(:link_delete_user), user_path(@user), :method => "delete", :confirm => t(:msg_confirm_delete_user) %>
+<%= link_to t(:link_delete_user), @submit_to, :method => "delete", :confirm => t(:msg_confirm_delete_user) %>
 </div>
 <% end %>

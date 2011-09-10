@@ -4,7 +4,7 @@ class SessionsController < ApplicationController
 
   def new
 		@page[:title] = t(:title_login)
-		if StringLib.cast(session[:logged_in], :bool): redirect_to @redirect_url end
+		redirect_to @redirect_url if StringLib.cast(session[:logged_in], :bool)
   end
 
   def create
@@ -28,7 +28,7 @@ class SessionsController < ApplicationController
   protected
   def load_redirect_url
     @redirect_url = params[:url]
-    if @redirect_url == nil or @redirect_url == '': @redirect_url = '/' end
+    @redirect_url = '/' if @redirect_url == nil or @redirect_url == ''
   end
 
 end

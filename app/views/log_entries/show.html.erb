@@ -1,0 +1,17 @@
+<% if @can_edit %>
+<%= form_tag user_edit_log_path(:username => @user.username, :index => @log_entry.index), :method => :post do %>
+  <h1>
+      <%= text_field_tag 'label', @log_entry.label, :class => 'editable disabled clear-default', 'data-default' => t(:default_log_entry_label), 'data-event-in' => 'click', 'data-event-out' => 'blur' %>
+      <span class='listener hidden' data-event='edited' data-function='show' data-target='.editable'><%= submit_tag t(:btn_save) %></span>
+  </h1>
+  <ul id='items'>
+    <%= render :partial => 'log_entry_items/input', :collection => @log_entry.active_items, :locals => { :tag_name => 'li' } %>
+  </ul>
+<% end %>
+<p><%= link_to t(:link_add_log_entry_item), log_entry_item_input_path(:tag_name => 'li'), :remote => true %></p>
+<% else %>
+  <h1><%= @log_entry.label %></h1>
+  <ul id='items'>
+    <%= render :partial => 'log_entry_items/input', :collection => @log_entry.active_items, :locals => { :tag_name => 'li' } %>
+  </ul>
+<% end %>

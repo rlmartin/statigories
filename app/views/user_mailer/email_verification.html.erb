@@ -1,0 +1,8 @@
+<html>
+<body>
+Dear <%= @recipient.first_name + ' ' + @recipient.last_name %>,<br />
+Please click this link or copy it into the address bar of your browser to verify your email address. <a href='<%= Const::get(:root_url) %>/user/<%= @recipient.username %>/verify?code=<%= @recipient.verification_code %>'><%= Const::get(:root_url) %>/users/<%= @recipient.username %>/verify?code=<%= @recipient.verification_code %></a>.<br />
+Thank you,<br />
+<%= t(:app_name) %> Admin
+</body>
+</html>

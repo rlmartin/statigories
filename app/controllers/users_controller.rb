@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
-	before_filter :login_or_oauth_required, :except => [:create, :forgot_password, :new, :process_forgot_password, :process_resend_verify, :process_reset_password, :resend_verify, :reset_password, :search, :show, :show_search, :verify, :verify_check]
+	before_filter :login_or_oauth_required, :except => [:create, :exists, :forgot_password, :new, :process_forgot_password, :process_resend_verify, :process_reset_password, :resend_verify, :reset_password, :search, :show, :show_search, :verify, :verify_check]
 	before_filter :set_page_vars
-	before_filter [:load_user_from_param, :load_permissions_for_user], :only => [:show, :edit, :update, :destroy, :reset_password, :process_reset_password, :verify]
+	before_filter :load_user_from_param, :load_permissions_for_user, :only => [:show, :exists, :edit, :update, :destroy, :reset_password, :process_reset_password, :verify]
 
   def create
 		@user = User.new(params[:user])
@@ -18,7 +18,7 @@ class UsersController < ApplicationController
 		# Only allow deleting if the user has permission.
 		if @can_delete
 			@page[:title] = t(:title_user_delete)
-			if User.destroy(@user.id): EventLog.create(:event_id => Event::USER_DELETED, :event_data => @user.id.to_s) end
+			EventLog.create(:event_id => Event::USER_DELETED, :event_data => @user.id.to_s) if User.destroy(@user.id)
 			logout
 		else
 			redirect_to user_path(@user)
@@ -27,8 +27,8 @@ class UsersController < ApplicationController
 
   def edit
 		# Only allow editing if the user has permission.
-		unless @can_edit: redirect_to user_path(@user) end
-		@submit_to = user_path
+		redirect_to user_path(@user) unless @can_edit
+		@submit_to = user_path(@user.username)
   end
 
 	def forgot_password
@@ -88,7 +88,7 @@ class UsersController < ApplicationController
 	end
 
 	def reset_password
-    unless @user == nil or params[:code] == @user.password_recovery_code: flash.now[:error] = t(:msg_invalid_password_recovery_code) end
+    flash.now[:error] = t(:msg_invalid_password_recovery_code) unless @user == nil or params[:code] == @user.password_recovery_code
 		@page[:title] = t(:title_forgot_password)
 	end
 
@@ -115,12 +115,12 @@ class UsersController < ApplicationController
 
   def search
     limit = StringLib.cast(params[:limit], :int)
-    if limit == nil or limit <= 0: limit = Constant::get(:search_default_limit) end
+    limit = Const::get(:search_default_limit) if limit == nil or limit <= 0
     text = params[:text]
     if text == nil
-      @users = User.find(:all, :limit => limit, :order => 'created_at DESC')
+      @users = User.order('created_at DESC').limit(limit)
     else
-      @users = User.find(:all, :limit => limit, :order => 'created_at DESC', :conditions => ['username LIKE ? OR first_name LIKE ? OR last_name LIKE ? OR email LIKE ?', '%' + text + '%', '%' + text + '%', '%' + text + '%', '%' + text + '%'])
+      @users = User.where(['username LIKE ? OR first_name LIKE ? OR last_name LIKE ? OR email LIKE ?', '%' + text + '%', '%' + text + '%', '%' + text + '%', '%' + text + '%']).order('created_at DESC').limit(limit)
     end
     @page[:title] = t(:title_user_search)
     @page[:subtitle] = ''
@@ -130,10 +130,20 @@ class UsersController < ApplicationController
     error_page_on_fail @user != nil, :msg_user_not_found
   end
 
+  def exists
+    if @user != nil and @user.id > 0
+      flash[:notice] = :msg_username_taken
+    else
+      flash[:notice] = :msg_username_available
+    end
+    render 'layouts/_default'
+  end
+
   def update
 	  @user = User.find_by_id(params[:user][:id])
     load_permissions_for_user
     old_username = @user.username
+    @user.username = params[:username] if params[:username]
 	  unless @user == nil
       if @can_edit
 			  if params[:user][:password] == ''
@@ -174,7 +184,7 @@ class UsersController < ApplicationController
   end
 
 	def verify_check
-		if current_user_stub == nil or current_user_stub.id == nil or current_user_stub.id <= 0: redirect_to new_user_path end
+		redirect_to new_user_path if current_user_stub == nil or current_user_stub.id == nil or current_user_stub.id <= 0
 		@page[:title] = t(:title_email_verification)
 	end
 
