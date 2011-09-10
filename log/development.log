@@ -20506,3 +20506,78 @@ Started GET "/javascripts/js_vars.js" for 127.0.0.1 at 2011-04-22 18:00:36 -0400
   Processing by GeneralPageController#js_vars as JS
 Rendered general_page/js_vars.js.erb (0.6ms)
 Completed 200 OK in 14ms (Views: 12.9ms | ActiveRecord: 0.0ms)
+
+
+Started GET "/user/ryan/logs/15/5" for 127.0.0.1 at 2011-04-23 08:00:19 -0400
+  Processing by LogEntriesController#show_all as HTML
+  Parameters: {"username"=>"ryan", "num"=>"15", "start"=>"5"}
+  [1m[35mUser Load (0.1ms)[0m  SELECT `users`.* FROM `users` WHERE `users`.`username` = 'ryan' LIMIT 1
+  [1m[36mSQL (145.2ms)[0m  [1mSHOW TABLES[0m
+  [1m[35mLogEntry Load (0.1ms)[0m  SELECT `log_entries`.* FROM `log_entries` WHERE `log_entries`.`index` IS NULL AND (`log_entries`.user_id = 13) LIMIT 1
+  [1m[36mLogEntry Load (0.3ms)[0m  [1mSELECT `log_entries`.* FROM `log_entries` WHERE (`log_entries`.user_id = 13) ORDER BY created_at DESC LIMIT 15 OFFSET 5[0m
+  [1m[35mUser Load (0.1ms)[0m  SELECT `users`.* FROM `users` WHERE `users`.`id` = 13 LIMIT 1
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT `users`.* FROM `users` WHERE `users`.`id` = 13 LIMIT 1[0m
+  [1m[35mCACHE (0.0ms)[0m  SELECT `users`.* FROM `users` WHERE `users`.`id` = 13 LIMIT 1
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT `users`.* FROM `users` WHERE `users`.`id` = 13 LIMIT 1[0m
+  [1m[35mCACHE (0.0ms)[0m  SELECT `users`.* FROM `users` WHERE `users`.`id` = 13 LIMIT 1
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT `users`.* FROM `users` WHERE `users`.`id` = 13 LIMIT 1[0m
+  [1m[35mCACHE (0.0ms)[0m  SELECT `users`.* FROM `users` WHERE `users`.`id` = 13 LIMIT 1
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT `users`.* FROM `users` WHERE `users`.`id` = 13 LIMIT 1[0m
+  [1m[35mCACHE (0.0ms)[0m  SELECT `users`.* FROM `users` WHERE `users`.`id` = 13 LIMIT 1
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT `users`.* FROM `users` WHERE `users`.`id` = 13 LIMIT 1[0m
+  [1m[35mCACHE (0.0ms)[0m  SELECT `users`.* FROM `users` WHERE `users`.`id` = 13 LIMIT 1
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT `users`.* FROM `users` WHERE `users`.`id` = 13 LIMIT 1[0m
+  [1m[35mCACHE (0.0ms)[0m  SELECT `users`.* FROM `users` WHERE `users`.`id` = 13 LIMIT 1
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT `users`.* FROM `users` WHERE `users`.`id` = 13 LIMIT 1[0m
+  [1m[35mCACHE (0.0ms)[0m  SELECT `users`.* FROM `users` WHERE `users`.`id` = 13 LIMIT 1
+Rendered log_entries/_log_entry.html.erb (33.4ms)
+Rendered layouts/_header.html.erb (2.8ms)
+Rendered general_page/_message_containers.html.erb (1.4ms)
+Rendered layouts/_footer.html.erb (1.0ms)
+Rendered layouts/_tracking.html.erb (1.1ms)
+Rendered log_entries/show_all.html.erb within layouts/application (97.7ms)
+Completed 200 OK in 501ms (Views: 135.7ms | ActiveRecord: 145.8ms)
+
+
+Started GET "/javascripts/js_vars.js" for 127.0.0.1 at 2011-04-23 08:00:20 -0400
+  Processing by GeneralPageController#js_vars as JS
+Rendered general_page/js_vars.js.erb (0.5ms)
+Completed 200 OK in 18ms (Views: 16.5ms | ActiveRecord: 0.0ms)
+
+
+Started GET "/user/ryan/logs/15/5" for 127.0.0.1 at 2011-04-23 09:17:55 -0400
+  Processing by LogEntriesController#show_all as HTML
+  Parameters: {"username"=>"ryan", "num"=>"15", "start"=>"5"}
+  [1m[36mSQL (0.5ms)[0m  [1mSHOW TABLES[0m
+  [1m[35mUser Load (0.1ms)[0m  SELECT `users`.* FROM `users` WHERE `users`.`username` = 'ryan' LIMIT 1
+  [1m[36mSQL (0.4ms)[0m  [1mSHOW TABLES[0m
+  [1m[35mLogEntry Load (0.1ms)[0m  SELECT `log_entries`.* FROM `log_entries` WHERE `log_entries`.`index` IS NULL AND (`log_entries`.user_id = 13) LIMIT 1
+  [1m[36mLogEntry Load (0.3ms)[0m  [1mSELECT `log_entries`.* FROM `log_entries` WHERE (`log_entries`.user_id = 13) ORDER BY created_at DESC LIMIT 15 OFFSET 5[0m
+  [1m[35mUser Load (0.1ms)[0m  SELECT `users`.* FROM `users` WHERE `users`.`id` = 13 LIMIT 1
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT `users`.* FROM `users` WHERE `users`.`id` = 13 LIMIT 1[0m
+  [1m[35mCACHE (0.0ms)[0m  SELECT `users`.* FROM `users` WHERE `users`.`id` = 13 LIMIT 1
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT `users`.* FROM `users` WHERE `users`.`id` = 13 LIMIT 1[0m
+  [1m[35mCACHE (0.0ms)[0m  SELECT `users`.* FROM `users` WHERE `users`.`id` = 13 LIMIT 1
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT `users`.* FROM `users` WHERE `users`.`id` = 13 LIMIT 1[0m
+  [1m[35mCACHE (0.0ms)[0m  SELECT `users`.* FROM `users` WHERE `users`.`id` = 13 LIMIT 1
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT `users`.* FROM `users` WHERE `users`.`id` = 13 LIMIT 1[0m
+  [1m[35mCACHE (0.0ms)[0m  SELECT `users`.* FROM `users` WHERE `users`.`id` = 13 LIMIT 1
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT `users`.* FROM `users` WHERE `users`.`id` = 13 LIMIT 1[0m
+  [1m[35mCACHE (0.0ms)[0m  SELECT `users`.* FROM `users` WHERE `users`.`id` = 13 LIMIT 1
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT `users`.* FROM `users` WHERE `users`.`id` = 13 LIMIT 1[0m
+  [1m[35mCACHE (0.0ms)[0m  SELECT `users`.* FROM `users` WHERE `users`.`id` = 13 LIMIT 1
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT `users`.* FROM `users` WHERE `users`.`id` = 13 LIMIT 1[0m
+  [1m[35mCACHE (0.0ms)[0m  SELECT `users`.* FROM `users` WHERE `users`.`id` = 13 LIMIT 1
+Rendered log_entries/_log_entry.html.erb (34.0ms)
+Rendered layouts/_header.html.erb (2.1ms)
+Rendered general_page/_message_containers.html.erb (0.7ms)
+Rendered layouts/_footer.html.erb (0.4ms)
+Rendered layouts/_tracking.html.erb (0.6ms)
+Rendered log_entries/show_all.html.erb within layouts/application (65.7ms)
+Completed 200 OK in 468ms (Views: 103.3ms | ActiveRecord: 1.6ms)
+
+
+Started GET "/javascripts/js_vars.js" for 127.0.0.1 at 2011-04-23 09:17:56 -0400
+  Processing by GeneralPageController#js_vars as JS
+Rendered general_page/js_vars.js.erb (0.7ms)
+Completed 200 OK in 83ms (Views: 82.0ms | ActiveRecord: 0.0ms)

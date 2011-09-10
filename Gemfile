@@ -1,7 +1,7 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.0.5'
-gem 'activesupport', '3.0.5'
+gem 'rails', '3.0.7'
+gem 'activesupport', '3.0.7'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
@@ -11,6 +11,11 @@ gem 'mysql2'
 gem 'oauth', '0.4.4'
 gem 'acts-as-taggable-on'
 gem 'aaronh-chronic'
+
+group :production, :migration do
+  gem 'mongrel', '>= 1.2.0.pre2'
+  gem 'mongrel_cluster'
+end
 
 # Use unicorn as the web server
 # gem 'unicorn'
