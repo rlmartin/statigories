@@ -1,2 +1,0 @@
-if @success: page['group_form_add_to_' + params[:friend]].replace_html prep_rjs(render(:partial => 'form_add_to', :locals => { :username => @user.username, :friend => params[:friend] })) end
-finish_rjs page
