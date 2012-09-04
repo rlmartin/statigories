@@ -12,11 +12,6 @@ gem 'oauth', '0.4.4'
 gem 'acts-as-taggable-on'
 gem 'aaronh-chronic'
 
-group :production, :migration do
-  gem 'mongrel', '>= 1.2.0.pre2'
-  gem 'mongrel_cluster'
-end
-
 # Use unicorn as the web server
 # gem 'unicorn'
 
@@ -40,4 +35,8 @@ end
 # and rake tasks are available in development mode:
 group :test do
   gem 'mocha', '0.9.10', :require => false
+  gem 'rspec'
+  gem 'rspec-rails'
+  gem 'fuubar'
+  gem 'factory_girl'
 end

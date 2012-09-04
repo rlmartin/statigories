@@ -115,6 +115,8 @@ StatigoriesCom::Application.routes.draw do
   # Log Entry routes
   get 'user/:username/log/new', :to => 'log_entries#new', :as => :user_new_log
   match 'user/:username/log/quick(/*entry)', :to => 'log_entries#quick_add', :as => :log_entry_quick_add
+  get 'log(/new)', :to => 'log_entries#new', :as => :user_new_log
+  match 'log/quick(/*entry)', :to => 'log_entries#quick_add', :as => :log_entry_quick_add
   get 'user/:username/log/:index', :to => 'log_entries#show', :as => :user_log
   post 'user/:username/log/:index', :to => 'log_entries#edit', :as => :user_edit_log
   post 'user/:username/log/:index/label(/:label)', :to => 'log_entries#edit_label', :as => :user_edit_log_label

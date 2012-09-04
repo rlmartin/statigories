@@ -162,14 +162,22 @@ class ApplicationController < ActionController::Base
 		end
 	end
 
-	def load_user_from_param
+	def load_user_from_param(bolAllowCurrentUser = false)
 		@page[:title] = t(:title_error_user_not_found)
-    params[:username] = params[:user][:username] if params[:username] == nil and params[:user][:username] != nil
-		@user = User.find_by_username(params[:username])
-		if @user != nil
-			@page[:title] = @user.first_name + ' ' + @user.last_name
-		end
+    params[:username] = params[:user][:username] if params[:username] == nil and params[:user] and params[:user][:username] != nil
+    if params[:username]
+		  @user = User.find_by_username(params[:username])
+    else
+      @user = current_user
+    end
+	  if @user
+		  @page[:title] = @user.first_name + ' ' + @user.last_name
+	  end
 	end
+
+	def load_user_from_param_or_current_user
+    load_user_from_param(true)
+  end
 
   def my_user_id
     if current_user_stub == nil

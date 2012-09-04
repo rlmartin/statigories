@@ -100,6 +100,54 @@ class LogEntryItemTest < ActiveSupport::TestCase
     assert_nil i.value_lat
     assert_nil i.value_lng
 
+    i = le.items.create(:value => '51:28')
+    assert_not_nil i.id
+    assert_equal i.value, '51:28'
+    assert_nil i.value_bool
+    assert_equal i.value_datetime.to_datetime.to_s, DateTime.civil(1000, 1, 1, 0, 51, 28, timezone_offset(Time.parse('1/1/2000'))).getutc.to_s
+    assert_equal i.value_date, Date.parse('1/1/1000')
+    assert_equal i.value_time, DateTime.civil(0, 1, 1, 0, 51, 28)
+    assert_nil i.value_float
+    assert_nil i.value_int
+    assert_nil i.value_lat
+    assert_nil i.value_lng
+
+    i = le.items.create(:value => '51:28 AM')
+    assert_not_nil i.id
+    assert_equal i.value, '51:28 AM'
+    assert_nil i.value_bool
+    assert_nil i.value_datetime
+    assert_nil i.value_date
+    assert_nil i.value_time
+    assert_nil i.value_float
+    assert_nil i.value_int
+    assert_nil i.value_lat
+    assert_nil i.value_lng
+
+    i = le.items.create(:value => '1:28AM')
+    assert_not_nil i.id
+    assert_equal i.value, '1:28AM'
+    assert_nil i.value_bool
+    assert_equal i.value_datetime.to_datetime.to_s, DateTime.civil(1000, 1, 1, 1, 28, 0, timezone_offset(Time.parse('1/1/2000'))).getutc.to_s
+    assert_equal i.value_date, Date.parse('1/1/1000')
+    assert_equal i.value_time, DateTime.civil(0, 1, 1, 1, 28, 0)
+    assert_nil i.value_float
+    assert_nil i.value_int
+    assert_nil i.value_lat
+    assert_nil i.value_lng
+
+    i = le.items.create(:value => '1:28 PM')
+    assert_not_nil i.id
+    assert_equal i.value, '1:28 PM'
+    assert_nil i.value_bool
+    assert_equal i.value_datetime.to_datetime.to_s, DateTime.civil(1000, 1, 1, 13, 28, 0, timezone_offset(Time.parse('1/1/2000'))).getutc.to_s
+    assert_equal i.value_date, Date.parse('1/1/1000')
+    assert_equal i.value_time, DateTime.civil(0, 1, 1, 13, 28, 0)
+    assert_nil i.value_float
+    assert_nil i.value_int
+    assert_nil i.value_lat
+    assert_nil i.value_lng
+
     i = le.items.create(:value => '(1.1, 2.1)')
     assert_not_nil i.id
     assert_equal i.value, '(1.1, 2.1)'

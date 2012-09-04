@@ -1,6 +1,7 @@
 class LogEntriesController < ApplicationController
   include ArrayLib
 	before_filter :load_user_from_param, :load_permissions_for_user, :load_log_entry_from_param
+  before_filter :load_user_from_param_or_current_user, :only => :new
   before_filter :check_authorization_edit, :only => [:edit, :new, :quick_add, :quick_add_form]
 #  before_filter :check_authorization_view, :only => [:show]
 
@@ -66,7 +67,7 @@ class LogEntriesController < ApplicationController
     limit = 10 if limit <= 0
     start = params[:start].to_i
     start = 1 if start <= 0
-    @logs = @user.log_entries.order('created_at DESC').limit(limit).offset(start)
+    @logs = @user.log_entries.order('created_at DESC').limit(limit).offset(start - 1)
   end
 
   protected

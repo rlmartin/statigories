@@ -1,4 +1,11 @@
+# Add RVM's lib directory to the load path.
+$:.unshift(File.expand_path('./lib', ENV['rvm_path']))
+
+require 'rvm/capistrano'
+#set :rvm_ruby_string, '1.9.2'
 require 'bundler/capistrano'
+
+#require 'bundler/capistrano'
 
 set :application, "statigories.com"
 # Note that this IP address may change for future deployments.
@@ -28,45 +35,45 @@ role :web, "#{launch_ip}"
 role :db,  "#{launch_ip}", :primary => true
 
 namespace :deploy do
-	desc "Restart the Mongrel cluster"
-	task :restart, :roles => :app do
-		stop
-		start
-	end
+#	desc "Restart the Mongrel cluster"
+#	task :restart, :roles => :app do
+#		stop
+#		start
+#	end
 
 	# Other startup methods (memcached, backgroundrb, etc) should be added here.
 	desc "Start the Mongrel cluster and Nginx"
 	task :start, :roles => :app do
-		start_mongrel
+#		start_mongrel
 		start_nginx
 	end
 
 	# Other stop methods should be added here.
 	desc "Stop the Mongrel cluster and Nginx"
 	task :stop, :roles => :app do
-		stop_mongrel
+#		stop_mongrel
 		stop_nginx
 	end
 
-	desc "Start Mongrel"
-	task :start_mongrel, :roles => :app do
-		begin
-			run "/etc/init.d/mongrel_cluster start"
-		rescue RuntimeError => e
-			puts e
-			puts "Mongrel appears to be on already."
-		end
-	end
+#	desc "Start Mongrel"
+#	task :start_mongrel, :roles => :app do
+#		begin
+#			run "/etc/init.d/mongrel_cluster start"
+#		rescue RuntimeError => e
+#			puts e
+#			puts "Mongrel appears to be on already."
+#		end
+#	end
 
-	desc "Stop Mongrel"
-	task :stop_mongrel, :roles => :app do
-		begin
-			run "/etc/init.d/mongrel_cluster stop"
-		rescue RuntimeError => e
-			puts e
-			puts "Mongrel appears to be off already."
-		end
-	end
+#	desc "Stop Mongrel"
+#	task :stop_mongrel, :roles => :app do
+#		begin
+#			run "/etc/init.d/mongrel_cluster stop"
+#		rescue RuntimeError => e
+#			puts e
+#			puts "Mongrel appears to be off already."
+#		end
+#	end
 
 	desc "Start nginx"
 	task :start_nginx, :roles => :app do
