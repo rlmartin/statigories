@@ -8,7 +8,8 @@ gem 'activesupport', '3.0.7'
 
 gem 'mysql2'
 
-gem 'oauth', '0.4.4'
+gem 'oauth'
+gem 'oauth-plugin'
 gem 'acts-as-taggable-on'
 gem 'aaronh-chronic'
 
